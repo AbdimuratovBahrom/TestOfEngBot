@@ -9,13 +9,9 @@ const port = process.env.PORT || 3000;
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
 
 const app = express();
-const bot = new TelegramBot(token, {
-  webHook: {
-    port: port
-  }
-});
+const bot = new TelegramBot(token, { webHook: true });
 
-// Подключаем webhook
+// Webhook route
 bot.setWebHook(`${WEBHOOK_URL}/bot${token}`);
 app.use(express.json());
 app.post(`/bot${token}`, (req, res) => {
@@ -23,7 +19,7 @@ app.post(`/bot${token}`, (req, res) => {
   res.sendStatus(200);
 });
 
-// Примерные вопросы (в реальности должны быть из базы или другого файла)
+// Вопросы
 const beginnerQuestions = Array.from({ length: 80 }, (_, i) => ({
   question: `Beginner Question ${i + 1}?`,
   options: ['A', 'B', 'C', 'D'],
@@ -54,6 +50,7 @@ function sendNextQuestion(chatId) {
   });
 }
 
+// Команды
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   bot.sendMessage(chatId, 'Choose your level:', {
@@ -95,11 +92,10 @@ bot.on('callback_query', async (query) => {
   bot.answerCallbackQuery(query.id);
 });
 
+// Запускаем сервер
 app.get('/', (req, res) => res.send('Bot is running.'));
-
 app.listen(port, async () => {
   console.log(`🌐 WEBHOOK_URL: ${WEBHOOK_URL}`);
   console.log(`📡 PORT: ${port}`);
   await initDB();
-  console.log('✅ DB initialized');
 });

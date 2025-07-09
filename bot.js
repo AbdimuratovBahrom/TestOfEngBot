@@ -8,12 +8,16 @@ const token = process.env.BOT_TOKEN;
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
 const port = process.env.PORT || 3000;
 
-const bot = new TelegramBot(token);
-const app = express();
+const bot = new TelegramBot(token, { webHook: true });
 
 bot.setWebHook(`${WEBHOOK_URL}/bot${token}`);
 
-app.use(bot.webhookCallback(`/bot${token}`));
+app.use(express.json());
+app.post(`/bot${token}`, (req, res) => {
+  bot.processUpdate(req.body);
+  res.sendStatus(200);
+});
+
 
 const beginnerQuestions = Array.from({ length: 80 }, (_, i) => ({
   question: `Beginner Question ${i + 1}?`,

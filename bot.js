@@ -4,22 +4,23 @@ import TelegramBot from 'node-telegram-bot-api';
 import { initDB, saveResult, getTop10, getUserResults } from './db.js';
 import shuffle from 'lodash.shuffle';
 
-
-
 const token = process.env.BOT_TOKEN;
-const bot = new TelegramBot(token, { polling: true });
-const app = express();
-const port = process.env.PORT || 3000;
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
+const port = process.env.PORT || 3000;
 
-// Примерные вопросы
+const bot = new TelegramBot(token);
+const app = express();
+
+bot.setWebHook(`${WEBHOOK_URL}/bot${token}`);
+
+app.use(bot.webhookCallback(`/bot${token}`));
+
 const beginnerQuestions = Array.from({ length: 80 }, (_, i) => ({
   question: `Beginner Question ${i + 1}?`,
   options: ['A', 'B', 'C', 'D'],
   correctAnswer: 'A'
 }));
 
-// Текущее состояние пользователей
 const userStates = new Map();
 
 function startQuiz(chatId, level) {

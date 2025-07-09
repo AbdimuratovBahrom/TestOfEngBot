@@ -6,9 +6,9 @@ import { dirname, join } from 'path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const dbPath = join(__dirname, 'results.db');
 
-export const initDB = async () => {
+export async function initDB() {
   return open({
     filename: dbPath,
-    driver: sqlite3.Database
+    driver: sqlite3.Database,
   });
-};
+}

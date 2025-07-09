@@ -12,3 +12,7 @@ export async function initDB() {
     driver: sqlite3.Database,
   });
 }
+
+// ... твой код функций initDB, saveResult, getTop10, getUserResults
+
+export { initDB, saveResult, getTop10, getUserResults };

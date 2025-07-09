@@ -4,6 +4,8 @@ import TelegramBot from 'node-telegram-bot-api';
 import { initDB, saveResult, getTop10, getUserResults } from './db.js';
 import shuffle from 'lodash.shuffle';
 
+
+
 const token = process.env.BOT_TOKEN;
 const bot = new TelegramBot(token, { polling: true });
 const app = express();

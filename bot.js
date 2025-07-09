@@ -1,24 +1,29 @@
 import 'dotenv/config';
 import express from 'express';
 import TelegramBot from 'node-telegram-bot-api';
-import { initDB, saveResult, getTop10, getUserResults } from './db.js';
 import shuffle from 'lodash.shuffle';
+import { initDB, saveResult, getTop10, getUserResults } from './db.js';
 
 const token = process.env.BOT_TOKEN;
-const WEBHOOK_URL = process.env.WEBHOOK_URL;
 const port = process.env.PORT || 3000;
+const WEBHOOK_URL = process.env.WEBHOOK_URL;
 
-const bot = new TelegramBot(token, { webHook: true });
+const app = express();
+const bot = new TelegramBot(token, {
+  webHook: {
+    port: port
+  }
+});
 
+// Подключаем webhook
 bot.setWebHook(`${WEBHOOK_URL}/bot${token}`);
-
 app.use(express.json());
 app.post(`/bot${token}`, (req, res) => {
   bot.processUpdate(req.body);
   res.sendStatus(200);
 });
 
-
+// Примерные вопросы (в реальности должны быть из базы или другого файла)
 const beginnerQuestions = Array.from({ length: 80 }, (_, i) => ({
   question: `Beginner Question ${i + 1}?`,
   options: ['A', 'B', 'C', 'D'],
@@ -91,8 +96,10 @@ bot.on('callback_query', async (query) => {
 });
 
 app.get('/', (req, res) => res.send('Bot is running.'));
+
 app.listen(port, async () => {
   console.log(`🌐 WEBHOOK_URL: ${WEBHOOK_URL}`);
   console.log(`📡 PORT: ${port}`);
   await initDB();
+  console.log('✅ DB initialized');
 });

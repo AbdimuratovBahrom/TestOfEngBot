@@ -51,9 +51,7 @@ function sendNextQuestion(chatId) {
     const total = state.questions.length;
     const level = state.level;
     bot.sendMessage(chatId, `🎉 Викторина завершена!\nВаш результат: ${score}/${total}`, {
-      reply_markup: {
-        remove_keyboard: true,
-      },
+      reply_markup: { remove_keyboard: true },
     });
     saveResult(chatId, level, score);
     userStates.delete(chatId);
@@ -79,17 +77,70 @@ bot.setMyCommands([
   { command: 'myresults', description: '📈 Мои результаты' },
 ]);
 
+const languageOptions = [
+  [{ text: '🇷🇺 Русский', callback_data: 'lang_ru' }],
+  [{ text: '🇺🇿 O‘zbekcha', callback_data: 'lang_uz' }],
+  [{ text: '🇰🇿 Qaraqalpaqsha', callback_data: 'lang_kk' }],
+];
+
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
-  bot.sendMessage(chatId, '👋 Добро пожаловать в бот для тренировки английского! Выберите команду:', {
-    reply_markup: {
-      keyboard: [
-        [{ text: '📚 Выбрать уровень /level' }],
-        [{ text: 'ℹ️ Помощь /help' }, { text: '🏆 Топ 10 /top10' }],
-      ],
-      resize_keyboard: true,
-    },
+
+  userStates.set(chatId, { lang: null });
+  bot.sendMessage(chatId, '🌐 Пожалуйста, выберите язык / Iltimos, tilni tanlang:', {
+    reply_markup: { inline_keyboard: languageOptions },
   });
+});
+
+bot.on('callback_query', async (query) => {
+  const chatId = query.message.chat.id;
+  const data = query.data;
+
+  try {
+    await bot.answerCallbackQuery(query.id);
+  } catch (err) {
+    console.warn('⚠️ answerCallbackQuery error:', err.message);
+  }
+
+  const state = userStates.get(chatId) || {};
+
+  if (data.startsWith('lang_')) {
+    const lang = data.replace('lang_', '');
+    userStates.set(chatId, { ...state, lang });
+
+    let greeting = '👋 Добро пожаловать!';
+    if (lang === 'uz') greeting = '👋 Xush kelibsiz!';
+    if (lang === 'kk') greeting = '👋 Qosh keldińiz!';
+
+    bot.sendMessage(chatId, `${greeting}\n📚 Выберите команду:`, {
+      reply_markup: {
+        keyboard: [
+          [{ text: '📚 Выбрать уровень /level' }],
+          [{ text: 'ℹ️ Помощь /help' }, { text: '🏆 Топ 10 /top10' }],
+        ],
+        resize_keyboard: true,
+      },
+    });
+
+    return;
+  }
+
+  if (data.startsWith('level_')) {
+    const level = data.replace('level_', '');
+    startQuiz(chatId, level);
+  } else if (state.questions) {
+    const q = state.questions[state.index];
+    const isCorrect = data === q.correctAnswer;
+
+    await bot.sendMessage(chatId,
+      isCorrect ? '✅ Правильно!' : `❌ Неправильно. Правильный ответ: ${q.correctAnswer}`
+    );
+
+    if (isCorrect) state.correct++;
+    state.index++;
+
+    setTimeout(() => sendNextQuestion(chatId), 1000);
+  }
 });
 
 bot.onText(/\/help/, (msg) => {
@@ -138,36 +189,6 @@ bot.onText(/\/myresults/, async (msg) => {
   bot.sendMessage(msg.chat.id, message, { parse_mode: 'HTML' });
 });
 
-bot.on('callback_query', async (query) => {
-  const chatId = query.message.chat.id;
-  const data = query.data;
-
-  try {
-    await bot.answerCallbackQuery(query.id);
-  } catch (err) {
-    console.warn('⚠️ answerCallbackQuery error:', err.message);
-  }
-
-  const state = userStates.get(chatId);
-
-  if (data.startsWith('level_')) {
-    const level = data.replace('level_', '');
-    startQuiz(chatId, level);
-  } else if (state) {
-    const q = state.questions[state.index];
-    const isCorrect = data === q.correctAnswer;
-
-    await bot.sendMessage(chatId,
-      isCorrect ? '✅ Правильно!' : `❌ Неправильно. Правильный ответ: ${q.correctAnswer}`
-    );
-
-    if (isCorrect) state.correct++;
-    state.index++;
-
-    setTimeout(() => sendNextQuestion(chatId), 1000);
-  }
-});
-
 function startQuiz(chatId, level) {
   let questions;
   switch (level) {
@@ -178,6 +199,7 @@ function startQuiz(chatId, level) {
   }
 
   const selected = getRandomQuestions(questions);
-  userStates.set(chatId, { level, questions: selected, index: 0, correct: 0 });
+  const state = userStates.get(chatId) || {};
+  userStates.set(chatId, { ...state, level, questions: selected, index: 0, correct: 0 });
   sendNextQuestion(chatId);
 }

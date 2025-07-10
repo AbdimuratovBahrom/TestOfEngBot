@@ -1,5 +1,16 @@
 // questions.js
-export const beginnerQuestions = [
+
+function assignRandomCorrectAnswer(questions) {
+  return questions.map(q => {
+    const randomIndex = Math.floor(Math.random() * q.options.length);
+    return {
+      ...q,
+      correctAnswer: q.options[randomIndex]
+    };
+  });
+}
+
+export const beginnerQuestions = assignRandomCorrectAnswer([
   {
     question: "What's the opposite of 'big'?",
     options: ['Small', 'Large', 'Huge', 'Tall'],
@@ -485,10 +496,10 @@ export const beginnerQuestions = [
     options: ['Glasses', 'Telescope', 'Microscope', 'Mirror'],
     correctAnswer: 'Telescope'
   }
-];
+]);
 
-export const intermediateQuestions = [
-  {
+export const intermediateQuestions = assignRandomCorrectAnswer([
+ {
     question: "Which sentence is correct?",
     options: [
       'She don’t like coffee.',
@@ -993,10 +1004,10 @@ export const intermediateQuestions = [
     options: ['Ride', 'Rides', 'Riding', 'Rode'],
     correctAnswer: 'Rides'
   }
-];
+]);
 
-export const advancedQuestions = [
-  {
+export const advancedQuestions = assignRandomCorrectAnswer([
+   {
     question: "Choose the correct sentence:",
     options: [
       'Seldom I have encountered such wisdom.',
@@ -1573,4 +1584,7 @@ export const advancedQuestions = [
     options: ['Brief', 'Permanent', 'Short', 'Temporary'],
     correctAnswer: 'Permanent'
   }
-];
+]);
+
+
+

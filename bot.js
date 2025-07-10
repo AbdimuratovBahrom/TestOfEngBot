@@ -15,18 +15,21 @@ if (!TOKEN || !WEBHOOK_URL) {
   process.exit(1);
 }
 
-const bot = new TelegramBot(TOKEN, { webHook: { port: PORT } });
-bot.setWebHook(`${WEBHOOK_URL}/bot${TOKEN}`);
+const bot = new TelegramBot(TOKEN, { webHook: true });
 
 const app = express();
 app.use(express.json());
+
 app.get('/', (_, res) => res.send('🤖 Бот работает!'));
 app.post(`/bot${TOKEN}`, (req, res) => {
   bot.processUpdate(req.body);
   res.sendStatus(200);
 });
 
-// ⚠️ Удалено: app.listen(PORT), потому что порт уже занят ботом
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
+  bot.setWebHook(`${WEBHOOK_URL}/bot${TOKEN}`);
+});
 
 const userStates = new Map();
 
@@ -48,7 +51,9 @@ function sendNextQuestion(chatId) {
     const total = state.questions.length;
     const level = state.level;
     bot.sendMessage(chatId, `🎉 Викторина завершена!\nВаш результат: ${score}/${total}`, {
-      reply_markup: { remove_keyboard: true },
+      reply_markup: {
+        remove_keyboard: true,
+      },
     });
     saveResult(chatId, level, score);
     userStates.delete(chatId);
@@ -65,16 +70,15 @@ function sendNextQuestion(chatId) {
   });
 }
 
-// Команды
 bot.setMyCommands([
   { command: 'start', description: 'Начать' },
   { command: 'help', description: 'Помощь' },
   { command: 'info', description: 'О боте' },
   { command: 'level', description: 'Выбрать уровень' },
   { command: 'top10', description: '🏆 Топ 10' },
+  { command: 'myresults', description: '📈 Мои результаты' },
 ]);
 
-// /start
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   bot.sendMessage(chatId, '👋 Добро пожаловать в бот для тренировки английского! Выберите команду:', {
@@ -88,7 +92,6 @@ bot.onText(/\/start/, (msg) => {
   });
 });
 
-// /help
 bot.onText(/\/help/, (msg) => {
   bot.sendMessage(msg.chat.id, `ℹ️ <b>Как пользоваться:</b>
 
@@ -100,7 +103,6 @@ bot.onText(/\/help/, (msg) => {
 Приятного обучения! 🎓`, { parse_mode: 'HTML' });
 });
 
-// /info
 bot.onText(/\/info/, (msg) => {
   bot.sendMessage(msg.chat.id, `🤖 <b>English Quiz Bot</b>
 📌 Автор: @AbdimuratovBahrom
@@ -109,7 +111,6 @@ bot.onText(/\/info/, (msg) => {
 `, { parse_mode: 'HTML' });
 });
 
-// /level
 bot.onText(/\/level/, (msg) => {
   const levels = [
     [{ text: '🔰 Beginner', callback_data: 'level_beginner' }],
@@ -121,7 +122,6 @@ bot.onText(/\/level/, (msg) => {
   });
 });
 
-// /top10
 bot.onText(/\/top10/, async (msg) => {
   const top = await getTop10Results();
   if (top.length === 0) return bot.sendMessage(msg.chat.id, '❌ Результаты не найдены.');
@@ -130,7 +130,14 @@ bot.onText(/\/top10/, async (msg) => {
   bot.sendMessage(msg.chat.id, message, { parse_mode: 'HTML' });
 });
 
-// inline кнопки
+bot.onText(/\/myresults/, async (msg) => {
+  const results = await getUserResults(msg.chat.id);
+  if (results.length === 0) return bot.sendMessage(msg.chat.id, '❌ У вас ещё нет результатов.');
+  const message = '📈 <b>Ваши результаты:</b>\n\n' + results.map((r) =>
+    `— ${r.score}/20 (${r.level})`).join('\n');
+  bot.sendMessage(msg.chat.id, message, { parse_mode: 'HTML' });
+});
+
 bot.on('callback_query', async (query) => {
   const chatId = query.message.chat.id;
   const data = query.data;
@@ -161,7 +168,6 @@ bot.on('callback_query', async (query) => {
   }
 });
 
-// Начать викторину
 function startQuiz(chatId, level) {
   let questions;
   switch (level) {

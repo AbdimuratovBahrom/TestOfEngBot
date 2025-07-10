@@ -975,7 +975,7 @@ export const intermediateQuestions = [
   },
   {
     question: "Choose the correct preposition: She’s afraid ___ spiders.",
-    options: ['At', 'In', 'On', 'By'],
+    options: ['At', 'In', 'On', 'Of'],
     correctAnswer: 'Of'
   },
   {

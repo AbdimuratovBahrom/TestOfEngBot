@@ -25,7 +25,8 @@ app.post(`/bot${TOKEN}`, (req, res) => {
   bot.processUpdate(req.body);
   res.sendStatus(200);
 });
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// ⚠️ Удалено: app.listen(PORT), потому что порт уже занят ботом
 
 const userStates = new Map();
 
@@ -47,9 +48,7 @@ function sendNextQuestion(chatId) {
     const total = state.questions.length;
     const level = state.level;
     bot.sendMessage(chatId, `🎉 Викторина завершена!\nВаш результат: ${score}/${total}`, {
-      reply_markup: {
-        remove_keyboard: true,
-      },
+      reply_markup: { remove_keyboard: true },
     });
     saveResult(chatId, level, score);
     userStates.delete(chatId);
@@ -72,16 +71,16 @@ bot.setMyCommands([
   { command: 'help', description: 'Помощь' },
   { command: 'info', description: 'О боте' },
   { command: 'level', description: 'Выбрать уровень' },
-  { command: 'top10', description: 'Топ 10' },
+  { command: 'top10', description: '🏆 Топ 10' },
 ]);
 
 // /start
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
-  bot.sendMessage(chatId, '👋 Добро пожаловать! Выберите команду из меню или начните с /level.', {
+  bot.sendMessage(chatId, '👋 Добро пожаловать в бот для тренировки английского! Выберите команду:', {
     reply_markup: {
       keyboard: [
-        [{ text: '📚 Уровень /level' }],
+        [{ text: '📚 Выбрать уровень /level' }],
         [{ text: 'ℹ️ Помощь /help' }, { text: '🏆 Топ 10 /top10' }],
       ],
       resize_keyboard: true,
@@ -91,21 +90,22 @@ bot.onText(/\/start/, (msg) => {
 
 // /help
 bot.onText(/\/help/, (msg) => {
-  bot.sendMessage(msg.chat.id, `ℹ️ <b>Инструкция:</b>
+  bot.sendMessage(msg.chat.id, `ℹ️ <b>Как пользоваться:</b>
 
-1. Выберите уровень сложности (/level).
+1. Нажмите "📚 Выбрать уровень".
 2. Ответьте на 20 вопросов.
-3. Получите результат и смотрите Топ 10 (/top10).
+3. Узнайте свой результат.
+4. Смотрите Топ 10.
 
-Удачи в изучении английского! 🇬🇧`, { parse_mode: 'HTML' });
+Приятного обучения! 🎓`, { parse_mode: 'HTML' });
 });
 
 // /info
 bot.onText(/\/info/, (msg) => {
   bot.sendMessage(msg.chat.id, `🤖 <b>English Quiz Bot</b>
 📌 Автор: @AbdimuratovBahrom
-📊 Команды: /level, /top10, /myresults
 💡 Уровни: Beginner, Intermediate, Advanced
+📊 Команды: /level, /top10, /myresults
 `, { parse_mode: 'HTML' });
 });
 
@@ -125,7 +125,7 @@ bot.onText(/\/level/, (msg) => {
 bot.onText(/\/top10/, async (msg) => {
   const top = await getTop10Results();
   if (top.length === 0) return bot.sendMessage(msg.chat.id, '❌ Результаты не найдены.');
-  const message = '🏆 <b>Топ 10 участников:</b>\n\n' + top.map((r, i) =>
+  const message = '🏆 <b>Топ 10 результатов:</b>\n\n' + top.map((r, i) =>
     `${i + 1}. 👤 <b>${r.user_id}</b> — ${r.score}/20 (${r.level})`).join('\n');
   bot.sendMessage(msg.chat.id, message, { parse_mode: 'HTML' });
 });
@@ -161,6 +161,7 @@ bot.on('callback_query', async (query) => {
   }
 });
 
+// Начать викторину
 function startQuiz(chatId, level) {
   let questions;
   switch (level) {

@@ -1,35 +1,23 @@
 import 'dotenv/config';
 import express from 'express';
 import TelegramBot from 'node-telegram-bot-api';
-import shuffle from 'lodash.shuffle';
 import { initDB, saveResult, getTop10, getUserResults } from './db.js';
+import { beginnerQuestions, intermediateQuestions, advancedQuestions } from './questions.js';
+import shuffle from 'lodash.shuffle';
 
 const token = process.env.BOT_TOKEN;
+const bot = new TelegramBot(token, { polling: true });
+const app = express();
 const port = process.env.PORT || 3000;
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
-
-const app = express();
-const bot = new TelegramBot(token, { webHook: true });
-
-// Webhook route
-bot.setWebHook(`${WEBHOOK_URL}/bot${token}`);
-app.use(express.json());
-app.post(`/bot${token}`, (req, res) => {
-  bot.processUpdate(req.body);
-  res.sendStatus(200);
-});
-
-// Вопросы
-const beginnerQuestions = Array.from({ length: 80 }, (_, i) => ({
-  question: `Beginner Question ${i + 1}?`,
-  options: ['A', 'B', 'C', 'D'],
-  correctAnswer: 'A'
-}));
 
 const userStates = new Map();
 
 function startQuiz(chatId, level) {
-  const questions = shuffle(beginnerQuestions).slice(0, 20);
+  const all = level === 'beginner' ? beginnerQuestions
+           : level === 'intermediate' ? intermediateQuestions
+           : advancedQuestions;
+  const questions = shuffle(all).slice(0, 20);
   userStates.set(chatId, { level, questions, index: 0, correct: 0 });
   sendNextQuestion(chatId);
 }
@@ -50,7 +38,6 @@ function sendNextQuestion(chatId) {
   });
 }
 
-// Команды
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   bot.sendMessage(chatId, 'Choose your level:', {
@@ -92,7 +79,6 @@ bot.on('callback_query', async (query) => {
   bot.answerCallbackQuery(query.id);
 });
 
-// Запускаем сервер
 app.get('/', (req, res) => res.send('Bot is running.'));
 app.listen(port, async () => {
   console.log(`🌐 WEBHOOK_URL: ${WEBHOOK_URL}`);

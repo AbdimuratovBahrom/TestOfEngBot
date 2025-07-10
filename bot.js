@@ -6,7 +6,8 @@ import { beginnerQuestions, intermediateQuestions, advancedQuestions } from './q
 import shuffle from 'lodash.shuffle';
 
 const token = process.env.BOT_TOKEN;
-const bot = new TelegramBot(token, { polling: true });
+const bot = new TelegramBot(token);
+
 const app = express();
 const port = process.env.PORT || 3000;
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
@@ -79,9 +80,16 @@ bot.on('callback_query', async (query) => {
   bot.answerCallbackQuery(query.id);
 });
 
+app.use(express.json());
 app.get('/', (req, res) => res.send('Bot is running.'));
+app.post(`/bot${token}`, (req, res) => {
+  bot.processUpdate(req.body);
+  res.sendStatus(200);
+});
+
 app.listen(port, async () => {
   console.log(`🌐 WEBHOOK_URL: ${WEBHOOK_URL}`);
   console.log(`📡 PORT: ${port}`);
   await initDB();
+  await bot.setWebHook(`${WEBHOOK_URL}/bot${token}`);
 });

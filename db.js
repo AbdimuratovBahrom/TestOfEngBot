@@ -1,55 +1,44 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-// Определяем __dirname в ES-модулях
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 let db;
 
-async function initDB() {
+export async function initDb() {
   db = await open({
-    filename: path.join(__dirname, 'quiz_results.db'),
+    filename: './quiz.db',
     driver: sqlite3.Database
   });
 
-  await db.exec(`
+  await db.run(`
     CREATE TABLE IF NOT EXISTS results (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      userId TEXT,
-      username TEXT,
+      user_id INTEGER,
+      level TEXT,
       score INTEGER,
-      total INTEGER,
-      timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-      level TEXT
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
   `);
 }
 
-async function saveResult(userId, username, score, total, level) {
+export async function saveResult(userId, level, score) {
+  if (!db) await initDb();
   await db.run(
-    'INSERT INTO results (userId, username, score, total, level) VALUES (?, ?, ?, ?, ?)',
-    [userId, username, score, total, level]
+    'INSERT INTO results (user_id, level, score) VALUES (?, ?, ?)',
+    [userId, level, score]
   );
 }
 
-async function getTop10() {
-  return await db.all(`
-    SELECT username, level, MAX(score) as maxScore, total
-    FROM results
-    GROUP BY userId, level
-    ORDER BY maxScore DESC
-    LIMIT 10
-  `);
+export async function getTop10Results() {
+  if (!db) await initDb();
+  return await db.all(
+    'SELECT user_id, level, score FROM results ORDER BY score DESC LIMIT 10'
+  );
 }
 
-async function getUserResults(userId) {
+export async function getUserResults(userId) {
+  if (!db) await initDb();
   return await db.all(
-    'SELECT level, score, total, timestamp FROM results WHERE userId = ? ORDER BY timestamp DESC LIMIT 10',
+    'SELECT level, score, created_at FROM results WHERE user_id = ? ORDER BY created_at DESC LIMIT 10',
     [userId]
   );
 }
-
-export { initDB, saveResult, getTop10, getUserResults };

@@ -1,135 +1,151 @@
-import 'dotenv/config';
-import express from 'express';
 import TelegramBot from 'node-telegram-bot-api';
-import { initDB, saveResult, getTop10, getUserResults } from './db.js';
+import express from 'express';
+import dotenv from 'dotenv';
 import { beginnerQuestions, intermediateQuestions, advancedQuestions } from './questions.js';
-import shuffle from 'lodash.shuffle';
+import { saveResult, getTop10Results, getUserResults } from './db.js';
 
-const token = process.env.BOT_TOKEN;
+dotenv.config();
+
+const TOKEN = process.env.BOT_TOKEN;
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
+const PORT = process.env.PORT || 3000;
 
-const bot = new TelegramBot(token);
+if (!TOKEN || !WEBHOOK_URL) {
+  console.error('❌ BOT_TOKEN и WEBHOOK_URL должны быть заданы в .env');
+  process.exit(1);
+}
+
+const bot = new TelegramBot(TOKEN, { webHook: { port: PORT } });
+bot.setWebHook(`${WEBHOOK_URL}/bot${TOKEN}`);
+
 const app = express();
-const port = process.env.PORT || 3000;
-
-// Настройка webhook
-bot.setWebHook(`${WEBHOOK_URL}/bot${token}`);
-app.use(`/bot${token}`, express.json(), (req, res) => {
+app.use(express.json());
+app.get('/', (_, res) => res.send('🤖 Бот работает!'));
+app.post(`/bot${TOKEN}`, (req, res) => {
   bot.processUpdate(req.body);
   res.sendStatus(200);
 });
 
-app.get('/', (req, res) => res.send('Бот запущен 🚀'));
-app.listen(port, async () => {
+app.listen(PORT, () => {
   console.log(`🌐 WEBHOOK_URL: ${WEBHOOK_URL}`);
-  console.log(`📡 PORT: ${port}`);
-  await initDB();
+  console.log(`📡 PORT: ${PORT}`);
 });
-
-// Установка меню
-bot.setMyCommands([
-  { command: '/start', description: 'Начать' },
-  { command: '/help', description: 'Помощь' },
-  { command: '/info', description: 'О боте' },
-  { command: '/level', description: 'Выбрать уровень' },
-  { command: '/top10', description: 'Топ 10 игроков' },
-  { command: '/myresults', description: 'Мои результаты' },
-]);
 
 const userStates = new Map();
 
-function getQuestionsByLevel(level) {
-  if (level === 'beginner') return beginnerQuestions;
-  if (level === 'intermediate') return intermediateQuestions;
-  if (level === 'advanced') return advancedQuestions;
-  return beginnerQuestions;
+function getRandomQuestions(questions, count = 20) {
+  const shuffled = [...questions].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
 }
 
-function startQuiz(chatId, level) {
-  const questions = shuffle(getQuestionsByLevel(level)).slice(0, 20);
-  userStates.set(chatId, { level, questions, index: 0, correct: 0 });
-  sendNextQuestion(chatId);
+function createQuestionMessage(state) {
+  const q = state.questions[state.index];
+  return `🧠 <b>Вопрос ${state.index + 1}/${state.questions.length}:</b>\n${q.question}`;
 }
 
 function sendNextQuestion(chatId) {
   const state = userStates.get(chatId);
+
   if (!state || state.index >= state.questions.length) {
-    bot.sendMessage(chatId, `✅ Викторина завершена! Правильных ответов: ${state.correct}/20`);
-    saveResult(chatId, state.level, state.correct);
+    const score = state.correct;
+    const total = state.questions.length;
+    const level = state.level;
+    bot.sendMessage(chatId, `🎉 Викторина завершена!\nВаш результат: ${score}/${total}`, {
+      reply_markup: {
+        remove_keyboard: true,
+      },
+    });
+    saveResult(chatId, level, score);
     userStates.delete(chatId);
     return;
   }
 
   const q = state.questions[state.index];
-  const progress = `${state.index + 1}/20`;
+  const message = createQuestionMessage(state);
+  const buttons = q.options.map((opt) => [{ text: `🔘 ${opt}`, callback_data: opt }]);
 
-  bot.sendMessage(chatId, `❓ ${q.question}\n📊 Вопрос ${progress}`, {
-    reply_markup: {
-      inline_keyboard: q.options.map(opt => [{
-        text: `🔘 ${opt}`,
-        callback_data: opt
-      }])
-    }
+  bot.sendMessage(chatId, message, {
+    parse_mode: 'HTML',
+    reply_markup: { inline_keyboard: buttons },
   });
 }
 
+// Команды
+bot.setMyCommands([
+  { command: 'start', description: 'Начать' },
+  { command: 'help', description: 'Помощь' },
+  { command: 'info', description: 'О боте' },
+  { command: 'level', description: 'Выбрать уровень' },
+  { command: 'top10', description: '🏆 Топ 10' },
+]);
+
+// /start
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
-  bot.sendMessage(chatId, '👋 Добро пожаловать! Выберите уровень сложности:', {
+  bot.sendMessage(chatId, '👋 Добро пожаловать в бот для тренировки английского! Выберите команду:', {
     reply_markup: {
-      inline_keyboard: [
-        [{ text: '🟢 Beginner', callback_data: 'level_beginner' }],
-        [{ text: '🟡 Intermediate', callback_data: 'level_intermediate' }],
-        [{ text: '🔴 Advanced', callback_data: 'level_advanced' }]
-      ]
-    }
+      keyboard: [
+        [{ text: '📚 Выбрать уровень /level' }],
+        [{ text: 'ℹ️ Помощь /help' }, { text: '🏆 Топ 10 /top10' }],
+      ],
+      resize_keyboard: true,
+    },
   });
 });
 
-bot.onText(/\/level/, (msg) => {
-  bot.sendMessage(msg.chat.id, 'Выберите уровень сложности:', {
-    reply_markup: {
-      inline_keyboard: [
-        [{ text: '🟢 Beginner', callback_data: 'level_beginner' }],
-        [{ text: '🟡 Intermediate', callback_data: 'level_intermediate' }],
-        [{ text: '🔴 Advanced', callback_data: 'level_advanced' }]
-      ]
-    }
-  });
-});
-
-bot.onText(/\/top10/, async (msg) => {
-  const top = await getTop10();
-  const text = top.length
-    ? top.map((r, i) => `${i + 1}. ${r.user_id}: ${r.score} (${r.level})`).join('\n')
-    : 'Нет данных.';
-  bot.sendMessage(msg.chat.id, `🏆 Топ 10 игроков:\n${text}`);
-});
-
-bot.onText(/\/myresults/, async (msg) => {
-  const rows = await getUserResults(msg.chat.id);
-  const text = rows.length
-    ? rows.map((r, i) => `${i + 1}. ${r.score} (${r.level})`).join('\n')
-    : 'Нет ваших результатов.';
-  bot.sendMessage(msg.chat.id, `📊 Ваши результаты:\n${text}`);
-});
-
+// /help
 bot.onText(/\/help/, (msg) => {
-  bot.sendMessage(msg.chat.id, `🆘 Помощь:
-- /start — начать викторину
-- /level — выбрать уровень
-- /top10 — топ игроков
-- /myresults — ваши результаты
-- /info — информация о боте`);
+  bot.sendMessage(msg.chat.id, `ℹ️ <b>Как пользоваться:</b>
+
+1. Нажмите "📚 Выбрать уровень".
+2. Ответьте на 20 вопросов.
+3. Узнайте свой результат.
+4. Смотрите Топ 10.
+
+Приятного обучения! 🎓`, { parse_mode: 'HTML' });
 });
 
+// /info
 bot.onText(/\/info/, (msg) => {
-  bot.sendMessage(msg.chat.id, 'ℹ️ Этот бот поможет вам тренировать английский язык через тесты.');
+  bot.sendMessage(msg.chat.id, `🤖 <b>English Quiz Bot</b>
+📌 Автор: @AbdimuratovBahrom
+💡 Уровни: Beginner, Intermediate, Advanced
+📊 Команды: /level, /top10, /myresults
+`, { parse_mode: 'HTML' });
 });
 
+// /level
+bot.onText(/\/level/, (msg) => {
+  const levels = [
+    [{ text: '🔰 Beginner', callback_data: 'level_beginner' }],
+    [{ text: '⚙️ Intermediate', callback_data: 'level_intermediate' }],
+    [{ text: '🚀 Advanced', callback_data: 'level_advanced' }],
+  ];
+  bot.sendMessage(msg.chat.id, '📚 Выберите уровень сложности:', {
+    reply_markup: { inline_keyboard: levels },
+  });
+});
+
+// /top10
+bot.onText(/\/top10/, async (msg) => {
+  const top = await getTop10Results();
+  if (top.length === 0) return bot.sendMessage(msg.chat.id, '❌ Результаты не найдены.');
+  const message = '🏆 <b>Топ 10 результатов:</b>\n\n' + top.map((r, i) =>
+    `${i + 1}. 👤 <b>${r.user_id}</b> — ${r.score}/20 (${r.level})`).join('\n');
+  bot.sendMessage(msg.chat.id, message, { parse_mode: 'HTML' });
+});
+
+// inline кнопки
 bot.on('callback_query', async (query) => {
   const chatId = query.message.chat.id;
   const data = query.data;
+
+  try {
+    await bot.answerCallbackQuery(query.id);
+  } catch (err) {
+    console.warn('⚠️ answerCallbackQuery error:', err.message);
+  }
+
   const state = userStates.get(chatId);
 
   if (data.startsWith('level_')) {
@@ -146,10 +162,21 @@ bot.on('callback_query', async (query) => {
     if (isCorrect) state.correct++;
     state.index++;
 
-    setTimeout(() => {
-      sendNextQuestion(chatId);
-    }, 1000);
+    setTimeout(() => sendNextQuestion(chatId), 1000);
+  }
+});
+
+// Начать викторину
+function startQuiz(chatId, level) {
+  let questions;
+  switch (level) {
+    case 'beginner': questions = beginnerQuestions; break;
+    case 'intermediate': questions = intermediateQuestions; break;
+    case 'advanced': questions = advancedQuestions; break;
+    default: return;
   }
 
-  bot.answerCallbackQuery(query.id);
-});
+  const selected = getRandomQuestions(questions);
+  userStates.set(chatId, { level, questions: selected, index: 0, correct: 0 });
+  sendNextQuestion(chatId);
+}

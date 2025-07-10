@@ -1,4 +1,3 @@
-// Updated bot.js with language selection
 import TelegramBot from 'node-telegram-bot-api';
 import express from 'express';
 import dotenv from 'dotenv';
@@ -17,152 +16,260 @@ if (!TOKEN || !WEBHOOK_URL) {
 }
 
 const bot = new TelegramBot(TOKEN, { webHook: true });
+
 const app = express();
 app.use(express.json());
+
 app.get('/', (_, res) => res.send('🤖 Бот работает!'));
 app.post(`/bot${TOKEN}`, (req, res) => {
   bot.processUpdate(req.body);
   res.sendStatus(200);
 });
+
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
   bot.setWebHook(`${WEBHOOK_URL}/bot${TOKEN}`);
 });
 
 const userStates = new Map();
-const userLanguages = new Map();
 
 const translations = {
   ru: {
-    welcome: '👋 Добро пожаловать в бот для тренировки английского! Выберите команду:',
-    help: `ℹ️ <b>Как пользоваться:</b>\n1. Нажмите \"📚 Выбрать уровень\".\n2. Ответьте на 20 вопросов.\n3. Узнайте свой результат.\n4. Смотрите Топ 10.\n\nПриятного обучения! 🎓`,
-    info: `🤖 <b>English Quiz Bot</b>\n📌 Автор: @AbdimuratovBahrom\n💡 Уровни: Beginner, Intermediate, Advanced\n📊 Команды: /level, /top10, /myresults`,
-    chooseLevel: '📚 Выберите уровень сложности:',
-    top10: '🏆 <b>Топ 10 результатов:</b>',
-    myresults: '📈 <b>Ваши результаты:</b>',
-    noResults: '❌ Результаты не найдены.',
-    quizEnd: (score, total) => `🎉 Викторина завершена!\nВаш результат: ${score}/${total}`,
+    start: '👋 Добро пожаловать в бот для тренировки английского! Пожалуйста, выберите язык:',
+    choose_level: '📚 Выберите уровень сложности:',
+    help: `ℹ️ <b>Как пользоваться:</b>\n\n1. Нажмите "📚 Выбрать уровень".\n2. Ответьте на 20 вопросов.\n3. Узнайте свой результат.\n4. Смотрите Топ 10.\n\nПриятного обучения! 🎓`,
+    info: `🤖 <b>@TestOfEngBot</b>\n📌 Автор: @Admin\n💡 Уровни: Beginner, Intermediate, Advanced\n📊 Команды: /level, /top10, /myresults`,
+    result: (score, total) => `🎉 Викторина завершена!\nВаш результат: ${score}/${total}`,
+    top10_empty: '❌ Результаты не найдены.',
+    myresults_empty: '❌ У вас ещё нет результатов.',
+    top10_title: '🏆 <b>Топ 10 результатов:</b>\n\n',
+    your_results: '📈 <b>Ваши результаты:</b>\n\n',
     correct: '✅ Правильно!',
-    wrong: (correctAnswer) => `❌ Неправильно. Правильный ответ: ${correctAnswer}`,
-    level: {
-      beginner: '🔰 Beginner',
-      intermediate: '⚙️ Intermediate',
-      advanced: '🚀 Advanced',
-    },
-    keyboard: [
-      [{ text: '📚 Выбрать уровень /level' }],
-      [{ text: 'ℹ️ Помощь /help' }, { text: '🏆 Топ 10 /top10' }],
-    ],
-    languageSelect: '🌐 Пожалуйста, выберите язык / Iltimos, tilni tanlang / Til tanlań:',
-    languages: [
-      [{ text: '🇷🇺 Русский', callback_data: 'lang_ru' }],
-      [{ text: '🇺🇿 Oʻzbekcha', callback_data: 'lang_uz' }],
-      [{ text: '🇰🇿 Qaraqalpaqsha', callback_data: 'lang_kk' }],
-    ],
+    wrong: (answer) => `❌ Неправильно. Правильный ответ: ${answer}`,
+    choose_language: '🌐 Пожалуйста, выберите язык:',
+    menu: (lang) => ({
+      keyboard: [
+        [{ text: '📚 Выбрать уровень /level' }],
+        [{ text: 'ℹ️ Помощь /help' }, { text: '🏆 Топ 10 /top10' }]
+      ],
+      resize_keyboard: true,
+    }),
+    commands: {
+      start: 'Начать',
+      help: 'Помощь',
+      info: 'О боте',
+      level: 'Выбрать уровень',
+      top10: '🏆 Топ 10',
+      myresults: '📈 Мои результаты'
+    }
   },
   uz: {
-    welcome: '👋 Ingliz tili bo‘yicha mashq qilish uchun botga xush kelibsiz! Buyruqni tanlang:',
-    help: `ℹ️ <b>Foydalanish:</b>\n1. \"📚 Darajani tanlang\" tugmasini bosing.\n2. 20 ta savolga javob bering.\n3. Natijani bilib oling.\n4. Top 10 ro‘yxatini ko‘ring.\n\nOmad! 🎓`,
-    info: `🤖 <b>English Quiz Bot</b>\n📌 Muallif: @AbdimuratovBahrom\n💡 Darajalar: Beginner, Intermediate, Advanced\n📊 Buyruqlar: /level, /top10, /myresults`,
-    chooseLevel: '📚 Qiyinchilik darajasini tanlang:',
-    top10: '🏆 <b>Eng yaxshi 10 natija:</b>',
-    myresults: '📈 <b>Sizning natijalaringiz:</b>',
-    noResults: '❌ Natijalar topilmadi.',
-    quizEnd: (score, total) => `🎉 Viktorina tugadi!\nNatijangiz: ${score}/${total}`,
+    start: '👋 Ingliz tilini o‘rganish uchun botga xush kelibsiz! Iltimos, tilni tanlang:',
+    choose_level: '📚 Qiyinlik darajasini tanlang:',
+    help: `ℹ️ <b>Qanday foydalaniladi:</b>\n\n1. "📚 Darajani tanlang" tugmasini bosing.\n2. 20 ta savolga javob bering.\n3. Natijani ko‘ring.\n4. Top 10 ni ko‘ring.\n\nOmad! 🎓`,
+    info: `🤖 <b>@TestOfEngBot</b>\n📌 Muallif: @Admin\n💡 Darajalar: Beginner, Intermediate, Advanced\n📊 Buyruqlar: /level, /top10, /myresults`,
+    result: (score, total) => `🎉 Viktorina yakunlandi!\nNatijangiz: ${score}/${total}`,
+    top10_empty: '❌ Natijalar topilmadi.',
+    myresults_empty: '❌ Sizda hali natijalar yo‘q.',
+    top10_title: '🏆 <b>Top 10 natijalar:</b>\n\n',
+    your_results: '📈 <b>Sizning natijalaringiz:</b>\n\n',
     correct: '✅ To‘g‘ri!',
-    wrong: (correctAnswer) => `❌ Noto‘g‘ri. To‘g‘ri javob: ${correctAnswer}`,
-    level: {
-      beginner: '🔰 Beginner',
-      intermediate: '⚙️ Intermediate',
-      advanced: '🚀 Advanced',
-    },
-    keyboard: [
-      [{ text: '📚 Darajani tanlash /level' }],
-      [{ text: 'ℹ️ Yordam /help' }, { text: '🏆 Top 10 /top10' }],
-    ],
-    languageSelect: '🌐 Iltimos, tilni tanlang:',
-    languages: [
-      [{ text: '🇷🇺 Rus tili', callback_data: 'lang_ru' }],
-      [{ text: '🇺🇿 Oʻzbekcha', callback_data: 'lang_uz' }],
-      [{ text: '🇰🇿 Qaraqalpaqsha', callback_data: 'lang_kk' }],
-    ],
+    wrong: (answer) => `❌ Noto‘g‘ri. To‘g‘ri javob: ${answer}`,
+    choose_language: '🌐 Iltimos, tilni tanlang:',
+    menu: (lang) => ({
+      keyboard: [
+        [{ text: '📚 Darajani tanlash /level' }],
+        [{ text: 'ℹ️ Yordam /help' }, { text: '🏆 Top 10 /top10' }]
+      ],
+      resize_keyboard: true,
+    }),
+    commands: {
+      start: 'Boshlash',
+      help: 'Yordam',
+      info: 'Bot haqida',
+      level: 'Darajani tanlash',
+      top10: '🏆 Top 10',
+      myresults: '📈 Mening natijalarim'
+    }
   },
   kk: {
-    welcome: '👋 Ingiliz tilin úyreniw ushın botqa xosh kelipsiz! Búyruq saylań:',
-    help: `ℹ️ <b>Qanday paydalaniladi:</b>\n1. \"📚 Dárajesin saylań\".\n2. 20 sorawǵa juwap beriń.\n3. Natijeni biliń.\n4. Eń jaqsı 10-she tiklew.\n\nSátti bolsin! 🎓`,
-    info: `🤖 <b>English Quiz Bot</b>\n📌 Avtor: @AbdimuratovBahrom\n💡 Dárajeler: Beginner, Intermediate, Advanced\n📊 Búyruqlar: /level, /top10, /myresults`,
-    chooseLevel: '📚 Qiynshiliq dárejesin saylań:',
-    top10: '🏆 <b>Eń jaqsı 10 natije:</b>',
-    myresults: '📈 <b>Sizdiń natijelerińiz:</b>',
-    noResults: '❌ Natijeler tabılmadi.',
-    quizEnd: (score, total) => `🎉 Viktorina ayaqlandi!\nNatijeńiz: ${score}/${total}`,
-    correct: '✅ Dúrís!',
-    wrong: (correctAnswer) => `❌ Nádúrís. Dúrís juwap: ${correctAnswer}`,
-    level: {
-      beginner: '🔰 Beginner',
-      intermediate: '⚙️ Intermediate',
-      advanced: '🚀 Advanced',
-    },
-    keyboard: [
-      [{ text: '📚 Dáreje saylaw /level' }],
-      [{ text: 'ℹ️ Kómek /help' }, { text: '🏆 Top 10 /top10' }],
-    ],
-    languageSelect: '🌐 Til tanlań:',
-    languages: [
-      [{ text: '🇷🇺 Russha', callback_data: 'lang_ru' }],
-      [{ text: '🇺🇿 Oʻzbeksha', callback_data: 'lang_uz' }],
-      [{ text: '🇰🇿 Qaraqalpaqsha', callback_data: 'lang_kk' }],
-    ],
-  },
+    start: '👋 Ағылшын тілін үйрену ботына қош келдіңіз! Тілді таңдаңыз:',
+    choose_level: '📚 Қиындық деңгейін таңдаңыз:',
+    help: `ℹ️ <b>Қалай қолдануға болады:</b>\n\n1. "📚 Деңгейді таңдау" түймесін басыңыз.\n2. 20 сұраққа жауап беріңіз.\n3. Нәтижені көріңіз.\n4. Top 10-ды қараңыз.\n\nСәттілік! 🎓`,
+    info: `🤖 <b>@TestOfEngBot</b>\n📌 Авторы: @Admin\n💡 Деңгейлер: Beginner, Intermediate, Advanced\n📊 Бұйрықтар: /level, /top10, /myresults`,
+    result: (score, total) => `🎉 Викторина аяқталды!\nНәтижеңіз: ${score}/${total}`,
+    top10_empty: '❌ Нәтижелер табылмады.',
+    myresults_empty: '❌ Сізде әлі нәтиже жоқ.',
+    top10_title: '🏆 <b>Top 10 нәтижелер:</b>\n\n',
+    your_results: '📈 <b>Сіздің нәтижелеріңіз:</b>\n\n',
+    correct: '✅ Дұрыс!',
+    wrong: (answer) => `❌ Қате. Дұрыс жауап: ${answer}`,
+    choose_language: '🌐 Тілді таңдаңыз:',
+    menu: (lang) => ({
+      keyboard: [
+        [{ text: '📚 Деңгейді таңдау /level' }],
+        [{ text: 'ℹ️ Көмек /help' }, { text: '🏆 Top 10 /top10' }]
+      ],
+      resize_keyboard: true,
+    }),
+    commands: {
+      start: 'Бастау',
+      help: 'Көмек',
+      info: 'Бот туралы',
+      level: 'Деңгейді таңдау',
+      top10: '🏆 Top 10',
+      myresults: '📈 Менің нәтижелерім'
+    }
+  }
 };
 
-// Language selection
+// Команды с переводом
+bot.setMyCommands([
+  { command: 'start', description: 'Start' },
+  { command: 'help', description: 'Help' },
+  { command: 'info', description: 'Info' },
+  { command: 'level', description: 'Choose level' },
+  { command: 'top10', description: 'Top 10' },
+  { command: 'myresults', description: 'My Results' },
+]);
+
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
-  if (!userLanguages.has(chatId)) {
-    bot.sendMessage(chatId, translations.ru.languageSelect, {
-      reply_markup: { inline_keyboard: translations.ru.languages },
-    });
-  } else {
-    const lang = userLanguages.get(chatId);
-    bot.sendMessage(chatId, translations[lang].welcome, {
-      reply_markup: {
-        keyboard: translations[lang].keyboard,
-        resize_keyboard: true,
-      },
-    });
-  }
+  userStates.set(chatId, { step: 'language' });
+
+  const buttons = [
+    [{ text: '🇷🇺 Русский', callback_data: 'lang_ru' }],
+    [{ text: '🇺🇿 Oʻzbekcha', callback_data: 'lang_uz' }],
+    [{ text: '🇰k Qaraqalpaqsha', callback_data: 'lang_kk' }],
+  ];
+
+  bot.sendMessage(chatId, translations.ru.choose_language, {
+    reply_markup: { inline_keyboard: buttons },
+  });
 });
 
 bot.on('callback_query', async (query) => {
   const chatId = query.message.chat.id;
   const data = query.data;
 
+  try {
+    await bot.answerCallbackQuery(query.id);
+  } catch (err) {
+    console.warn('CallbackQuery error:', err.message);
+  }
+
   if (data.startsWith('lang_')) {
-    const lang = data.replace('lang_', '');
-    userLanguages.set(chatId, lang);
-    await bot.sendMessage(chatId, translations[lang].welcome, {
-      reply_markup: {
-        keyboard: translations[lang].keyboard,
-        resize_keyboard: true,
-      },
+    const lang = data.split('_')[1];
+    const state = { lang, level: null, questions: [], index: 0, correct: 0 };
+    userStates.set(chatId, state);
+    const t = translations[lang];
+
+    bot.sendMessage(chatId, t.start, {
+      reply_markup: t.menu(lang),
     });
     return;
   }
 
   const state = userStates.get(chatId);
+  if (!state || !state.lang) return;
+
+  const t = translations[state.lang];
 
   if (data.startsWith('level_')) {
     const level = data.replace('level_', '');
-    startQuiz(chatId, level);
-  } else if (state) {
+    state.level = level;
+    let questions;
+    if (level === 'beginner') questions = beginnerQuestions;
+    else if (level === 'intermediate') questions = intermediateQuestions;
+    else if (level === 'advanced') questions = advancedQuestions;
+    else return;
+
+    const selected = getRandomQuestions(questions);
+    userStates.set(chatId, { ...state, questions: selected, index: 0, correct: 0 });
+    sendNextQuestion(chatId);
+  } else {
     const q = state.questions[state.index];
     const isCorrect = data === q.correctAnswer;
-    const lang = userLanguages.get(chatId) || 'ru';
-    await bot.sendMessage(chatId,
-      isCorrect ? translations[lang].correct : translations[lang].wrong(q.correctAnswer));
+
+    await bot.sendMessage(chatId, isCorrect ? t.correct : t.wrong(q.correctAnswer));
     if (isCorrect) state.correct++;
     state.index++;
     setTimeout(() => sendNextQuestion(chatId), 1000);
   }
 });
+
+function sendNextQuestion(chatId) {
+  const state = userStates.get(chatId);
+  const t = translations[state?.lang || 'ru'];
+
+  if (!state || state.index >= state.questions.length) {
+    const msg = t.result(state.correct, state.questions.length);
+    bot.sendMessage(chatId, msg, {
+      reply_markup: { remove_keyboard: true },
+    });
+    saveResult(chatId, state.level, state.correct);
+    userStates.delete(chatId);
+    return;
+  }
+
+  const q = state.questions[state.index];
+  const buttons = q.options.map((opt) => [{ text: `🔘 ${opt}`, callback_data: opt }]);
+  const message = `🧠 <b>${state.index + 1}/${state.questions.length}</b>\n${q.question}`;
+  bot.sendMessage(chatId, message, {
+    parse_mode: 'HTML',
+    reply_markup: { inline_keyboard: buttons },
+  });
+}
+
+// Обработчики всех команд (локализованные)
+function getLang(chatId) {
+  return userStates.get(chatId)?.lang || 'ru';
+}
+
+bot.onText(/\/help/, (msg) => {
+  const lang = getLang(msg.chat.id);
+  bot.sendMessage(msg.chat.id, translations[lang].help, { parse_mode: 'HTML' });
+});
+
+bot.onText(/\/info/, (msg) => {
+  const lang = getLang(msg.chat.id);
+  bot.sendMessage(msg.chat.id, translations[lang].info, { parse_mode: 'HTML' });
+});
+
+bot.onText(/\/level/, (msg) => {
+  const lang = getLang(msg.chat.id);
+  const t = translations[lang];
+  const levels = [
+    [{ text: '🔰 Beginner', callback_data: 'level_beginner' }],
+    [{ text: '⚙️ Intermediate', callback_data: 'level_intermediate' }],
+    [{ text: '🚀 Advanced', callback_data: 'level_advanced' }],
+  ];
+  bot.sendMessage(msg.chat.id, t.choose_level, {
+    reply_markup: { inline_keyboard: levels },
+  });
+});
+
+bot.onText(/\/top10/, async (msg) => {
+  const lang = getLang(msg.chat.id);
+  const t = translations[lang];
+  const top = await getTop10Results();
+  if (top.length === 0) return bot.sendMessage(msg.chat.id, t.top10_empty);
+  const message = t.top10_title + top.map((r, i) =>
+    `${i + 1}. 👤 <b>${r.user_id}</b> — ${r.score}/20 (${r.level})`).join('\n');
+  bot.sendMessage(msg.chat.id, message, { parse_mode: 'HTML' });
+});
+
+bot.onText(/\/myresults/, async (msg) => {
+  const lang = getLang(msg.chat.id);
+  const t = translations[lang];
+  const results = await getUserResults(msg.chat.id);
+  if (results.length === 0) return bot.sendMessage(msg.chat.id, t.myresults_empty);
+  const message = t.your_results + results.map((r) =>
+    `— ${r.score}/20 (${r.level})`).join('\n');
+  bot.sendMessage(msg.chat.id, message, { parse_mode: 'HTML' });
+});
+
+function getRandomQuestions(questions, count = 20) {
+  const shuffled = [...questions].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
+}

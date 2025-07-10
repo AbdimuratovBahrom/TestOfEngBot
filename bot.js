@@ -4,6 +4,9 @@ import dotenv from 'dotenv';
 import { beginnerQuestions, intermediateQuestions, advancedQuestions } from './questions.js';
 import { saveResult, getTop10Results, getUserResults } from './db.js';
 
+
+
+
 dotenv.config();
 
 const TOKEN = process.env.BOT_TOKEN;
@@ -26,10 +29,7 @@ app.post(`/bot${TOKEN}`, (req, res) => {
   res.sendStatus(200);
 });
 
-app.listen(PORT, () => {
-  console.log(`🌐 WEBHOOK_URL: ${WEBHOOK_URL}`);
-  console.log(`📡 PORT: ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 const userStates = new Map();
 

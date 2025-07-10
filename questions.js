@@ -11,7 +11,7 @@ function assignRandomCorrectAnswer(questions) {
 }
 
 export const beginnerQuestions = assignRandomCorrectAnswer([
-  {
+ {
     question: "What's the opposite of 'big'?",
     options: ['Small', 'Large', 'Huge', 'Tall'],
     correctAnswer: 'Small'
@@ -1007,7 +1007,7 @@ export const intermediateQuestions = assignRandomCorrectAnswer([
 ]);
 
 export const advancedQuestions = assignRandomCorrectAnswer([
-   {
+    {
     question: "Choose the correct sentence:",
     options: [
       'Seldom I have encountered such wisdom.',

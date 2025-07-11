@@ -11,7 +11,8 @@ dotenv.config();
 
 const TOKEN = process.env.BOT_TOKEN;
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
+
 
 if (!TOKEN || !WEBHOOK_URL) {
   console.error('❌ BOT_TOKEN и WEBHOOK_URL должны быть заданы в .env');

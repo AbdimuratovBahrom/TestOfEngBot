@@ -35,7 +35,7 @@ const userStates = new Map();
 
 const translations = {
   ru: {
-    start: '👋 Добро пожаловать в бот для тренировки английского! Пожалуйста, выберите язык:',
+    start: '👋 Добро пожаловать в бот для тренировки английского! Пожалуйста, выберите уровень сложности:',
     choose_level: '📚 Выберите уровень сложности:',
     help: `ℹ️ <b>Как пользоваться:</b>\n\n1. Нажмите "📚 Выбрать уровень".\n2. Ответьте на 20 вопросов.\n3. Узнайте свой результат.\n4. Смотрите Топ 10.\n\nПриятного обучения! 🎓`,
     info: `🤖 <b>@TestOfEngBot</b>\n📌 Автор: @Admin\n💡 Уровни: Beginner, Intermediate, Advanced\n📊 Команды: /level, /top10, /myresults`,
@@ -124,14 +124,14 @@ const translations = {
 };
 
 // Команды с переводом
-bot.setMyCommands([
-  { command: 'start', description: 'Start' },
-  { command: 'help', description: 'Help' },
-  { command: 'info', description: 'Info' },
-  { command: 'level', description: 'Choose level' },
-  { command: 'top10', description: 'Top 10' },
-  { command: 'myresults', description: 'My Results' },
-]);
+// bot.setMyCommands([
+//   { command: 'start', description: 'Start' },
+//   { command: 'help', description: 'Help' },
+//   { command: 'info', description: 'Info' },
+//   { command: 'level', description: 'Choose level' },
+//   { command: 'top10', description: 'Top 10' },
+//   { command: 'myresults', description: 'My Results' },
+// ]);
 
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;

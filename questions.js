@@ -108,7 +108,7 @@ export const beginnerQuestions = ([
   },
   {
     question: "What is the smell of rain like?",
-    options: ["Wet", "Dry", "Hot", "Cold"],
+    options: [ "Dry", "Hot", "Wet","Cold"],
     correctAnswer: "Wet"
   },
   {
@@ -118,12 +118,12 @@ export const beginnerQuestions = ([
   },
   {
     question: "What is the opposite of 'fast'?",
-    options: ["Slow", "Quick", "Rapid", "Speedy"],
+    options: [ "Quick", "Rapid", "Speedy", "Slow"],
     correctAnswer: "Slow"
   },
   {
     question: "Which is a type of bird?",
-    options: ["Eagle", "Lion", "Snake", "Bear"],
+    options: [ "Lion", "Snake", "Bear", "Eagle"],
     correctAnswer: "Eagle"
   },
   {
@@ -133,12 +133,12 @@ export const beginnerQuestions = ([
   },
   {
     question: "What do you call a baby dog?",
-    options: ["Puppy", "Kitten", "Cub", "Calf"],
+    options: [ "Kitten", "Cub", "Puppy", "Calf"],
     correctAnswer: "Puppy"
   },
   {
     question: "Which word is an adjective?",
-    options: ["Big", "Run", "Table", "Slowly"],
+    options: [ "Run", "Table", "Slowly", "Big"],
     correctAnswer: "Big"
   },
   {
@@ -153,7 +153,7 @@ export const beginnerQuestions = ([
   },
   {
     question: "Which is a type of fish?",
-    options: ["Salmon", "Tiger", "Wolf", "Fox"],
+    options: [ "Tiger", "Wolf", "Salmon", "Fox"],
     correctAnswer: "Salmon"
   },
   {
@@ -163,7 +163,7 @@ export const beginnerQuestions = ([
   },
   {
     question: "What do you use to cut paper?",
-    options: ["Scissors", "Spoon", "Fork", "Knife"],
+    options: [ "Spoon", "Fork", "Knife", "Scissors"],
     correctAnswer: "Scissors"
   },
   {

@@ -137,9 +137,7 @@ if (data.startsWith('lang_')) {
 const langCode = data.replace('lang_', '');
 await setCommandsForLanguage(chatId, langCode);
 
-javascript
-Копировать
-Редактировать
+
 const lang = LANG[langCode];
 if (lang) {
   bot.sendMessage(chatId, lang.texts.welcome, {
@@ -170,9 +168,7 @@ const langCode = userLanguages.get(chatId) || 'ru';
 const t = LANG[langCode].texts;
 const isCorrect = data === q.correctAnswer;
 
-javascript
-Копировать
-Редактировать
+
 await bot.sendMessage(chatId, isCorrect ? t.correct : t.wrong(q.correctAnswer));
 if (isCorrect) state.correct++;
 state.index++;

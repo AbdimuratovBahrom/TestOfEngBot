@@ -1,14 +1,6 @@
-function assignRandomoptions(questions) {
-  return questions.map(q => {
-    const randomIndex = Math.floor(Math.random() * q.options.length);
-    return {
-      ...q,
-      correctAnswer: q.options[randomIndex]
-    };
-  });
-}
 
-export const beginnerQuestions = assignoptions([
+
+export const beginnerQuestions = ([
   {
     question: "What is the capital of England?",
     options: ["London", "Paris", "Berlin", "Madrid"],
@@ -493,7 +485,7 @@ export const beginnerQuestions = assignoptions([
   }
 ]);
 
-export const intermediateQuestions = assignRandomoptions([
+export const intermediateQuestions = ([
   {
     question: "Choose the correct form: 'He ____ to the gym every day.'",
     options: ["go", "goes", "gone", "going"],
@@ -1041,7 +1033,7 @@ export const intermediateQuestions = assignRandomoptions([
   }
 ]);
 
-export const advancedQuestions = assignRandomoptions([
+export const advancedQuestions = ([
   {
     question: "Identify the sentence with correct punctuation:",
     options: [

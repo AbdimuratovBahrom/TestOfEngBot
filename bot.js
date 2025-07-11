@@ -46,7 +46,7 @@ const translations = {
     your_results: '📈 <b>Ваши результаты:</b>\n\n',
     correct: '✅ Правильно!',
     wrong: (answer) => `❌ Неправильно. Правильный ответ: ${answer}`,
-    choose_language: '🌐 Пожалуйста, выберите язык:',
+    choose_language: '🌐Выберите язык/Tilni tanlang/Til saylañ:',
     menu: (lang) => ({
       keyboard: [
         [{ text: '📚 Выбрать уровень /level' }],
@@ -140,7 +140,7 @@ bot.onText(/\/start/, (msg) => {
   const buttons = [
     [{ text: '🇷🇺 Русский', callback_data: 'lang_ru' }],
     [{ text: '🇺🇿 Oʻzbekcha', callback_data: 'lang_uz' }],
-    [{ text: '🇰k Qaraqalpaqsha', callback_data: 'lang_kk' }],
+    [{ text: ' Qaraqalpaqsha', callback_data: 'lang_kk' }],
   ];
 
   bot.sendMessage(chatId, translations.ru.choose_language, {

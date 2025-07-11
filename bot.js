@@ -54,7 +54,7 @@ const translations = {
       ],
       resize_keyboard: true,
     }),
-    commands: {
+    setMyCommands: {
       start: 'Начать',
       help: 'Помощь',
       info: 'О боте',

@@ -30,7 +30,17 @@ app.post(`/bot${TOKEN}`, (req, res) => {
   res.sendStatus(200);
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
+  bot.setWebHook(`${WEBHOOK_URL}/bot${TOKEN}`);
+}).on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`❌ Порт ${PORT} уже используется`);
+  } else {
+    console.error('❌ Ошибка сервера:', err);
+  }
+});
+
 
 const userStates = new Map();
 

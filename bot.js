@@ -96,7 +96,7 @@ bot.onText(/\/start/, (msg) => {
       inline_keyboard: [
         [{ text: '🇷🇺 Русский', callback_data: 'lang_ru' }],
         [{ text: '🇺🇿 Oʻzbekcha', callback_data: 'lang_uz' }],
-        [{ text: '🇰🇿 Qaraqalpaqsha', callback_data: 'lang_kk' }],
+        [{ text: '🇰k Qaraqalpaqsha', callback_data: 'lang_kk' }],
       ],
     },
   });

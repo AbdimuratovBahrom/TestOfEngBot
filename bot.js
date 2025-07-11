@@ -19,12 +19,11 @@ if (!TOKEN || !WEBHOOK_URL) {
   process.exit(1);
 }
 
-const bot = new TelegramBot(TOKEN, { webHook: { port: PORT } });
-bot.setWebHook(`${WEBHOOK_URL}/bot${TOKEN}`);
-
 const app = express();
 app.use(express.json());
+
 app.get('/', (_, res) => res.send('🤖 Бот работает!'));
+
 app.post(`/bot${TOKEN}`, (req, res) => {
   bot.processUpdate(req.body);
   res.sendStatus(200);
@@ -33,13 +32,8 @@ app.post(`/bot${TOKEN}`, (req, res) => {
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
   bot.setWebHook(`${WEBHOOK_URL}/bot${TOKEN}`);
-}).on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`❌ Порт ${PORT} уже используется`);
-  } else {
-    console.error('❌ Ошибка сервера:', err);
-  }
 });
+
 
 
 const userStates = new Map();

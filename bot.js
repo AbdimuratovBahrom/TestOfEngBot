@@ -183,7 +183,8 @@ bot.on('callback_query', async (query) => {
     startQuiz(chatId, level);
   } else if (state && state.questions) {
     const q = state.questions[state.index];
-    const isCorrect = data === q.options[q.correctAnswer];
+    const correctIndex = q.options.indexOf(q.correctAnswer);
+const isCorrect = data === q.options[correctIndex !== -1 ? correctIndex : q.correctAnswer];
     await bot.sendMessage(chatId, isCorrect ? t(chatId, 'correct') : t(chatId, 'wrong', q.options[q.correctAnswer] || 'неизвестно'));
     if (isCorrect) state.correct++;
     state.index++;

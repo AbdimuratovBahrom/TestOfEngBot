@@ -1,1607 +1,1557 @@
-
-
 export const beginnerQuestions = [
   {
     question: "What is the capital of England?",
-    options: ["London", "Paris", "Berlin", "Madrid"],
+    options: ["London", "Paris", "Berlin", "Madrid"].sort(() => Math.random() - 0.5),
     correctAnswer: "London"
   },
   {
     question: "What is the opposite of 'big'?",
-    options: ["Small", "Large", "Huge", "Tall"],
+    options: ["Small", "Large", "Huge", "Tall"].sort(() => Math.random() - 0.5),
     correctAnswer: "Small"
   },
   {
     question: "What is the color of the sky on a clear day?",
-    options: ["Blue", "Red", "Green", "Yellow"],
+    options: ["Blue", "Red", "Green", "Yellow"].sort(() => Math.random() - 0.5),
     correctAnswer: "Blue"
   },
   {
     question: "How many days are in a week?",
-    options: ["Five", "Six", "Seven", "Eight"],
+    options: ["Five", "Six", "Seven", "Eight"].sort(() => Math.random() - 0.5),
     correctAnswer: "Seven"
   },
   {
     question: "What is the plural of 'cat'?",
-    options: ["Cats", "Cat", "Cates", "Catses"],
+    options: ["Cats", "Cat", "Cates", "Catses"].sort(() => Math.random() - 0.5),
     correctAnswer: "Cats"
   },
   {
     question: "Which animal is known as man's best friend?",
-    options: ["Dog", "Cat", "Bird", "Fish"],
+    options: ["Dog", "Cat", "Bird", "Fish"].sort(() => Math.random() - 0.5),
     correctAnswer: "Dog"
   },
   {
     question: "What is 2 + 3?",
-    options: ["Four", "Five", "Six", "Seven"],
+    options: ["Four", "Five", "Six", "Seven"].sort(() => Math.random() - 0.5),
     correctAnswer: "Five"
   },
   {
     question: "What do you call a baby cat?",
-    options: ["Kitten", "Puppy", "Cub", "Foal"],
+    options: ["Kitten", "Puppy", "Cub", "Foal"].sort(() => Math.random() - 0.5),
     correctAnswer: "Kitten"
   },
   {
     question: "Which word is a verb?",
-    options: ["Run", "Table", "Blue", "Happy"],
+    options: ["Run", "Table", "Blue", "Happy"].sort(() => Math.random() - 0.5),
     correctAnswer: "Run"
   },
   {
     question: "What is the first day of the week?",
-    options: ["Monday", "Sunday", "Friday", "Wednesday"],
+    options: ["Monday", "Sunday", "Friday", "Wednesday"].sort(() => Math.random() - 0.5),
     correctAnswer: "Monday"
   },
   {
     question: "What is the opposite of 'hot'?",
-    options: ["Cold", "Warm", "Cool", "Burning"],
+    options: ["Cold", "Warm", "Cool", "Burning"].sort(() => Math.random() - 0.5),
     correctAnswer: "Cold"
   },
   {
     question: "How many legs does a spider have?",
-    options: ["Six", "Eight", "Four", "Ten"],
+    options: ["Six", "Eight", "Four", "Ten"].sort(() => Math.random() - 0.5),
     correctAnswer: "Eight"
   },
   {
     question: "What is the plural of 'book'?",
-    options: ["Books", "Bookes", "Book", "Booksies"],
+    options: ["Books", "Bookes", "Book", "Booksies"].sort(() => Math.random() - 0.5),
     correctAnswer: "Books"
   },
   {
     question: "Which is a fruit?",
-    options: ["Apple", "Carrot", "Potato", "Broccoli"],
+    options: ["Apple", "Carrot", "Potato", "Broccoli"].sort(() => Math.random() - 0.5),
     correctAnswer: "Apple"
   },
   {
     question: "What is the color of grass?",
-    options: ["Green", "Blue", "Red", "Purple"],
+    options: ["Green", "Blue", "Red", "Purple"].sort(() => Math.random() - 0.5),
     correctAnswer: "Green"
   },
   {
     question: "What is 5 - 2?",
-    options: ["Two", "Three", "Four", "Five"],
+    options: ["Two", "Three", "Four", "Five"].sort(() => Math.random() - 0.5),
     correctAnswer: "Three"
   },
   {
     question: "What do you use to write on a blackboard?",
-    options: ["Chalk", "Pen", "Pencil", "Marker"],
+    options: ["Chalk", "Pen", "Pencil", "Marker"].sort(() => Math.random() - 0.5),
     correctAnswer: "Chalk"
   },
   {
     question: "Which word is a noun?",
-    options: ["House", "Run", "Quickly", "Happy"],
+    options: ["House", "Run", "Quickly", "Happy"].sort(() => Math.random() - 0.5),
     correctAnswer: "House"
   },
   {
     question: "What is the opposite of 'up'?",
-    options: ["Down", "Left", "Right", "Over"],
+    options: ["Down", "Left", "Right", "Over"].sort(() => Math.random() - 0.5),
     correctAnswer: "Down"
   },
   {
     question: "What is the plural of 'child'?",
-    options: ["Children", "Childs", "Childes", "Childrens"],
+    options: ["Children", "Childs", "Childes", "Childrens"].sort(() => Math.random() - 0.5),
     correctAnswer: "Children"
   },
   {
     question: "Which is a day of the week?",
-    options: ["Tuesday", "January", "Summer", "Morning"],
+    options: ["Tuesday", "January", "Summer", "Morning"].sort(() => Math.random() - 0.5),
     correctAnswer: "Tuesday"
   },
   {
     question: "What is the smell of rain like?",
-    options: [ "Dry", "Hot", "Wet","Cold"],
+    options: ["Dry", "Hot", "Wet", "Cold"].sort(() => Math.random() - 0.5),
     correctAnswer: "Wet"
   },
   {
     question: "How many months are in a year?",
-    options: ["Ten", "Eleven", "Twelve", "Thirteen"],
+    options: ["Ten", "Eleven", "Twelve", "Thirteen"].sort(() => Math.random() - 0.5),
     correctAnswer: "Twelve"
   },
   {
     question: "What is the opposite of 'fast'?",
-    options: [ "Quick", "Rapid", "Speedy", "Slow"],
+    options: ["Quick", "Rapid", "Speedy", "Slow"].sort(() => Math.random() - 0.5),
     correctAnswer: "Slow"
   },
   {
     question: "Which is a type of bird?",
-    options: [ "Lion", "Snake", "Bear", "Eagle"],
+    options: ["Lion", "Snake", "Bear", "Eagle"].sort(() => Math.random() - 0.5),
     correctAnswer: "Eagle"
   },
   {
     question: "What is 4 + 4?",
-    options: ["Six", "Seven", "Eight", "Nine"],
+    options: ["Six", "Seven", "Eight", "Nine"].sort(() => Math.random() - 0.5),
     correctAnswer: "Eight"
   },
   {
     question: "What do you call a baby dog?",
-    options: [ "Kitten", "Cub", "Puppy", "Calf"],
+    options: ["Kitten", "Cub", "Puppy", "Calf"].sort(() => Math.random() - 0.5),
     correctAnswer: "Puppy"
   },
   {
     question: "Which word is an adjective?",
-    options: [ "Run", "Table", "Slowly", "Big"],
+    options: ["Run", "Table", "Slowly", "Big"].sort(() => Math.random() - 0.5),
     correctAnswer: "Big"
   },
   {
     question: "What is the opposite of 'day'?",
-    options: ["Night", "Morning", "Evening", "Afternoon"],
+    options: ["Night", "Morning", "Evening", "Afternoon"].sort(() => Math.random() - 0.5),
     correctAnswer: "Night"
   },
   {
     question: "What is the plural of 'man'?",
-    options: ["Men", "Mans", "Manes", "Mens"],
+    options: ["Men", "Mans", "Manes", "Mens"].sort(() => Math.random() - 0.5),
     correctAnswer: "Men"
   },
   {
     question: "Which is a type of fish?",
-    options: [ "Tiger", "Wolf", "Salmon", "Fox"],
+    options: ["Tiger", "Wolf", "Salmon", "Fox"].sort(() => Math.random() - 0.5),
     correctAnswer: "Salmon"
   },
   {
     question: "What is 10 - 5?",
-    options: ["Four", "Five", "Six", "Seven"],
+    options: ["Four", "Five", "Six", "Seven"].sort(() => Math.random() - 0.5),
     correctAnswer: "Five"
   },
   {
     question: "What do you use to cut paper?",
-    options: [ "Spoon", "Fork", "Knife", "Scissors"],
+    options: ["Spoon", "Fork", "Knife", "Scissors"].sort(() => Math.random() - 0.5),
     correctAnswer: "Scissors"
   },
   {
     question: "Which word is a pronoun?",
-    options: ["He", "Run", "Table", "Big"],
+    options: ["He", "Run", "Table", "Big"].sort(() => Math.random() - 0.5),
     correctAnswer: "He"
   },
   {
     question: "What is the opposite of 'in'?",
-    options: ["Out", "Up", "Down", "Over"],
+    options: ["Out", "Up", "Down", "Over"].sort(() => Math.random() - 0.5),
     correctAnswer: "Out"
   },
   {
     question: "What is the plural of 'foot'?",
-    options: ["Feet", "Foots", "Footes", "Feets"],
+    options: ["Feet", "Foots", "Footes", "Feets"].sort(() => Math.random() - 0.5),
     correctAnswer: "Feet"
   },
   {
     question: "Which is a type of tree?",
-    options: ["Oak", "Rose", "Lily", "Tulip"],
+    options: ["Oak", "Rose", "Lily", "Tulip"].sort(() => Math.random() - 0.5),
     correctAnswer: "Oak"
   },
   {
     question: "What is 3 × 2?",
-    options: ["Five", "Six", "Seven", "Eight"],
+    options: ["Five", "Six", "Seven", "Eight"].sort(() => Math.random() - 0.5),
     correctAnswer: "Six"
   },
   {
     question: "What do you call a young horse?",
-    options: ["Foal", "Puppy", "Kitten", "Cub"],
+    options: ["Foal", "Puppy", "Kitten", "Cub"].sort(() => Math.random() - 0.5),
     correctAnswer: "Foal"
   },
   {
     question: "Which word is an adverb?",
-    options: ["Quickly", "Table", "Big", "House"],
+    options: ["Quickly", "Table", "Big", "House"].sort(() => Math.random() - 0.5),
     correctAnswer: "Quickly"
   },
   {
     question: "What is the opposite of 'happy'?",
-    options: ["Sad", "Joyful", "Excited", "Cheerful"],
+    options: ["Sad", "Joyful", "Excited", "Cheerful"].sort(() => Math.random() - 0.5),
     correctAnswer: "Sad"
   },
   {
     question: "What is the plural of 'woman'?",
-    options: ["Women", "Womans", "Womanes", "Womens"],
+    options: ["Women", "Womans", "Womanes", "Womens"].sort(() => Math.random() - 0.5),
     correctAnswer: "Women"
   },
   {
     question: "Which is a type of insect?",
-    options: ["Bee", "Dog", "Cat", "Horse"],
+    options: ["Bee", "Dog", "Cat", "Horse"].sort(() => Math.random() - 0.5),
     correctAnswer: "Bee"
   },
   {
     question: "What is 6 ÷ 2?",
-    options: ["Two", "Three", "Four", "Five"],
+    options: ["Two", "Three", "Four", "Five"].sort(() => Math.random() - 0.5),
     correctAnswer: "Three"
   },
   {
     question: "What do you use to eat soup?",
-    options: ["Spoon", "Fork", "Knife", "Chopsticks"],
+    options: ["Spoon", "Fork", "Knife", "Chopsticks"].sort(() => Math.random() - 0.5),
     correctAnswer: "Spoon"
   },
   {
     question: "Which word is a preposition?",
-    options: ["On", "Run", "Table", "Big"],
+    options: ["On", "Run", "Table", "Big"].sort(() => Math.random() - 0.5),
     correctAnswer: "On"
   },
   {
     question: "What is the opposite of 'open'?",
-    options: [ "Shut", "Locked", "All of the above", "Close"],
+    options: ["Shut", "Locked", "All of the above", "Close"].sort(() => Math.random() - 0.5),
     correctAnswer: "Close"
   },
   {
     question: "What is the plural of 'mouse'?",
-    options: ["Mice", "Mouses", "Mousees", "Mices"],
+    options: ["Mice", "Mouses", "Mousees", "Mices"].sort(() => Math.random() - 0.5),
     correctAnswer: "Mice"
   },
   {
     question: "Which is a type of flower?",
-    options: ["Rose", "Oak", "Pine", "Maple"],
+    options: ["Rose", "Oak", "Pine", "Maple"].sort(() => Math.random() - 0.5),
     correctAnswer: "Rose"
   },
   {
     question: "What is 7 + 3?",
-    options: ["Nine", "Ten", "Eleven", "Twelve"],
+    options: ["Nine", "Ten", "Eleven", "Twelve"].sort(() => Math.random() - 0.5),
     correctAnswer: "Ten"
   },
   {
     question: "What do you call a young cow?",
-    options: ["Calf", "Puppy", "Kitten", "Foal"],
+    options: ["Calf", "Puppy", "Kitten", "Foal"].sort(() => Math.random() - 0.5),
     correctAnswer: "Calf"
   },
   {
     question: "Which word is a conjunction?",
-    options: ["And", "Run", "Table", "Big"],
+    options: ["And", "Run", "Table", "Big"].sort(() => Math.random() - 0.5),
     correctAnswer: "And"
   },
   {
     question: "What is the opposite of 'long'?",
-    options: ["Short", "Tall", "Wide", "Deep"],
+    options: ["Short", "Tall", "Wide", "Deep"].sort(() => Math.random() - 0.5),
     correctAnswer: "Short"
   },
   {
     question: "What is the plural of 'sheep'?",
-    options: ["Sheep", "Sheeps", "Sheepes", "Sheepies"],
+    options: ["Sheep", "Sheeps", "Sheepes", "Sheepies"].sort(() => Math.random() - 0.5),
     correctAnswer: "Sheep"
   },
   {
     question: "Which is a type of reptile?",
-    options: ["Snake", "Dog", "Cat", "Horse"],
+    options: ["Snake", "Dog", "Cat", "Horse"].sort(() => Math.random() - 0.5),
     correctAnswer: "Snake"
   },
   {
     question: "What is 8 - 4?",
-    options: ["Three", "Four", "Five", "Six"],
+    options: ["Three", "Four", "Five", "Six"].sort(() => Math.random() - 0.5),
     correctAnswer: "Four"
   },
   {
     question: "What do you use to drink water?",
-    options: ["Glass", "Plate", "Bowl", "Spoon"],
+    options: ["Glass", "Plate", "Bowl", "Spoon"].sort(() => Math.random() - 0.5),
     correctAnswer: "Glass"
   },
   {
     question: "Which word is an interjection?",
-    options: ["Wow", "Run", "Table", "Big"],
+    options: ["Wow", "Run", "Table", "Big"].sort(() => Math.random() - 0.5),
     correctAnswer: "Wow"
   },
   {
     question: "What is the opposite of 'high'?",
-    options: ["Low", "Tall", "Big", "Wide"],
+    options: ["Low", "Tall", "Big", "Wide"].sort(() => Math.random() - 0.5),
     correctAnswer: "Low"
   },
   {
     question: "What is the plural of 'deer'?",
-    options: ["Deer", "Deers", "Deeres", "Deeries"],
+    options: ["Deer", "Deers", "Deeres", "Deeries"].sort(() => Math.random() - 0.5),
     correctAnswer: "Deer"
   },
   {
     question: "Which is a type of mammal?",
-    options: ["Dolphin", "Crocodile", "Python", "Lizard"],
+    options: ["Dolphin", "Crocodile", "Python", "Lizard"].sort(() => Math.random() - 0.5),
     correctAnswer: "Dolphin"
   },
-  // questions.js (continued)
-
   {
     question: "What is 9 + 1?",
-    options: ["Eight", "Nine", "Ten", "Eleven"],
+    options: ["Eight", "Nine", "Ten", "Eleven"].sort(() => Math.random() - 0.5),
     correctAnswer: "Ten"
   },
   {
     question: "What do you call a young bear?",
-    options: ["Cub", "Puppy", "Kitten", "Foal"],
+    options: ["Cub", "Puppy", "Kitten", "Foal"].sort(() => Math.random() - 0.5),
     correctAnswer: "Cub"
   },
   {
     question: "Which word is a verb?",
-    options: ["Sing", "Chair", "Red", "Fast"],
+    options: ["Sing", "Chair", "Red", "Fast"].sort(() => Math.random() - 0.5),
     correctAnswer: "Sing"
   },
   {
     question: "What is the opposite of 'wet'?",
-    options: ["Dry", "Cold", "Hot", "Soft"],
+    options: ["Dry", "Cold", "Hot", "Soft"].sort(() => Math.random() - 0.5),
     correctAnswer: "Dry"
   },
   {
     question: "What is the plural of 'fish'?",
-    options: ["Fish", "Fishes", "Fishies", "Fishees"],
+    options: ["Fish", "Fishes", "Fishies", "Fishees"].sort(() => Math.random() - 0.5),
     correctAnswer: "Fish"
   },
   {
     question: "Which is a type of vegetable?",
-    options: ["Carrot", "Apple", "Banana", "Orange"],
+    options: ["Carrot", "Apple", "Banana", "Orange"].sort(() => Math.random() - 0.5),
     correctAnswer: "Carrot"
   },
   {
     question: "What is 6 + 3?",
-    options: ["Eight", "Nine", "Ten", "Eleven"],
+    options: ["Eight", "Nine", "Ten", "Eleven"].sort(() => Math.random() - 0.5),
     correctAnswer: "Nine"
   },
   {
     question: "What do you use to sweep the floor?",
-    options: ["Broom", "Mop", "Rake", "Shovel"],
+    options: ["Broom", "Mop", "Rake", "Shovel"].sort(() => Math.random() - 0.5),
     correctAnswer: "Broom"
   },
   {
     question: "Which word is a noun?",
-    options: ["Car", "Drive", "Fast", "Slowly"],
+    options: ["Car", "Drive", "Fast", "Slowly"].sort(() => Math.random() - 0.5),
     correctAnswer: "Car"
   },
   {
     question: "What is the opposite of 'dark'?",
-    options: ["Light", "Black", "Dim", "Shadow"],
+    options: ["Light", "Black", "Dim", "Shadow"].sort(() => Math.random() - 0.5),
     correctAnswer: "Light"
   },
   {
     question: "What is the plural of 'tooth'?",
-    options: ["Teeth", "Tooths", "Toothes", "Teeths"],
+    options: ["Teeth", "Tooths", "Toothes", "Teeths"].sort(() => Math.random() - 0.5),
     correctAnswer: "Teeth"
   },
   {
     question: "Which is a type of bird?",
-    options: ["Parrot", "Tiger", "Bear", "Fox"],
+    options: ["Parrot", "Tiger", "Bear", "Fox"].sort(() => Math.random() - 0.5),
     correctAnswer: "Parrot"
   },
   {
     question: "What is 12 - 3?",
-    options: ["Eight", "Nine", "Ten", "Eleven"],
+    options: ["Eight", "Nine", "Ten", "Eleven"].sort(() => Math.random() - 0.5),
     correctAnswer: "Nine"
   },
   {
     question: "What do you use to write a letter?",
-    options: ["Pen", "Spoon", "Fork", "Knife"],
+    options: ["Pen", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
     correctAnswer: "Pen"
   },
   {
     question: "Which word is an adjective?",
-    options: ["Tall", "Run", "Table", "Quickly"],
+    options: ["Tall", "Run", "Table", "Quickly"].sort(() => Math.random() - 0.5),
     correctAnswer: "Tall"
   },
   {
     question: "What is the opposite of 'old'?",
-    options: ["Young", "New", "Fresh", "All of the above"],
+    options: ["Young", "New", "Fresh", "All of the above"].sort(() => Math.random() - 0.5),
     correctAnswer: "All of the above"
   },
   {
     question: "What is the plural of 'goose'?",
-    options: ["Geese", "Gooses", "Goosees", "Geeses"],
+    options: ["Geese", "Gooses", "Goosees", "Geeses"].sort(() => Math.random() - 0.5),
     correctAnswer: "Geese"
   },
   {
     question: "Which is a type of fruit?",
-    options: ["Banana", "Potato", "Onion", "Cabbage"],
+    options: ["Banana", "Potato", "Onion", "Cabbage"].sort(() => Math.random() - 0.5),
     correctAnswer: "Banana"
   },
   {
     question: "What is 4 × 3?",
-    options: ["Ten", "Eleven", "Twelve", "Thirteen"],
+    options: ["Ten", "Eleven", "Twelve", "Thirteen"].sort(() => Math.random() - 0.5),
     correctAnswer: "Twelve"
   },
   {
     question: "What do you call a young lion?",
-    options: ["Cub", "Puppy", "Kitten", "Foal"],
+    options: ["Cub", "Puppy", "Kitten", "Foal"].sort(() => Math.random() - 0.5),
     correctAnswer: "Cub"
   },
   {
     question: "Which word is a pronoun?",
-    options: ["She", "Run", "Table", "Big"],
+    options: ["She", "Run", "Table", "Big"].sort(() => Math.random() - 0.5),
     correctAnswer: "She"
   },
   {
     question: "What is the opposite of 'near'?",
-    options: ["Far", "Close", "Next", "Beside"],
+    options: ["Far", "Close", "Next", "Beside"].sort(() => Math.random() - 0.5),
     correctAnswer: "Far"
   },
   {
     question: "What is the plural of 'ox'?",
-    options: ["Oxen", "Oxes", "Oxies", "Oxs"],
+    options: ["Oxen", "Oxes", "Oxies", "Oxs"].sort(() => Math.random() - 0.5),
     correctAnswer: "Oxen"
   },
   {
     question: "Which is a type of tree?",
-    options: ["Pine", "Rose", "Lily", "Tulip"],
+    options: ["Pine", "Rose", "Lily", "Tulip"].sort(() => Math.random() - 0.5),
     correctAnswer: "Pine"
   },
   {
     question: "What is 15 - 6?",
-    options: ["Eight", "Nine", "Ten", "Eleven"],
+    options: ["Eight", "Nine", "Ten", "Eleven"].sort(() => Math.random() - 0.5),
     correctAnswer: "Nine"
   },
   {
     question: "What do you use to clean dishes?",
-    options: ["Sponge", "Broom", "Rake", "Shovel"],
+    options: ["Sponge", "Broom", "Rake", "Shovel"].sort(() => Math.random() - 0.5),
     correctAnswer: "Sponge"
   },
   {
     question: "Which word is an adverb?",
-    options: ["Slowly", "Table", "Big", "House"],
+    options: ["Slowly", "Table", "Big", "House"].sort(() => Math.random() - 0.5),
     correctAnswer: "Slowly"
   },
   {
     question: "What is the opposite of 'strong'?",
-    options: ["Weak", "Powerful", "Tough", "Hard"],
+    options: ["Weak", "Powerful", "Tough", "Hard"].sort(() => Math.random() - 0.5),
     correctAnswer: "Weak"
   },
   {
     question: "What is the plural of 'person'?",
-    options: ["People", "Persons", "Peoples", "Persones"],
+    options: ["People", "Persons", "Peoples", "Persones"].sort(() => Math.random() - 0.5),
     correctAnswer: "People"
   },
   {
     question: "Which is a type of insect?",
-    options: ["Ant", "Dog", "Cat", "Horse"],
+    options: ["Ant", "Dog", "Cat", "Horse"].sort(() => Math.random() - 0.5),
     correctAnswer: "Ant"
   },
   {
     question: "What is 10 ÷ 2?",
-    options: ["Four", "Five", "Six", "Seven"],
+    options: ["Four", "Five", "Six", "Seven"].sort(() => Math.random() - 0.5),
     correctAnswer: "Five"
   },
   {
     question: "What do you use to eat cereal?",
-    options: ["Spoon", "Fork", "Knife", "Chopsticks"],
+    options: ["Spoon", "Fork", "Knife", "Chopsticks"].sort(() => Math.random() - 0.5),
     correctAnswer: "Spoon"
   },
   {
     question: "Which word is a preposition?",
-    options: ["Under", "Run", "Table", "Big"],
+    options: ["Under", "Run", "Table", "Big"].sort(() => Math.random() - 0.5),
     correctAnswer: "Under"
   },
   {
     question: "What is the opposite of 'big'?",
-    options: ["Small", "Large", "Huge", "Tall"],
+    options: ["Small", "Large", "Huge", "Tall"].sort(() => Math.random() - 0.5),
     correctAnswer: "Small"
   },
   {
     question: "What is the plural of 'leaf'?",
-    options: ["Leaves", "Leafs", "Leafes", "Leavs"],
+    options: ["Leaves", "Leafs", "Leafes", "Leavs"].sort(() => Math.random() - 0.5),
     correctAnswer: "Leaves"
-  }
-];
-
-export const intermediateQuestions = [
-  {
-    question: "Choose the correct form: 'He ____ to the gym every day.'",
-    options: ["go", "goes", "gone", "going"],
-    correctAnswer: "goes"
   },
   {
-    question: "What is the past tense of 'run'?",
-    options: ["Ran", "Run", "Runned", "Running"],
-    correctAnswer: "Ran"
+    question: "What is the capital of France?",
+    options: ["Berlin", "Paris", "Rome", "Madrid"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Paris"
   },
   {
-    question: "Which sentence is correct?",
-    options: [
-      "She don't like coffee.",
-      "She doesn't like coffee.",
-      "She not like coffee.",
-      "She isn't like coffee."
-    ],
-    correctAnswer: "She doesn't like coffee."
+    question: "Which animal has a long neck?",
+    options: ["Giraffe", "Elephant", "Tiger", "Bear"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Giraffe"
   },
   {
-    question: "What is the synonym of 'happy'?",
-    options: ["Sad", "Joyful", "Angry", "Tired"],
-    correctAnswer: "Joyful"
+    question: "What is 1 + 4?",
+    options: ["Three", "Four", "Five", "Six"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Five"
   },
   {
-    question: "Choose the correct article: '____ apple a day keeps the doctor away.'",
-    options: ["A", "An", "The", "No article"],
-    correctAnswer: "An"
+    question: "What do you call a baby bird?",
+    options: ["Chick", "Puppy", "Calf", "Foal"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Chick"
   },
   {
-    question: "What is the plural form of 'knife'?",
-    options: ["Knives", "Knifes", "Knife", "Knifves"],
-    correctAnswer: "Knives"
-  },
-  {
-    question: "Which is the correct sentence?",
-    options: [
-      "I have two cats.",
-      "I has two cats.",
-      "I have two cat.",
-      "I has two cat."
-    ],
-    correctAnswer: "I have two cats."
-  },
-  {
-    question: "What is the past tense of 'go'?",
-    options: ["Went", "Gone", "Goed", "Going"],
-    correctAnswer: "Went"
-  },
-  {
-    question: "Choose the correct pronoun: 'This book belongs to ____.'",
-    options: ["me", "I", "mine", "my"],
-    correctAnswer: "me"
-  },
-  {
-    question: "What is the antonym of 'difficult'?",
-    options: ["Easy", "Hard", "Tough", "Complex"],
-    correctAnswer: "Easy"
-  },
-  {
-    question: "Which is a correct sentence?",
-    options: [
-      "They is playing football.",
-      "They are playing football.",
-      "They plays football.",
-      "They playing football."
-    ],
-    correctAnswer: "They are playing football."
-  },
-  {
-    question: "What is the past tense of 'eat'?",
-    options: ["Ate", "Eaten", "Eat", "Eating"],
-    correctAnswer: "Ate"
-  },
-  {
-    question: "Choose the correct form: 'She ____ a book now.'",
-    options: ["reads", "is reading", "read", "reading"],
-    correctAnswer: "is reading"
-  },
-  {
-    question: "What is the synonym of 'big'?",
-    options: ["Small", "Large", "Tiny", "Short"],
-    correctAnswer: "Large"
-  },
-  {
-    question: "Which sentence is correct?",
-    options: [
-      "He don't have a car.",
-      "He doesn't have a car.",
-      "He not have a car.",
-      "He hasn't a car."
-    ],
-    correctAnswer: "He doesn't have a car."
-  },
-  {
-    question: "What is the plural of 'city'?",
-    options: ["Cities", "Citys", "Cityes", "Citis"],
-    correctAnswer: "Cities"
-  },
-  {
-    question: "Choose the correct form: 'They ____ to the park yesterday.'",
-    options: ["go", "went", "gone", "going"],
-    correctAnswer: "went"
-  },
-  {
-    question: "What is the antonym of 'fast'?",
-    options: ["Slow", "Quick", "Rapid", "Speedy"],
-    correctAnswer: "Slow"
-  },
-  {
-    question: "Which is the correct sentence?",
-    options: [
-      "I am go to school.",
-      "I am going to school.",
-      "I go to school am.",
-      "I going to school."
-    ],
-    correctAnswer: "I am going to school."
-  },
-  {
-    question: "What is the past tense of 'drink'?",
-    options: ["Drank", "Drunk", "Drinked", "Drinking"],
-    correctAnswer: "Drank"
-  },
-  {
-    question: "Choose the correct article: '____ sun rises in the east.'",
-    options: ["A", "An", "The", "No article"],
+    question: "Which word is an article?",
+    options: ["The", "Run", "Happy", "Quickly"].sort(() => Math.random() - 0.5),
     correctAnswer: "The"
   },
   {
-    question: "What is the synonym of 'beautiful'?",
-    options: ["Ugly", "Pretty", "Plain", "Dull"],
-    correctAnswer: "Pretty"
+    question: "What is the opposite of 'cold'?",
+    options: ["Hot", "Warm", "Cool", "Dry"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Hot"
   },
   {
-    question: "Which sentence is correct?",
-    options: [
-      "She sing very well.",
-      "She sings very well.",
-      "She singing very well.",
-      "She is sing very well."
-    ],
-    correctAnswer: "She sings very well."
+    question: "How many fingers on one hand?",
+    options: ["Four", "Five", "Six", "Seven"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Five"
+  },
+  {
+    question: "What is the plural of 'box'?",
+    options: ["Boxes", "Boxs", "Boxen", "Boxies"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Boxes"
+  },
+  {
+    question: "Which is a type of drink?",
+    options: ["Water", "Bread", "Cheese", "Meat"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Water"
+  },
+  {
+    question: "What color is snow?",
+    options: ["White", "Black", "Green", "Brown"].sort(() => Math.random() - 0.5),
+    correctAnswer: "White"
+  },
+  {
+    question: "What is 3 - 1?",
+    options: ["One", "Two", "Three", "Four"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Two"
+  },
+  {
+    question: "What do you use to draw?",
+    options: ["Pencil", "Spoon", "Fork", "Plate"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Pencil"
+  },
+  {
+    question: "Which word is a number?",
+    options: ["One", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "One"
+  },
+  {
+    question: "What is the opposite of 'down'?",
+    options: ["Up", "Left", "Right", "In"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Up"
   },
   {
     question: "What is the plural of 'baby'?",
-    options: ["Babies", "Babys", "Babyes", "Babis"],
+    options: ["Babies", "Babys", "Babyes", "Babieses"].sort(() => Math.random() - 0.5),
     correctAnswer: "Babies"
   },
   {
-    question: "Choose the correct form: 'We ____ TV right now.'",
-    options: ["watch", "are watching", "watched", "watching"],
-    correctAnswer: "are watching"
+    question: "Which is a season?",
+    options: ["Spring", "Monday", "July", "Night"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Spring"
   },
   {
-    question: "What is the antonym of 'hot'?",
-    options: ["Cold", "Warm", "Cool", "All of the above"],
-    correctAnswer: "All of the above"
+    question: "What is the taste of sugar?",
+    options: ["Sweet", "Sour", "Bitter", "Salty"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Sweet"
   },
   {
-    question: "Which is the correct sentence?",
-    options: [
-      "He have a dog.",
-      "He has a dog.",
-      "He having a dog.",
-      "He is have a dog."
-    ],
-    correctAnswer: "He has a dog."
+    question: "How many wheels on a bicycle?",
+    options: ["Two", "Three", "Four", "Six"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Two"
   },
   {
-    question: "What is the past tense of 'write'?",
-    options: ["Wrote", "Written", "Writed", "Writing"],
-    correctAnswer: "Wrote"
+    question: "What is the opposite of 'full'?",
+    options: ["Empty", "Heavy", "Light", "Big"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Empty"
   },
   {
-    question: "Choose the correct pronoun: 'The book is ____.'",
-    options: ["mine", "me", "I", "my"],
-    correctAnswer: "mine"
+    question: "Which is a type of pet?",
+    options: ["Hamster", "Lion", "Elephant", "Giraffe"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Hamster"
   },
   {
-    question: "What is the synonym of 'small'?",
-    options: ["Big", "Tiny", "Large", "Huge"],
-    correctAnswer: "Tiny"
+    question: "What is 2 × 2?",
+    options: ["Three", "Four", "Five", "Six"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Four"
   },
   {
-    question: "Which sentence is correct?",
-    options: [
-      "They doesn't like to dance.",
-      "They don't like to dance.",
-      "They not like to dance.",
-      "They isn't like to dance."
-    ],
-    correctAnswer: "They don't like to dance."
+    question: "What do you call a baby sheep?",
+    options: ["Lamb", "Calf", "Foal", "Cub"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Lamb"
   },
   {
-    question: "What is the plural of 'life'?",
-    options: ["Lives", "Lifes", "Lifees", "Livs"],
-    correctAnswer: "Lives"
+    question: "Which word is a color?",
+    options: ["Red", "Run", "Sit", "Eat"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Red"
   },
   {
-    question: "Choose the correct form: 'I ____ to the store yesterday.'",
-    options: ["go", "went", "gone", "going"],
-    correctAnswer: "went"
+    question: "What is the opposite of 'start'?",
+    options: ["Finish", "Begin", "Continue", "Go"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Finish"
   },
   {
-    question: "What is the antonym of 'happy'?",
-    options: ["Sad", "Joyful", "Excited", "Cheerful"],
-    correctAnswer: "Sad"
+    question: "What is the plural of 'city'?",
+    options: ["Cities", "Citys", "Cityes", "Cites"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Cities"
   },
   {
-    question: "Which is the correct sentence?",
-    options: [
-      "She is read a book.",
-      "She is reading a book.",
-      "She reads a book is.",
-      "She reading a book."
-    ],
-    correctAnswer: "She is reading a book."
+    question: "Which is a type of weather?",
+    options: ["Rain", "Table", "Chair", "Book"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Rain"
   },
   {
-    question: "What is the past tense of 'see'?",
-    options: ["Saw", "Seen", "Seed", "Seeing"],
-    correctAnswer: "Saw"
+    question: "What is 6 - 3?",
+    options: ["Two", "Three", "Four", "Five"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Three"
   },
   {
-    question: "Choose the correct article: '____ elephant is a large animal.'",
-    options: ["A", "An", "The", "No article"],
-    correctAnswer: "An"
+    question: "What do you use to cook food?",
+    options: ["Pan", "Shoe", "Hat", "Ball"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Pan"
   },
   {
-    question: "What is the synonym of 'fast'?",
-    options: ["Slow", "Quick", "Lazy", "Idle"],
-    correctAnswer: "Quick"
+    question: "Which word is a place?",
+    options: ["Park", "Jump", "Sing", "Dance"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Park"
   },
   {
-    question: "Which sentence is correct?",
-    options: [
-      "He don't play soccer.",
-      "He doesn't play soccer.",
-      "He not play soccer.",
-      "He isn't play soccer."
-    ],
-    correctAnswer: "He doesn't play soccer."
-  },
-  {
-    question: "What is the plural of 'mouse'?",
-    options: ["Mice", "Mouses", "Mousees", "Mices"],
-    correctAnswer: "Mice"
-  },
-  {
-    question: "Choose the correct form: 'They ____ football every weekend.'",
-    options: ["play", "plays", "playing", "are play"],
-    correctAnswer: "play"
-  },
-  {
-    question: "What is the antonym of 'big'?",
-    options: ["Small", "Large", "Huge", "Tall"],
-    correctAnswer: "Small"
-  },
-  {
-    question: "Which is the correct sentence?",
-    options: [
-      "I am go to the park.",
-      "I am going to the park.",
-      "I go to the park am.",
-      "I going to the park."
-    ],
-    correctAnswer: "I am going to the park."
-  },
-  {
-    question: "What is the past tense of 'buy'?",
-    options: ["Bought", "Buyed", "Boughten", "Buying"],
-    correctAnswer: "Bought"
-  },
-  {
-    question: "Choose the correct pronoun: 'This is ____ car.'",
-    options: ["my", "me", "I", "mine"],
-    correctAnswer: "my"
-  },
-  {
-    question: "What is the synonym of 'sad'?",
-    options: ["Happy", "Unhappy", "Joyful", "Excited"],
-    correctAnswer: "Unhappy"
-  },
-  {
-    question: "Which sentence is correct?",
-    options: [
-      "She don't have a pen.",
-      "She doesn't have a pen.",
-      "She not have a pen.",
-      "She hasn't a pen."
-    ],
-    correctAnswer: "She doesn't have a pen."
-  },
-  {
-    question: "What is the plural of 'foot'?",
-    options: ["Feet", "Foots", "Footes", "Feets"],
-    correctAnswer: "Feet"
-  },
-  {
-    question: "Choose the correct form: 'He ____ to music every evening.'",
-    options: ["listen", "listens", "listening", "is listen"],
-    correctAnswer: "listens"
-  },
-  {
-    question: "What is the antonym of 'old'?",
-    options: ["Young", "New", "Fresh", "All of the above"],
-    correctAnswer: "All of the above"
-  },
-  {
-    question: "Which is the correct sentence?",
-    options: [
-      "They is running fast.",
-      "They are running fast.",
-      "They runs fast.",
-      "They running fast."
-    ],
-    correctAnswer: "They are running fast."
-  },
-  {
-    question: "What is the past tense of 'take'?",
-    options: ["Took", "Taken", "Taked", "Taking"],
-    correctAnswer: "Took"
-  },
-  {
-    question: "Choose the correct article: '____ moon is bright tonight.'",
-    options: ["A", "An", "The", "No article"],
-    correctAnswer: "The"
-  },
-  {
-    question: "What is the synonym of 'difficult'?",
-    options: ["Easy", "Hard", "Simple", "Clear"],
+    question: "What is the opposite of 'soft'?",
+    options: ["Hard", "Smooth", "Wet", "Warm"].sort(() => Math.random() - 0.5),
     correctAnswer: "Hard"
   },
   {
-    question: "Which sentence is correct?",
-    options: [
-      "He write a letter.",
-      "He writes a letter.",
-      "He writing a letter.",
-      "He is write a letter."
-    ],
-    correctAnswer: "He writes a letter."
+    question: "What is the plural of 'dog'?",
+    options: ["Dogs", "Doges", "Doggs", "Doggies"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Dogs"
+  },
+  {
+    question: "Which is a type of toy?",
+    options: ["Doll", "Carrot", "Apple", "Bread"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Doll"
+  },
+  {
+    question: "What is 5 + 2?",
+    options: ["Six", "Seven", "Eight", "Nine"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Seven"
+  },
+  {
+    question: "What do you call a baby rabbit?",
+    options: ["Kit", "Puppy", "Lamb", "Foal"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Kit"
+  },
+  {
+    question: "Which word is a shape?",
+    options: ["Circle", "Run", "Eat", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Circle"
+  },
+  {
+    question: "What is the opposite of 'light'?",
+    options: ["Dark", "Bright", "White", "Shiny"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Dark"
+  },
+  {
+    question: "What is the plural of 'mouse'?",
+    options: ["Mice", "Mouses", "Mousees", "Mices"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Mice"
+  },
+  {
+    question: "Which is a type of sport?",
+    options: ["Soccer", "Table", "Chair", "Book"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Soccer"
+  },
+  {
+    question: "What is 4 - 1?",
+    options: ["Two", "Three", "Four", "Five"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Three"
+  },
+  {
+    question: "What do you use to cut food?",
+    options: ["Knife", "Spoon", "Fork", "Plate"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Knife"
+  },
+  {
+    question: "Which word is a time?",
+    options: ["Morning", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Morning"
+  },
+  {
+    question: "What is the opposite of 'loud'?",
+    options: ["Quiet", "Noisy", "Strong", "Big"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Quiet"
+  },
+  {
+    question: "What is the plural of 'bus'?",
+    options: ["Buses", "Bus", "Busses", "Busies"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Buses"
+  },
+  {
+    question: "Which is a type of music?",
+    options: ["Pop", "Table", "Chair", "Book"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Pop"
+  },
+  {
+    question: "What is 3 + 4?",
+    options: ["Five", "Six", "Seven", "Eight"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Seven"
+  },
+  {
+    question: "What do you call a baby pig?",
+    options: ["Piglet", "Calf", "Lamb", "Foal"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Piglet"
+  },
+  {
+    question: "Which word is a food?",
+    options: ["Pizza", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Pizza"
+  },
+  {
+    question: "What is the opposite of 'new'?",
+    options: ["Old", "Young", "Fresh", "Clean"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Old"
   },
   {
     question: "What is the plural of 'child'?",
-    options: ["Children", "Childs", "Childes", "Childrens"],
+    options: ["Children", "Childs", "Childes", "Childrens"].sort(() => Math.random() - 0.5),
     correctAnswer: "Children"
   },
   {
-    question: "Choose the correct form: 'We ____ a movie last night.'",
-    options: ["watch", "watched", "watching", "are watch"],
-    correctAnswer: "watched"
+    question: "Which is a type of vehicle?",
+    options: ["Car", "Table", "Chair", "Book"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Car"
   },
   {
-    question: "What is the antonym of 'beautiful'?",
-    options: ["Ugly", "Pretty", "Lovely", "Charming"],
-    correctAnswer: "Ugly"
+    question: "What is 10 - 3?",
+    options: ["Six", "Seven", "Eight", "Nine"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Seven"
   },
   {
-    question: "Which is the correct sentence?",
-    options: [
-      "I don't likes coffee.",
-      "I don't like coffee.",
-      "I not like coffee.",
-      "I doesn't like coffee."
-    ],
-    correctAnswer: "I don't like coffee."
+    question: "What do you use to clean your teeth?",
+    options: ["Toothbrush", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Toothbrush"
   },
   {
-    question: "What is the past tense of 'give'?",
-    options: ["Gave", "Given", "Gived", "Giving"],
-    correctAnswer: "Gave"
+    question: "Which word is a direction?",
+    options: ["North", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "North"
   },
   {
-    question: "Choose the correct pronoun: 'The keys are ____.'",
-    options: ["mine", "me", "I", "my"],
-    correctAnswer: "mine"
+    question: "What is the opposite of 'heavy'?",
+    options: ["Light", "Big", "Strong", "Hard"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Light"
   },
   {
-    question: "What is the synonym of 'happy'?",
-    options: ["Sad", "Cheerful", "Angry", "Tired"],
-    correctAnswer: "Cheerful"
+    question: "What is the plural of 'goose'?",
+    options: ["Geese", "Gooses", "Goosees", "Geeses"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Geese"
   },
   {
-    question: "Which sentence is correct?",
-    options: [
-      "She go to school.",
-      "She goes to school.",
-      "She going to school.",
-      "She is go to school."
-    ],
-    correctAnswer: "She goes to school."
+    question: "Which is a type of clothing?",
+    options: ["Shirt", "Table", "Chair", "Book"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Shirt"
+  },
+  {
+    question: "What is 5 × 2?",
+    options: ["Eight", "Nine", "Ten", "Eleven"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Ten"
+  },
+  {
+    question: "What do you call a baby deer?",
+    options: ["Fawn", "Calf", "Lamb", "Foal"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fawn"
+  },
+  {
+    question: "Which word is a job?",
+    options: ["Teacher", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Teacher"
+  },
+  {
+    question: "What is the opposite of 'dirty'?",
+    options: ["Clean", "Wet", "Dry", "Hot"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Clean"
+  },
+  {
+    question: "What is the plural of 'tooth'?",
+    options: ["Teeth", "Tooths", "Toothes", "Teeths"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Teeth"
+  },
+  {
+    question: "Which is a type of fruit?",
+    options: ["Orange", "Carrot", "Potato", "Cabbage"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Orange"
+  },
+  {
+    question: "What is 20 - 5?",
+    options: ["Fourteen", "Fifteen", "Sixteen", "Seventeen"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fifteen"
+  },
+  {
+    question: "What do you use to see far away?",
+    options: ["Binoculars", "Spoon", "Fork", "Plate"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Binoculars"
+  },
+  {
+    question: "Which word is a month?",
+    options: ["January", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "January"
+  },
+  {
+    question: "What is the opposite of 'short'?",
+    options: ["Long", "Tall", "High", "Big"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Long"
+  },
+  {
+    question: "What is the plural of 'fox'?",
+    options: ["Foxes", "Foxs", "Foxes", "Foxies"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Foxes"
+  },
+  {
+    question: "Which is a type of dance?",
+    options: ["Ballet", "Table", "Chair", "Book"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Ballet"
+  },
+  {
+    question: "What is 7 - 2?",
+    options: ["Four", "Five", "Six", "Seven"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Five"
+  },
+  {
+    question: "What do you use to play music?",
+    options: ["Guitar", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Guitar"
+  },
+  {
+    question: "Which word is a building?",
+    options: ["School", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "School"
+  },
+  {
+    question: "What is the opposite of 'wide'?",
+    options: ["Narrow", "Long", "High", "Deep"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Narrow"
+  },
+  {
+    question: "What is the plural of 'lady'?",
+    options: ["Ladies", "Ladys", "Ladyes", "Ladieses"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Ladies"
+  },
+  {
+    question: "Which is a type of game?",
+    options: ["Chess", "Table", "Chair", "Book"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Chess"
+  },
+  {
+    question: "What is 6 + 4?",
+    options: ["Nine", "Ten", "Eleven", "Twelve"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Ten"
+  },
+  {
+    question: "What do you call a baby elephant?",
+    options: ["Calf", "Puppy", "Lamb", "Foal"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Calf"
+  },
+  {
+    question: "Which word is a tool?",
+    options: ["Hammer", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Hammer"
+  },
+  {
+    question: "What is the opposite of 'smooth'?",
+    options: ["Rough", "Soft", "Wet", "Dry"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Rough"
+  },
+  {
+    question: "What is the plural of 'pen'?",
+    options: ["Pens", "Penes", "Pennis", "Pensies"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Pens"
+  },
+  {
+    question: "Which is a type of flower?",
+    options: ["Tulip", "Table", "Chair", "Book"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Tulip"
+  },
+  {
+    question: "What is 9 - 4?",
+    options: ["Four", "Five", "Six", "Seven"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Five"
+  },
+  {
+    question: "What do you use to take photos?",
+    options: ["Camera", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Camera"
+  },
+  {
+    question: "Which word is a river?",
+    options: ["Nile", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Nile"
+  },
+  {
+    question: "What is the opposite of 'empty'?",
+    options: ["Full", "Light", "Small", "Soft"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Full"
+  },
+  {
+    question: "What is the plural of 'horse'?",
+    options: ["Horses", "Horsees", "Horss", "Horseies"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Horses"
+  },
+  {
+    question: "Which is a type of bird?",
+    options: ["Sparrow", "Tiger", "Bear", "Fox"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Sparrow"
+  },
+  {
+    question: "What is 8 + 2?",
+    options: ["Nine", "Ten", "Eleven", "Twelve"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Ten"
+  },
+  {
+    question: "What do you call a baby duck?",
+    options: ["Duckling", "Calf", "Lamb", "Foal"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Duckling"
+  },
+  {
+    question: "Which word is a fruit?",
+    options: ["Mango", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Mango"
+  },
+  {
+    question: "What is the opposite of 'narrow'?",
+    options: ["Wide", "Long", "High", "Deep"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Wide"
+  },
+  {
+    question: "What is the plural of 'roof'?",
+    options: ["Roofs", "Roves", "Roofes", "Roofies"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Roofs"
+  },
+  {
+    question: "Which is a type of fish?",
+    options: ["Shark", "Lion", "Elephant", "Bear"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Shark"
+  },
+  {
+    question: "What is 15 - 7?",
+    options: ["Seven", "Eight", "Nine", "Ten"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Eight"
+  },
+  {
+    question: "What do you use to measure time?",
+    options: ["Clock", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Clock"
+  },
+  {
+    question: "Which word is a mountain?",
+    options: ["Everest", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Everest"
+  },
+  {
+    question: "What is the opposite of 'rough'?",
+    options: ["Smooth", "Hard", "Wet", "Dry"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Smooth"
+  },
+  {
+    question: "What is the plural of 'life'?",
+    options: ["Lives", "Lifes", "Lifees", "Liveses"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Lives"
+  },
+  {
+    question: "Which is a type of insect?",
+    options: ["Butterfly", "Dog", "Cat", "Horse"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Butterfly"
+  },
+  {
+    question: "What is 12 + 3?",
+    options: ["Fourteen", "Fifteen", "Sixteen", "Seventeen"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fifteen"
+  },
+  {
+    question: "What do you use to cut hair?",
+    options: ["Scissors", "Spoon", "Fork", "Plate"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Scissors"
+  },
+  {
+    question: "Which word is a country?",
+    options: ["Japan", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Japan"
+  },
+  {
+    question: "What is the opposite of 'sweet'?",
+    options: ["Bitter", "Sour", "Salty", "Hot"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Bitter"
   },
   {
     question: "What is the plural of 'man'?",
-    options: ["Men", "Mans", "Manes", "Mens"],
+    options: ["Men", "Mans", "Manes", "Mens"].sort(() => Math.random() - 0.5),
     correctAnswer: "Men"
   },
   {
-    question: "Choose the correct form: 'They ____ dinner now.'",
-    options: ["eat", "eats", "eating", "are eating"],
-    correctAnswer: "are eating"
+    question: "Which is a type of tree?",
+    options: ["Maple", "Rose", "Lily", "Tulip"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Maple"
   },
   {
-    question: "What is the antonym of 'fast'?",
-    options: ["Slow", "Quick", "Rapid", "Speedy"],
+    question: "What is 20 ÷ 4?",
+    options: ["Four", "Five", "Six", "Seven"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Five"
+  },
+  {
+    question: "What do you use to write music?",
+    options: ["Pen", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Pen"
+  },
+  {
+    question: "Which word is an ocean?",
+    options: ["Pacific", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Pacific"
+  },
+  {
+    question: "What is the opposite of 'deep'?",
+    options: ["Shallow", "High", "Long", "Wide"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Shallow"
+  },
+  {
+    question: "What is the plural of 'foot'?",
+    options: ["Feet", "Foots", "Footes", "Feets"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Feet"
+  },
+  {
+    question: "Which is a type of vegetable?",
+    options: ["Tomato", "Apple", "Banana", "Orange"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Tomato"
+  },
+  {
+    question: "What is 18 - 8?",
+    options: ["Nine", "Ten", "Eleven", "Twelve"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Ten"
+  },
+  {
+    question: "What do you use to catch fish?",
+    options: ["Rod", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Rod"
+  },
+  {
+    question: "Which word is a planet?",
+    options: ["Mars", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Mars"
+  },
+  {
+    question: "What is the opposite of 'fast'?",
+    options: ["Slow", "Quick", "Rapid", "Speedy"].sort(() => Math.random() - 0.5),
     correctAnswer: "Slow"
   },
   {
-    question: "Which is the correct sentence?",
-    options: [
-      "He is play soccer.",
-      "He is playing soccer.",
-      "He plays soccer is.",
-      "He playing soccer."
-    ],
-    correctAnswer: "He is playing soccer."
+    question: "What is the plural of 'mouse'?",
+    options: ["Mice", "Mouses", "Mousees", "Mices"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Mice"
   },
   {
-    question: "What is the past tense of 'come'?",
-    options: ["Came", "Come", "Comed", "Coming"],
-    correctAnswer: "Came"
+    question: "Which is a type of sport?",
+    options: ["Tennis", "Table", "Chair", "Book"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Tennis"
   },
   {
-    question: "Choose the correct article: '____ cat is on the mat.'",
-    options: ["A", "An", "The", "No article"],
-    correctAnswer: "The"
+    question: "What is 7 × 2?",
+    options: ["Twelve", "Thirteen", "Fourteen", "Fifteen"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fourteen"
   },
   {
-    question: "What is the synonym of 'big'?",
-    options: ["Small", "Huge", "Tiny", "Short"],
-    correctAnswer: "Huge"
+    question: "What do you call a baby kangaroo?",
+    options: ["Joey", "Calf", "Lamb", "Foal"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Joey"
   },
   {
-    question: "Which sentence is correct?",
-    options: [
-      "They doesn't read books.",
-      "They don't read books.",
-      "They not read books.",
-      "They isn't read books."
-    ],
-    correctAnswer: "They don't read books."
+    question: "Which word is a language?",
+    options: ["Spanish", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Spanish"
   },
   {
-    question: "What is the plural of 'woman'?",
-    options: ["Women", "Womans", "Womanes", "Womens"],
-    correctAnswer: "Women"
+    question: "What is the opposite of 'bright'?",
+    options: ["Dim", "Light", "White", "Shiny"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Dim"
   },
   {
-    question: "Choose the correct form: 'I ____ to the gym every day.'",
-    options: ["go", "goes", "gone", "going"],
-    correctAnswer: "go"
+    question: "What is the plural of 'goose'?",
+    options: ["Geese", "Gooses", "Goosees", "Geeses"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Geese"
   },
   {
-    question: "What is the antonym of 'happy'?",
-    options: ["Sad", "Joyful", "Excited", "Cheerful"],
-    correctAnswer: "Sad"
+    question: "Which is a type of instrument?",
+    options: ["Drum", "Table", "Chair", "Book"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Drum"
   },
   {
-    question: "Which is the correct sentence?",
-    options: [
-      "She is write a letter.",
-      "She is writing a letter.",
-      "She writes a letter is.",
-      "She writing a letter."
-    ],
-    correctAnswer: "She is writing a letter."
+    question: "What is 25 - 10?",
+    options: ["Fourteen", "Fifteen", "Sixteen", "Seventeen"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fifteen"
   },
   {
-    question: "What is the past tense of 'make'?",
-    options: ["Made", "Maked", "Maken", "Making"],
-    correctAnswer: "Made"
+    question: "What do you use to build a house?",
+    options: ["Brick", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Brick"
   },
   {
-    question: "Choose the correct pronoun: 'This is ____ book.'",
-    options: ["my", "me", "I", "mine"],
-    correctAnswer: "my"
+    question: "Which word is a desert?",
+    options: ["Sahara", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Sahara"
   },
   {
-    question: "What is the synonym of 'small'?",
-    options: ["Big", "Little", "Large", "Huge"],
-    correctAnswer: "Little"
+    question: "What is the opposite of 'thick'?",
+    options: ["Thin", "Long", "High", "Deep"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Thin"
   },
   {
-    question: "Which sentence is correct?",
-    options: [
-      "He don't like tea.",
-      "He doesn't like tea.",
-      "He not like tea.",
-      "He isn't like tea."
-    ],
-    correctAnswer: "He doesn't like tea."
+    question: "What is the plural of 'wolf'?",
+    options: ["Wolves", "Wolfs", "Wolfes", "Wolfies"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Wolves"
+  },
+  {
+    question: "Which is a type of dance?",
+    options: ["Salsa", "Table", "Chair", "Book"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Salsa"
+  },
+  {
+    question: "What is 9 + 6?",
+    options: ["Fourteen", "Fifteen", "Sixteen", "Seventeen"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fifteen"
+  },
+  {
+    question: "What do you call a baby horse?",
+    options: ["Foal", "Calf", "Lamb", "Puppy"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Foal"
+  },
+  {
+    question: "Which word is a flower?",
+    options: ["Daisy", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Daisy"
+  },
+  {
+    question: "What is the opposite of 'dry'?",
+    options: ["Wet", "Hot", "Cold", "Soft"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Wet"
   },
   {
     question: "What is the plural of 'deer'?",
-    options: ["Deer", "Deers", "Deeres", "Deeries"],
+    options: ["Deer", "Deers", "Deeres", "Deeries"].sort(() => Math.random() - 0.5),
     correctAnswer: "Deer"
   },
   {
-    question: "Choose the correct form: 'We ____ to the park every Sunday.'",
-    options: ["go", "goes", "gone", "going"],
-    correctAnswer: "go"
+    question: "Which is a type of vehicle?",
+    options: ["Bus", "Table", "Chair", "Book"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Bus"
   },
   {
-    question: "What is the antonym of 'difficult'?",
-    options: ["Easy", "Hard", "Tough", "Complex"],
-    correctAnswer: "Easy"
+    question: "What is 14 + 1?",
+    options: ["Fourteen", "Fifteen", "Sixteen", "Seventeen"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fifteen"
   },
   {
-    question: "Which is the correct sentence?",
-    options: [
-      "They is watching TV.",
-      "They are watching TV.",
-      "They watches TV.",
-      "They watching TV."
-    ],
-    correctAnswer: "They are watching TV."
+    question: "What do you use to play soccer?",
+    options: ["Ball", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Ball"
   },
   {
-    question: "What is the past tense of 'find'?",
-    options: ["Found", "Finded", "Funden", "Finding"],
-    correctAnswer: "Found"
+    question: "Which word is a city?",
+    options: ["Tokyo", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Tokyo"
   },
   {
-    question: "Choose the correct article: '____ dog is barking.'",
-    options: ["A", "An", "The", "No article"],
-    correctAnswer: "The"
+    question: "What is the opposite of 'low'?",
+    options: ["High", "Tall", "Long", "Wide"].sort(() => Math.random() - 0.5),
+    correctAnswer: "High"
   },
   {
-    question: "What is the synonym of 'beautiful'?",
-    options: ["Ugly", "Lovely", "Plain", "Dull"],
-    correctAnswer: "Lovely"
+    question: "What is the plural of 'leaf'?",
+    options: ["Leaves", "Leafs", "Leafes", "Leavs"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Leaves"
   },
   {
-    question: "Which sentence is correct?",
-    options: [
-      "She sing a song.",
-      "She sings a song.",
-      "She singing a song.",
-      "She is sing a song."
-    ],
-    correctAnswer: "She sings a song."
-  }
-];
-
-export const advancedQuestions = [
-  {
-    question: "Identify the sentence with correct punctuation:",
-    options: [
-      "She said, 'I'll be there soon.'",
-      "She said 'I'll be there soon'.",
-      "She said, 'I'll be there soon'.",
-      "She said 'I'll be there soon.'"
-    ],
-    correctAnswer: "She said, 'I'll be there soon.'"
-  },
-  {
-    question: "Choose the correct form: 'If I ____ him, I would tell him the truth.'",
-    options: ["saw", "seen", "see", "seeing"],
-    correctAnswer: "saw"
-  },
-  {
-    question: "What is the correct passive voice: 'The book ____ by the author last year.'",
-    options: ["was written", "is written", "wrote", "writing"],
-    correctAnswer: "was written"
-  },
-  {
-    question: "Which word is a synonym of 'ephemeral'?",
-    options: ["Permanent", "Transient", "Eternal", "Lasting"],
-    correctAnswer: "Transient"
-  },
-  {
-    question: "Choose the correct sentence:",
-    options: [
-      "Neither of the boys are here.",
-      "Neither of the boys is here.",
-      "None of the boys is here.",
-      "None of the boys are here."
-    ],
-    correctAnswer: "Neither of the boys is here."
-  },
-  {
-    question: "What is the past participle of 'choose'?",
-    options: ["Chose", "Chosen", "Choosed", "Choosing"],
-    correctAnswer: "Chosen"
-  },
-  {
-    question: "Identify the sentence with correct grammar:",
-    options: [
-      "She has went to the store.",
-      "She has gone to the store.",
-      "She have gone to the store.",
-      "She gone to the store."
-    ],
-    correctAnswer: "She has gone to the store."
-  },
-  {
-    question: "What is the antonym of 'benevolent'?",
-    options: ["Kind", "Cruel", "Generous", "Friendly"],
-    correctAnswer: "Cruel"
-  },
-  {
-    question: "Choose the correct form: 'By the time we arrive, they ____ dinner.'",
-    options: ["will have finished", "will finish", "finish", "finished"],
-    correctAnswer: "will have finished"
+    question: "Which is a type of animal?",
+    options: ["Zebra", "Table", "Chair", "Book"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Zebra"
   },
   {
-    question: "Which sentence uses the subjunctive mood correctly?",
-    options: [
-      "I wish I was rich.",
-      "I wish I were rich.",
-      "I wish I am rich.",
-      "I wish I be rich."
-    ],
-    correctAnswer: "I wish I were rich."
+    question: "What is 30 - 15?",
+    options: ["Fourteen", "Fifteen", "Sixteen", "Seventeen"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fifteen"
   },
   {
-    question: "What is the synonym of 'ubiquitous'?",
-    options: ["Rare", "Common", "Unique", "Scarce"],
-    correctAnswer: "Common"
+    question: "What do you use to cut grass?",
+    options: ["Lawnmower", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Lawnmower"
   },
   {
-    question: "Choose the correct sentence:",
-    options: [
-      "The data is reliable.",
-      "The data are reliable.",
-      "The data be reliable.",
-      "The data was reliable."
-    ],
-    correctAnswer: "The data are reliable."
+    question: "Which word is a star?",
+    options: ["Sun", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Sun"
   },
   {
-    question: "What is the past participle of 'lie' (to recline)?",
-    options: ["Lain", "Lied", "Lay", "Lying"],
-    correctAnswer: "Lain"
+    question: "What is the opposite of 'slow'?",
+    options: ["Fast", "Quick", "Rapid", "Strong"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fast"
   },
   {
-    question: "Identify the sentence with correct punctuation:",
-    options: [
-      "However I can help.",
-      "However, I can help.",
-      "However; I can help.",
-      "However I can help,"
-    ],
-    correctAnswer: "However, I can help."
+    question: "What is the plural of 'house'?",
+    options: ["Houses", "Housees", "Housen", "Housies"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Houses"
   },
   {
-    question: "What is the antonym of 'obscure'?",
-    options: ["Hidden", "Clear", "Vague", "Unknown"],
-    correctAnswer: "Clear"
+    question: "Which is a type of bird?",
+    options: ["Owl", "Tiger", "Bear", "Fox"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Owl"
   },
   {
-    question: "Choose the correct form: 'She ____ to the meeting if she had known.'",
-    options: ["would have gone", "would go", "will go", "went"],
-    correctAnswer: "would have gone"
+    question: "What is 11 + 4?",
+    options: ["Fourteen", "Fifteen", "Sixteen", "Seventeen"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fifteen"
   },
   {
-    question: "Which sentence is correct?",
-    options: [
-      "Everyone have their own opinion.",
-      "Everyone has their own opinion.",
-      "Everyone have his own opinion.",
-      "Everyone has his own opinion."
-    ],
-    correctAnswer: "Everyone has their own opinion."
+    question: "What do you use to paint?",
+    options: ["Brush", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Brush"
   },
   {
-    question: "What is the synonym of 'meticulous'?",
-    options: ["Careless", "Precise", "Hasty", "Negligent"],
-    correctAnswer: "Precise"
+    question: "Which word is a lake?",
+    options: ["Baikal", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Baikal"
   },
   {
-    question: "Choose the correct passive voice: 'The house ____ by the workers.'",
-    options: ["is being painted", "is painted", "painted", "painting"],
-    correctAnswer: "is being painted"
+    question: "What is the opposite of 'hot'?",
+    options: ["Cold", "Warm", "Cool", "Dry"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Cold"
   },
   {
-    question: "What is the past participle of 'swim'?",
-    options: ["Swam", "Swum", "Swimmed", "Swimming"],
-    correctAnswer: "Swum"
+    question: "What is the plural of 'child'?",
+    options: ["Children", "Childs", "Childes", "Childrens"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Children"
   },
   {
-    question: "Identify the sentence with correct grammar:",
-    options: [
-      "She don't know the answer.",
-      "She doesn't know the answer.",
-      "She not know the answer.",
-      "She isn't know the answer."
-    ],
-    correctAnswer: "She doesn't know the answer."
+    question: "Which is a type of fruit?",
+    options: ["Grape", "Carrot", "Potato", "Cabbage"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Grape"
   },
   {
-    question: "What is the antonym of 'prolific'?",
-    options: ["Productive", "Barren", "Abundant", "Fruitful"],
-    correctAnswer: "Barren"
+    question: "What is 16 - 1?",
+    options: ["Fourteen", "Fifteen", "Sixteen", "Seventeen"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fifteen"
   },
   {
-    question: "Choose the correct form: 'If he ____ harder, he would have passed.'",
-    options: ["had studied", "studied", "studies", "study"],
-    correctAnswer: "had studied"
+    question: "What do you use to sew clothes?",
+    options: ["Needle", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Needle"
   },
   {
-    question: "Which sentence uses the correct article?",
-    options: [
-      "A sun is shining brightly.",
-      "An sun is shining brightly.",
-      "The sun is shining brightly.",
-      "Sun is shining brightly."
-    ],
-    correctAnswer: "The sun is shining brightly."
+    question: "Which word is a continent?",
+    options: ["Africa", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Africa"
   },
   {
-    question: "What is the synonym of 'ambiguous'?",
-    options: ["Clear", "Vague", "Certain", "Definite"],
-    correctAnswer: "Vague"
+    question: "What is the opposite of 'high'?",
+    options: ["Low", "Tall", "Long", "Wide"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Low"
   },
   {
-    question: "Choose the correct sentence:",
-    options: [
-      "Less people attended the event.",
-      "Fewer people attended the event.",
-      "Lesser people attended the event.",
-      "Few people attended the event."
-    ],
-    correctAnswer: "Fewer people attended the event."
+    question: "What is the plural of 'mouse'?",
+    options: ["Mice", "Mouses", "Mousees", "Mices"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Mice"
   },
   {
-    question: "What is the past participle of 'drink'?",
-    options: ["Drank", "Drunk", "Drinked", "Drinking"],
-    correctAnswer: "Drunk"
+    question: "Which is a type of vegetable?",
+    options: ["Peas", "Apple", "Banana", "Orange"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Peas"
   },
   {
-    question: "Identify the sentence with correct punctuation:",
-    options: [
-      "I have two cats: Fluffy and Whiskers.",
-      "I have two cats, Fluffy and Whiskers.",
-      "I have two cats; Fluffy and Whiskers.",
-      "I have two cats Fluffy and Whiskers."
-    ],
-    correctAnswer: "I have two cats: Fluffy and Whiskers."
+    question: "What is 13 + 2?",
+    options: ["Fourteen", "Fifteen", "Sixteen", "Seventeen"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fifteen"
   },
   {
-    question: "What is the antonym of 'vivid'?",
-    options: ["Bright", "Dull", "Colorful", "Lively"],
-    correctAnswer: "Dull"
+    question: "What do you use to open a door?",
+    options: ["Key", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Key"
   },
   {
-    question: "Choose the correct form: 'The project ____ by next month.'",
-    options: ["will be completed", "will complete", "completes", "completed"],
-    correctAnswer: "will be completed"
+    question: "Which word is a bird?",
+    options: ["Eagle", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Eagle"
   },
   {
-    question: "Which sentence is correct?",
-    options: [
-      "Who did you give the book to?",
-      "Whom did you give the book to?",
-      "Who you gave the book to?",
-      "Whom you gave the book to?"
-    ],
-    correctAnswer: "Whom did you give the book to?"
+    question: "What is the opposite of 'open'?",
+    options: ["Closed", "Locked", "Shut", "All of the above"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Closed"
   },
   {
-    question: "What is the synonym of 'tenacious'?",
-    options: ["Weak", "Persistent", "Fragile", "Delicate"],
-    correctAnswer: "Persistent"
+    question: "What is the plural of 'goose'?",
+    options: ["Geese", "Gooses", "Goosees", "Geeses"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Geese"
   },
   {
-    question: "Choose the correct form: 'I wish I ____ to the party last night.'",
-    options: ["had gone", "went", "go", "going"],
-    correctAnswer: "had gone"
+    question: "Which is a type of fish?",
+    options: ["Tuna", "Lion", "Elephant", "Bear"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Tuna"
   },
   {
-    question: "What is the past participle of 'write'?",
-    options: ["Wrote", "Written", "Writed", "Writing"],
-    correctAnswer: "Written"
+    question: "What is 19 - 4?",
+    options: ["Fourteen", "Fifteen", "Sixteen", "Seventeen"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fifteen"
   },
   {
-    question: "Identify the sentence with correct grammar:",
-    options: [
-      "The team are playing well.",
-      "The team is playing well.",
-      "The team be playing well.",
-      "The team playing well."
-    ],
-    correctAnswer: "The team is playing well."
+    question: "What do you use to carry water?",
+    options: ["Bucket", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Bucket"
   },
   {
-    question: "What is the antonym of 'eloquent'?",
-    options: ["Articulate", "Inarticulate", "Fluent", "Expressive"],
-    correctAnswer: "Inarticulate"
+    question: "Which word is a tree?",
+    options: ["Oak", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Oak"
   },
   {
-    question: "Choose the correct sentence:",
-    options: [
-      "Its a beautiful day.",
-      "It's a beautiful day.",
-      "Its' a beautiful day.",
-      "It is a beautiful day."
-    ],
-    correctAnswer: "It's a beautiful day."
+    question: "What is the opposite of 'fast'?",
+    options: ["Slow", "Quick", "Rapid", "Strong"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Slow"
   },
   {
-    question: "What is the synonym of 'prudent'?",
-    options: ["Reckless", "Careful", "Careless", "Hasty"],
-    correctAnswer: "Careful"
+    question: "What is the plural of 'wife'?",
+    options: ["Wives", "Wifes", "Wifees", "Wiveses"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Wives"
   },
   {
-    question: "Choose the correct form: 'The book ____ before the movie was released.'",
-    options: ["had been published", "was published", "published", "publishing"],
-    correctAnswer: "had been published"
+    question: "Which is a type of sport?",
+    options: ["Basketball", "Table", "Chair", "Book"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Basketball"
   },
   {
-    question: "Which sentence uses the correct pronoun?",
-    options: [
-      "Me and him went to the store.",
-      "He and I went to the store.",
-      "Him and I went to the store.",
-      "I and he went to the store."
-    ],
-    correctAnswer: "He and I went to the store."
+    question: "What is 10 + 5?",
+    options: ["Fourteen", "Fifteen", "Sixteen", "Seventeen"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fifteen"
   },
   {
-    question: "What is the past participle of 'see'?",
-    options: ["Saw", "Seen", "Seed", "Seeing"],
-    correctAnswer: "Seen"
+    question: "What do you call a baby monkey?",
+    options: ["Infant", "Calf", "Lamb", "Foal"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Infant"
   },
   {
-    question: "Identify the sentence with correct punctuation:",
-    options: [
-      "Lets go to the park.",
-      "Let's go to the park.",
-      "Let us go to the park.",
-      "Lets' go to the park."
-    ],
-    correctAnswer: "Let's go to the park."
+    question: "Which word is a river?",
+    options: ["Amazon", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Amazon"
   },
   {
-    question: "What is the antonym of 'transparent'?",
-    options: ["Clear", "Opaque", "Visible", "Bright"],
-    correctAnswer: "Opaque"
+    question: "What is the opposite of 'low'?",
+    options: ["High", "Tall", "Long", "Wide"].sort(() => Math.random() - 0.5),
+    correctAnswer: "High"
   },
   {
-    question: "Choose the correct form: 'If she ____ earlier, she would have caught the train.'",
-    options: ["had left", "left", "leaves", "leaving"],
-    correctAnswer: "had left"
+    question: "What is the plural of 'deer'?",
+    options: ["Deer", "Deers", "Deeres", "Deeries"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Deer"
   },
   {
-    question: "Which sentence is correct?",
-    options: [
-      "The number of students are increasing.",
-      "The number of students is increasing.",
-      "The number of students be increasing.",
-      "The number of students increasing."
-    ],
-    correctAnswer: "The number of students is increasing."
+    question: "Which is a type of vegetable?",
+    options: ["Cucumber", "Apple", "Banana", "Orange"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Cucumber"
   },
   {
-    question: "What is the synonym of 'candid'?",
-    options: ["Dishonest", "Honest", "Secretive", "Deceptive"],
-    correctAnswer: "Honest"
+    question: "What is 17 - 2?",
+    options: ["Fourteen", "Fifteen", "Sixteen", "Seventeen"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fifteen"
   },
   {
-    question: "Choose the correct passive voice: 'The letter ____ by her yesterday.'",
-    options: ["was written", "is written", "wrote", "writing"],
-    correctAnswer: "was written"
+    question: "What do you use to dig?",
+    options: ["Shovel", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Shovel"
   },
   {
-    question: "What is the past participle of 'go'?",
-    options: ["Went", "Gone", "Goed", "Going"],
-    correctAnswer: "Gone"
+    question: "Which word is a mountain?",
+    options: ["Alps", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Alps"
   },
   {
-    question: "Identify the sentence with correct grammar:",
-    options: [
-      "She has ran a marathon.",
-      "She has run a marathon.",
-      "She have run a marathon.",
-      "She run a marathon."
-    ],
-    correctAnswer: "She has run a marathon."
+    question: "What is the opposite of 'thin'?",
+    options: ["Thick", "Long", "High", "Deep"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Thick"
   },
   {
-    question: "What is the antonym of 'frugal'?",
-    options: ["Thrifty", "Wasteful", "Economical", "Careful"],
-    correctAnswer: "Wasteful"
+    question: "What is the plural of 'loaf'?",
+    options: ["Loaves", "Loafs", "Loafes", "Loafies"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Loaves"
   },
   {
-    question: "Choose the correct form: 'They ____ the project by next week.'",
-    options: ["will have completed", "will complete", "complete", "completed"],
-    correctAnswer: "will have completed"
+    question: "Which is a type of bird?",
+    options: ["Penguin", "Tiger", "Bear", "Fox"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Penguin"
   },
   {
-    question: "Which sentence uses the subjunctive mood correctly?",
-    options: [
-      "If I was you, I would study.",
-      "If I were you, I would study.",
-      "If I am you, I would study.",
-      "If I be you, I would study."
-    ],
-    correctAnswer: "If I were you, I would study."
+    question: "What is 22 - 7?",
+    options: ["Fourteen", "Fifteen", "Sixteen", "Seventeen"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fifteen"
   },
   {
-    question: "What is the synonym of 'resilient'?",
-    options: ["Fragile", "Buoyant", "Weak", "Delicate"],
-    correctAnswer: "Buoyant"
+    question: "What do you use to wash dishes?",
+    options: ["Soap", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Soap"
   },
   {
-    question: "Choose the correct sentence:",
-    options: [
-      "A lot of information were shared.",
-      "A lot of information was shared.",
-      "A lot of informations were shared.",
-      "A lot of informations was shared."
-    ],
-    correctAnswer: "A lot of information was shared."
+    question: "Which word is a country?",
+    options: ["Brazil", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Brazil"
   },
   {
-    question: "What is the past participle of 'take'?",
-    options: ["Took", "Taken", "Taked", "Taking"],
-    correctAnswer: "Taken"
+    question: "What is the opposite of 'loud'?",
+    options: ["Quiet", "Noisy", "Strong", "Big"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Quiet"
   },
   {
-    question: "Identify the sentence with correct punctuation:",
-    options: [
-      "I love to read, write, and singing.",
-      "I love to read, write, and sing.",
-      "I love to read, write and sing.",
-      "I love to read write and sing."
-    ],
-    correctAnswer: "I love to read, write, and sing."
+    question: "What is the plural of 'potato'?",
+    options: ["Potatoes", "Potatos", "Potatoe", "Potatoies"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Potatoes"
   },
   {
-    question: "What is the antonym of 'authentic'?",
-    options: ["Genuine", "Fake", "Real", "True"],
-    correctAnswer: "Fake"
+    question: "Which is a type of fruit?",
+    options: ["Pear", "Carrot", "Potato", "Cabbage"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Pear"
   },
   {
-    question: "Choose the correct form: 'The meeting ____ by the time we arrived.'",
-    options: ["had started", "started", "starts", "starting"],
-    correctAnswer: "had started"
+    question: "What is 13 + 2?",
+    options: ["Fourteen", "Fifteen", "Sixteen", "Seventeen"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fifteen"
   },
   {
-    question: "Which sentence is correct?",
-    options: [
-      "Each of the students have a book.",
-      "Each of the students has a book.",
-      "Each of the students have books.",
-      "Each of the students has books."
-    ],
-    correctAnswer: "Each of the students has a book."
+    question: "What do you use to play tennis?",
+    options: ["Racket", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Racket"
   },
   {
-    question: "What is the synonym of 'obstinate'?",
-    options: ["Flexible", "Stubborn", "Adaptable", "Compliant"],
-    correctAnswer: "Stubborn"
+    question: "Which word is an island?",
+    options: ["Hawaii", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Hawaii"
   },
   {
-    question: "Choose the correct passive voice: 'The cake ____ by the chef.'",
-    options: ["was baked", "is baked", "baked", "baking"],
-    correctAnswer: "was baked"
+    question: "What is the opposite of 'high'?",
+    options: ["Low", "Tall", "Long", "Wide"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Low"
   },
   {
-    question: "What is the past participle of 'run'?",
-    options: ["Ran", "Run", "Runned", "Running"],
-    correctAnswer: "Run"
+    question: "What is the plural of 'sheep'?",
+    options: ["Sheep", "Sheeps", "Sheepes", "Sheepies"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Sheep"
   },
   {
-    question: "Identify the sentence with correct grammar:",
-    options: [
-      "The committee have decided.",
-      "The committee has decided.",
-      "The committee be decided.",
-      "The committee deciding."
-    ],
-    correctAnswer: "The committee has decided."
+    question: "Which is a type of vegetable?",
+    options: ["Spinach", "Apple", "Banana", "Orange"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Spinach"
   },
   {
-    question: "What is the antonym of 'superficial'?",
-    options: ["Shallow", "Deep", "Surface", "Light"],
-    correctAnswer: "Deep"
+    question: "What is 21 - 6?",
+    options: ["Fourteen", "Fifteen", "Sixteen", "Seventeen"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fifteen"
   },
   {
-    question: "Choose the correct form: 'If you ____ earlier, you wouldn’t have missed it.'",
-    options: ["had arrived", "arrived", "arrive", "arriving"],
-    correctAnswer: "had arrived"
+    question: "What do you use to cut wood?",
+    options: ["Saw", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Saw"
   },
   {
-    question: "Which sentence uses the correct article?",
-    options: [
-      "A apple is on the table.",
-      "An apple is on the table.",
-      "The apple is on the table.",
-      "Apple is on the table."
-    ],
-    correctAnswer: "An apple is on the table."
+    question: "Which word is a sea?",
+    options: ["Mediterranean", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Mediterranean"
   },
   {
-    question: "What is the synonym of 'diligent'?",
-    options: ["Lazy", "Hardworking", "Careless", "Idle"],
-    correctAnswer: "Hardworking"
+    question: "What is the opposite of 'soft'?",
+    options: ["Hard", "Smooth", "Wet", "Dry"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Hard"
   },
   {
-    question: "Choose the correct sentence:",
-    options: [
-      "There is too many people here.",
-      "There are too many people here.",
-      "There be too many people here.",
-      "There is too much people here."
-    ],
-    correctAnswer: "There are too many people here."
+    question: "What is the plural of 'man'?",
+    options: ["Men", "Mans", "Manes", "Mens"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Men"
   },
   {
-    question: "What is the past participle of 'give'?",
-    options: ["Gave", "Given", "Gived", "Giving"],
-    correctAnswer: "Given"
+    question: "Which is a type of animal?",
+    options: ["Kangaroo", "Table", "Chair", "Book"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Kangaroo"
   },
   {
-    question: "Identify the sentence with correct punctuation:",
-    options: [
-      "The dog barked; the cat ran.",
-      "The dog barked, the cat ran.",
-      "The dog barked the cat ran.",
-      "The dog barked: the cat ran."
-    ],
-    correctAnswer: "The dog barked; the cat ran."
+    question: "What is 18 + 2?",
+    options: ["Fourteen", "Fifteen", "Sixteen", "Seventeen"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fifteen"
   },
   {
-    question: "What is the antonym of 'optimistic'?",
-    options: ["Hopeful", "Pessimistic", "Confident", "Positive"],
-    correctAnswer: "Pessimistic"
+    question: "What do you use to bake bread?",
+    options: ["Oven", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Oven"
   },
   {
-    question: "Choose the correct form: 'The work ____ by the team last week.'",
-    options: ["was completed", "is completed", "completed", "completing"],
-    correctAnswer: "was completed"
+    question: "Which word is a forest?",
+    options: ["Amazon", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Amazon"
   },
   {
-    question: "Which sentence is correct?",
-    options: [
-      "Who did you see at the party?",
-      "Whom did you see at the party?",
-      "Who you saw at the party?",
-      "Whom you saw at the party?"
-    ],
-    correctAnswer: "Whom did you see at the party?"
+    question: "What is the opposite of 'wide'?",
+    options: ["Narrow", "Long", "High", "Deep"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Narrow"
   },
   {
-    question: "What is the synonym of 'exquisite'?",
-    options: ["Ordinary", "Beautiful", "Plain", "Simple"],
-    correctAnswer: "Beautiful"
+    question: "What is the plural of 'child'?",
+    options: ["Children", "Childs", "Childes", "Childrens"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Children"
   },
   {
-    question: "Choose the correct form: 'I wish he ____ here now.'",
-    options: ["were", "was", "is", "be"],
-    correctAnswer: "were"
+    question: "Which is a type of fish?",
+    options: ["Cod", "Lion", "Elephant", "Bear"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Cod"
   },
   {
-    question: "What is the past participle of 'buy'?",
-    options: ["Bought", "Buyed", "Boughten", "Buying"],
-    correctAnswer: "Bought"
+    question: "What is 16 + 4?",
+    options: ["Fourteen", "Fifteen", "Sixteen", "Seventeen"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fifteen"
   },
   {
-    question: "Identify the sentence with correct grammar:",
-    options: [
-      "The news are surprising.",
-      "The news is surprising.",
-      "The news be surprising.",
-      "The news surprising."
-    ],
-    correctAnswer: "The news is surprising."
+    question: "What do you use to fix a leak?",
+    options: ["Tape", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Tape"
   },
   {
-    question: "What is the antonym of 'generous'?",
-    options: ["Kind", "Selfish", "Giving", "Charitable"],
-    correctAnswer: "Selfish"
+    question: "Which word is a valley?",
+    options: ["Yosemite", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Yosemite"
   },
   {
-    question: "Choose the correct form: 'The movie ____ by the time we got there.'",
-    options: ["had started", "started", "starts", "starting"],
-    correctAnswer: "had started"
+    question: "What is the opposite of 'high'?",
+    options: ["Low", "Tall", "Long", "Wide"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Low"
   },
   {
-    question: "Which sentence is correct?",
-    options: [
-      "All the children has toys.",
-      "All the children have toys.",
-      "All the children has toy.",
-      "All the children have toy."
-    ],
-    correctAnswer: "All the children have toys."
+    question: "What is the plural of 'goose'?",
+    options: ["Geese", "Gooses", "Goosees", "Geeses"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Geese"
   },
   {
-    question: "What is the synonym of 'vivacious'?",
-    options: ["Dull", "Lively", "Quiet", "Calm"],
-    correctAnswer: "Lively"
+    question: "Which is a type of vegetable?",
+    options: ["Lettuce", "Apple", "Banana", "Orange"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Lettuce"
   },
   {
-    question: "Choose the correct passive voice: 'The song ____ by the choir.'",
-    options: ["was sung", "is sung", "sang", "singing"],
-    correctAnswer: "was sung"
+    question: "What is 23 - 8?",
+    options: ["Fourteen", "Fifteen", "Sixteen", "Seventeen"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Fifteen"
   },
   {
-    question: "What is the past participle of 'eat'?",
-    options: ["Ate", "Eaten", "Eat", "Eating"],
-    correctAnswer: "Eaten"
+    question: "What do you use to light a fire?",
+    options: ["Match", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Match"
   },
   {
-    question: "Identify the sentence with correct punctuation:",
-    options: [
-      "I have three hobbies, reading, writing, and painting.",
-      "I have three hobbies: reading, writing, and painting.",
-      "I have three hobbies; reading, writing, and painting.",
-      "I have three hobbies reading, writing, and painting."
-    ],
-    correctAnswer: "I have three hobbies: reading, writing, and painting."
+    question: "Which word is a capital?",
+    options: ["Beijing", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Beijing"
   }
 ];

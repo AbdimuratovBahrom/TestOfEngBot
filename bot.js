@@ -16,7 +16,7 @@ if (!TOKEN || !WEBHOOK_URL) {
 }
 
 // Инициализация бота
-const bot = new TelegramBot(TOKEN);
+const bot = new TelegramBot(TOKEN, { polling: false });
 
 // Кэш для хранения username
 const userCache = new Map();
@@ -87,7 +87,7 @@ const translations = {
     langSet: '✅ Til o‘rnatildi. Viktorinani boshlash uchun bosing.',
     startQuiz: '📚 Viktorinani boshlash',
     question: (index, total) => `Savol ${index}/${total}`,
-    unknownUser: "Noma'lum foydalanuvchi",
+    unknownUser: 'Nomalum foydalanuvchi',
     noDate: 'Sana mavjud emas',
     thanksMessage: '❤️ Botdan foydalanganingiz uchun rahmat! Muallifga minnatdorchilik bildirmoqchi bo‘lsangiz, unga yozing: [t.me/AbdimuratovBahrom](https://t.me/AbdimuratovBahrom)',
     errorMessage: '❌ Xato: savol ma’lumotlari noto‘g‘ri. Administratorga murojaat qiling. Batafsil: [savol: %question%, variantlar: %options%, to‘g‘ri javob: %correctAnswer%]',
@@ -183,8 +183,9 @@ bot.on('callback_query', async (query) => {
     startQuiz(chatId, level);
   } else if (state && state.questions) {
     const q = state.questions[state.index];
-    const isCorrect = data === q.options[q.correctAnswer];
-    await bot.sendMessage(chatId, isCorrect ? t(chatId, 'correct') : t(chatId, 'wrong', q.options[q.correctAnswer] || 'неизвестно'));
+    const userAnswer = data;
+    const isCorrect = q.options.includes(userAnswer) && userAnswer === q.correctAnswer;
+    await bot.sendMessage(chatId, isCorrect ? t(chatId, 'correct') : t(chatId, 'wrong', q.correctAnswer));
     if (isCorrect) state.correct++;
     state.index++;
     setTimeout(() => sendNextQuestion(chatId), 1000);
@@ -298,18 +299,18 @@ function sendNextQuestion(chatId) {
 
   const q = state.questions[state.index];
   console.log(`Debug: Question ${q.question}, options: ${JSON.stringify(q.options)}, correctAnswer: ${q.correctAnswer}`); // Отладочный лог
-  if (!q.options || q.options.length !== 4 || typeof q.correctAnswer !== 'number' || q.correctAnswer < 0 || q.correctAnswer >= 4) {
+  if (!q.options || q.options.length !== 4 || !q.correctAnswer || !q.options.includes(q.correctAnswer)) {
     const errorMsg = t(chatId, 'errorMessage')
       .replace('%question%', q.question || 'не указан')
       .replace('%options%', JSON.stringify(q.options) || 'не указаны')
-      .replace('%correctAnswer%', q.correctAnswer?.toString() || 'не указан');
+      .replace('%correctAnswer%', q.correctAnswer || 'не указан');
     bot.sendMessage(chatId, errorMsg);
     userStates.delete(chatId);
     return;
   }
 
   const message = createQuestionMessage({ ...state, chatId });
-  const buttons = q.options.map((opt, idx) => [{ text: `${t(chatId, 'optionPrefix')} ${opt || `вариант ${idx + 1}`}`, callback_data: opt || `option${idx}` }]);
+  const buttons = q.options.map((opt) => [{ text: `${t(chatId, 'optionPrefix')} ${opt}`, callback_data: opt }]);
 
   bot.sendMessage(chatId, message, {
     parse_mode: 'HTML',
@@ -327,23 +328,7 @@ function startQuiz(chatId, level) {
   }
 
   const selected = getRandomQuestions(questions);
-  // Перемешивание вариантов ответов и обновление correctAnswer
-  selected.forEach(q => {
-    if (!q.options || q.options.length !== 4) {
-      console.error(`❌ Ошибка в вопросе: ${q.question}, options: ${JSON.stringify(q.options)}`);
-      return;
-    }
-    const originalOptions = [...q.options]; // Сохраняем исходный массив
-    const shuffledOptions = [...q.options]; // Копия для перемешивания
-    shuffleArray(shuffledOptions);
-    const correctAnswerText = originalOptions[q.correctAnswer]; // Текст правильного ответа
-    q.correctAnswer = shuffledOptions.indexOf(correctAnswerText); // Обновляем индекс
-    if (q.correctAnswer === -1) {
-      console.error(`❌ Правильный ответ "${correctAnswerText}" не найден в перемешанных опциях для вопроса: ${q.question}`);
-    }
-    q.options = shuffledOptions; // Присваиваем перемешанный массив
-  });
-
+  // Перемешивание вариантов ответов уже выполняется в questions.js
   const prev = userStates.get(chatId) || { lang: 'ru' };
   userStates.set(chatId, {
     ...prev,

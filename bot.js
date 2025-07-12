@@ -18,6 +18,9 @@ if (!TOKEN || !WEBHOOK_URL) {
 // Инициализация бота
 const bot = new TelegramBot(TOKEN);
 
+// Кэш для хранения username
+const userCache = new Map();
+
 const app = express();
 app.use(express.json());
 
@@ -59,6 +62,7 @@ const translations = {
     langSet: '✅ Язык установлен. Нажмите, чтобы начать викторину.',
     startQuiz: '📚 Начать викторину',
     question: (index, total) => `Вопрос ${index}/${total}`,
+    unknownUser: 'Неизвестный пользователь',
   },
   uz: {
     welcome: '👋 Tilni tanlang:',
@@ -80,6 +84,7 @@ const translations = {
     langSet: '✅ Til o‘rnatildi. Viktorinani boshlash uchun bosing.',
     startQuiz: '📚 Viktorinani boshlash',
     question: (index, total) => `Savol ${index}/${total}`,
+    unknownUser: "Noma'lum foydalanuvchi",
   },
   kk: {
     welcome: '👋 Til saylañ:',
@@ -101,6 +106,7 @@ const translations = {
     langSet: '✅ Til ornatıldı. Viktorinanı baslaw ushın basıñ.',
     startQuiz: '📚 Viktorinanı baslaw',
     question: (index, total) => `Soraw ${index}/${total}`,
+    unknownUser: 'Belgisiz paydalanıwshı',
   },
 };
 
@@ -184,20 +190,47 @@ bot.onText(/\/level/, (msg) => {
 
 // /top10
 bot.onText(/\/top10/, async (msg) => {
+  const chatId = msg.chat.id;
   const top = await getTop10Results();
-  if (top.length === 0) return bot.sendMessage(msg.chat.id, t(msg.chat.id, 'top10Empty'));
-  const message = t(msg.chat.id, 'top10Header') + top.map((r, i) =>
-    `${i + 1}. 👤 <b>${r.user_id}</b> — ${r.score}/20 (${r.level})`).join('\n');
-  bot.sendMessage(msg.chat.id, message, { parse_mode: 'HTML' });
+  if (top.length === 0) return bot.sendMessage(chatId, t(chatId, 'top10Empty'));
+
+  const results = await Promise.all(top.map(async (r, i) => {
+    let username = userCache.get(r.user_id) || r.username;
+    if (!username) {
+      try {
+        const chat = await bot.getChat(r.user_id);
+        username = chat.username || chat.first_name || t(chatId, 'unknownUser');
+        userCache.set(r.user_id, username); // Кэшируем результат
+      } catch (err) {
+        console.warn(`⚠️ Не удалось получить имя пользователя для user_id ${r.user_id}:`, err.message);
+        username = t(chatId, 'unknownUser');
+      }
+    }
+    return `${i + 1}. 👤 <b>${username}</b> — ${r.score}/20 (${r.level})`;
+  }));
+
+  const message = t(chatId, 'top10Header') + results.join('\n');
+  bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
 });
 
 // /myresults
 bot.onText(/\/myresults/, async (msg) => {
   const chatId = msg.chat.id;
+  const state = userStates.get(chatId) || { lang: 'ru' };
+  const locale = state.lang === 'uz' ? 'uz-UZ' : state.lang === 'kk' ? 'kk-KZ' : 'ru-RU';
   const results = await getUserResults(chatId);
   if (results.length === 0) return bot.sendMessage(chatId, t(chatId, 'userResultsEmpty'));
-  const message = t(chatId, 'userResultsHeader') + results.map((r, i) =>
-    `${i + 1}. ${r.score}/20 (${r.level}) — ${new Date(r.timestamp).toLocaleDateString()}`).join('\n');
+
+  const formattedResults = results.map((r) => {
+    let date = 'Invalid Date';
+    if (r.timestamp) {
+      const d = new Date(r.timestamp);
+      date = !isNaN(d) ? d.toLocaleDateString(locale) : 'Дата недоступна';
+    }
+    return `${r.score}/20 (${r.level}) — ${date}`;
+  });
+
+  const message = t(chatId, 'userResultsHeader') + formattedResults.map((r, i) => `${i + 1}. ${r}`).join('\n');
   bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
 });
 

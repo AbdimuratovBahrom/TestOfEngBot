@@ -29,11 +29,20 @@ app.post(`/bot${TOKEN}`, (req, res) => {
   res.sendStatus(200);
 });
 
+
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
-  bot.setWebHook(`${WEBHOOK_URL}/bot${TOKEN}`);
-app.post(`/bot${TOKEN}`, (req, res) => { ... });
+  bot.setWebHook(`${WEBHOOK_URL}/bot${TOKEN}`)
+    .then(() => console.log('✅ Webhook set successfully'))
+    .catch((err) => console.error('❌ Webhook setup failed:', err.message));
 });
+
+
+// app.listen(PORT, () => {
+//   console.log(`✅ Server running on port ${PORT}`);
+//   bot.setWebHook(`${WEBHOOK_URL}/bot${TOKEN}`);
+// app.post(`/bot${TOKEN}`, (req, res) => { ... });
+// });
 
 
 

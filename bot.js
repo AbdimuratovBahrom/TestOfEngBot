@@ -48,7 +48,7 @@ const translations = {
     info: `🤖 <b>English Quiz Bot</b>\n📌 Автор: @AbdimuratovBahrom\n💡 Уровни: Начальный, Средний, Продвинутый\n📊 Команды: /level, /top10, /myresults, /thanks`,
     selectLevel: '📚 Выберите уровень сложности:',
     correct: '✅ Правильно!',
-    wrong: (answer) => `❌ Неправильно. Правильный ответ: ${answer}`,
+    wrong: (answer) => `❌ Неправильно. Правильный ответ: ${answer || 'неизвестно'}`,
     done: (score, total) => `🎉 Викторина завершена!\nВаш результат: ${score}/${total}`,
     top10Empty: '❌ Результаты не найдены.',
     top10Header: '🏆 <b>Топ 10 результатов:</b>\n\n',
@@ -65,6 +65,7 @@ const translations = {
     unknownUser: 'Неизвестный пользователь',
     noDate: 'Дата недоступна',
     thanksMessage: '❤️ Спасибо за использование бота! Если хотите поблагодарить автора, напишите ему: [t.me/AbdimuratovBahrom](https://t.me/AbdimuratovBahrom)',
+    errorMessage: '❌ Ошибка: некорректные данные вопроса. Обратитесь к администратору. Подробности: [question: %question%, options: %options%, correctAnswer: %correctAnswer%]',
   },
   uz: {
     welcome: '👋 Tilni tanlang:',
@@ -72,7 +73,7 @@ const translations = {
     info: `🤖 <b>English Quiz Bot</b>\n📌 Muallif: @AbdimuratovBahrom\n💡 Darajalar: Boshlang'ich, O'rta, Ilg'or\n📊 Buyruqlar: /level, /top10, /myresults, /thanks`,
     selectLevel: '📚 Qiyinlik darajasini tanlang:',
     correct: '✅ To‘g‘ri!',
-    wrong: (answer) => `❌ Noto‘g‘ri. To‘g‘ri javob: ${answer}`,
+    wrong: (answer) => `❌ Noto‘g‘ri. To‘g‘ri javob: ${answer || 'noma’lum'}`,
     done: (score, total) => `🎉 Viktorina tugadi!\nNatijangiz: ${score}/${total}`,
     top10Empty: '❌ Natijalar topilmadi.',
     top10Header: '🏆 <b>Eng yaxshi 10 natija:</b>\n\n',
@@ -89,6 +90,7 @@ const translations = {
     unknownUser: 'Nomalum foydalanuvchi',
     noDate: 'Sana mavjud emas',
     thanksMessage: '❤️ Botdan foydalanganingiz uchun rahmat! Muallifga minnatdorchilik bildirmoqchi bo‘lsangiz, unga yozing: [t.me/AbdimuratovBahrom](https://t.me/AbdimuratovBahrom)',
+    errorMessage: '❌ Xato: savol ma’lumotlari noto‘g‘ri. Administratorga murojaat qiling. Batafsil: [savol: %question%, variantlar: %options%, to‘g‘ri javob: %correctAnswer%]',
   },
   kk: {
     welcome: '👋 Til saylañ:',
@@ -96,7 +98,7 @@ const translations = {
     info: `🤖 <b>English Quiz Bot</b>\n📌 Avtor: @AbdimuratovBahrom\n💡 Darajalar: Baslang‘ish, Orta, Ilgeri\n📊 Komandalar: /level, /top10, /myresults, /thanks`,
     selectLevel: '📚 Qıyınlıq darajasın saylañ:',
     correct: '✅ Dúris!',
-    wrong: (answer) => `❌ Qáte. Dúris jawap: ${answer}`,
+    wrong: (answer) => `❌ Qáte. Dúris jawap: ${answer || 'bellisiz'}`,
     done: (score, total) => `🎉 Viktorina ayaqtaldı!\nNátiyjeñiz: ${score}/${total}`,
     top10Empty: '❌ Nátiyjeler tabılmadı.',
     top10Header: '🏆 <b>Eñ úzdik 10 nátiyje:</b>\n\n',
@@ -113,6 +115,7 @@ const translations = {
     unknownUser: 'Belgisiz paydalanıwshı',
     noDate: 'Sana joq',
     thanksMessage: '❤️ Botty paydalanıw üshin rámet! Eger avtordı maqtanw qalasañ, oña jazıñ: [t.me/AbdimuratovBahrom](https://t.me/AbdimuratovBahrom)',
+    errorMessage: '❌ Qaté: soraw maǵlıwmatlary dұrys emes. Administratorǵa muraǵat etiñ. Tolyq maǵlıwmat: [soraw: %question%, nұsǵawlar: %options%, dұrys jawap: %correctAnswer%]',
   },
 };
 
@@ -296,13 +299,17 @@ function sendNextQuestion(chatId) {
   const q = state.questions[state.index];
   console.log(`Debug: Question ${q.question}, options: ${JSON.stringify(q.options)}, correctAnswer: ${q.correctAnswer}`); // Отладочный лог
   if (!q.options || q.options.length !== 4 || typeof q.correctAnswer !== 'number' || q.correctAnswer < 0 || q.correctAnswer >= 4) {
-    bot.sendMessage(chatId, '❌ Ошибка: некорректные данные вопроса. Обратитесь к администратору.');
+    const errorMsg = t(chatId, 'errorMessage')
+      .replace('%question%', q.question || 'не указан')
+      .replace('%options%', JSON.stringify(q.options) || 'не указаны')
+      .replace('%correctAnswer%', q.correctAnswer?.toString() || 'не указан');
+    bot.sendMessage(chatId, errorMsg);
     userStates.delete(chatId);
     return;
   }
 
   const message = createQuestionMessage({ ...state, chatId });
-  const buttons = q.options.map((opt) => [{ text: `${t(chatId, 'optionPrefix')} ${opt || 'нет ответа'}`, callback_data: opt || 'undefined' }]);
+  const buttons = q.options.map((opt, idx) => [{ text: `${t(chatId, 'optionPrefix')} ${opt || `вариант ${idx + 1}`}`, callback_data: opt || `option${idx}` }]);
 
   bot.sendMessage(chatId, message, {
     parse_mode: 'HTML',

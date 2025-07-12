@@ -1,6 +1,6 @@
 
 
-export const beginnerQuestions = ([
+export const beginnerQuestions = [
   {
     question: "What is the capital of England?",
     options: ["London", "Paris", "Berlin", "Madrid"],
@@ -483,9 +483,9 @@ export const beginnerQuestions = ([
     options: ["Leaves", "Leafs", "Leafes", "Leavs"],
     correctAnswer: "Leaves"
   }
-]);
+];
 
-export const intermediateQuestions = ([
+export const intermediateQuestions = [
   {
     question: "Choose the correct form: 'He ____ to the gym every day.'",
     options: ["go", "goes", "gone", "going"],
@@ -1031,9 +1031,9 @@ export const intermediateQuestions = ([
     ],
     correctAnswer: "She sings a song."
   }
-]);
+];
 
-export const advancedQuestions = ([
+export const advancedQuestions = [
   {
     question: "Identify the sentence with correct punctuation:",
     options: [
@@ -1604,4 +1604,4 @@ export const advancedQuestions = ([
     ],
     correctAnswer: "I have three hobbies: reading, writing, and painting."
   }
-]);
+];

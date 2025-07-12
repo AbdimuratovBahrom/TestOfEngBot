@@ -233,8 +233,8 @@ export const beginnerQuestions = ([
   },
   {
     question: "What is the opposite of 'open'?",
-    options: ["Close", "Shut", "Locked", "All of the above"],
-    correctAnswer: "All of the above"
+    options: [ "Shut", "Locked", "All of the above", "Close"],
+    correctAnswer: "Close"
   },
   {
     question: "What is the plural of 'mouse'?",

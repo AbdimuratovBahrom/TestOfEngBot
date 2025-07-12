@@ -124,6 +124,15 @@ function t(chatId, key, ...args) {
   return typeof text === 'function' ? text(...args) : text;
 }
 
+// Функция для перемешивания массива
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 // Выбор языка
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
@@ -168,8 +177,8 @@ bot.on('callback_query', async (query) => {
     startQuiz(chatId, level);
   } else if (state && state.questions) {
     const q = state.questions[state.index];
-    const isCorrect = data === q.correctAnswer;
-    await bot.sendMessage(chatId, isCorrect ? t(chatId, 'correct') : t(chatId, 'wrong', q.correctAnswer));
+    const isCorrect = data === q.options[q.correctAnswer];
+    await bot.sendMessage(chatId, isCorrect ? t(chatId, 'correct') : t(chatId, 'wrong', q.options[q.correctAnswer]));
     if (isCorrect) state.correct++;
     state.index++;
     setTimeout(() => sendNextQuestion(chatId), 1000);
@@ -295,12 +304,22 @@ function startQuiz(chatId, level) {
     default: return;
   }
 
+  // Выбираем случайные вопросы
   const selected = getRandomQuestions(questions);
+
+  // Перемешиваем варианты ответа для каждого вопроса
+  const shuffledQuestions = selected.map(q => {
+    const options = [...q.options]; // Копируем массив опций
+    shuffleArray(options); // Перемешиваем опции
+    const newCorrectIndex = options.indexOf(q.correctAnswer); // Находим новую позицию правильного ответа
+    return { ...q, options, correctAnswer: newCorrectIndex }; // Обновляем вопрос с новыми опциями и индексом
+  });
+
   const prev = userStates.get(chatId) || { lang: 'ru' };
   userStates.set(chatId, {
     ...prev,
     level,
-    questions: selected,
+    questions: shuffledQuestions,
     index: 0,
     correct: 0,
     chatId,

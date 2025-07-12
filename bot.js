@@ -45,7 +45,7 @@ const translations = {
   ru: {
     welcome: '👋 Выберите язык:',
     help: `ℹ️ <b>Как пользоваться:</b>\n\n1. Нажмите "📚 Выбрать уровень".\n2. Ответьте на 20 вопросов.\n3. Узнайте свой результат.\n4. Смотрите Топ 10.\n\nПриятного обучения! 🎓`,
-    info: `🤖 <b>English Quiz Bot</b>\n📌 Автор: @AbdimuratovBahrom\n💡 Уровни: Начальный, Средний, Продвинутый\n📊 Команды: /level, /top10, /myresults`,
+    info: `🤖 <b>English Quiz Bot</b>\n📌 Автор: @AbdimuratovBahrom\n💡 Уровни: Начальный, Средний, Продвинутый\n📊 Команды: /level, /top10, /myresults, /thanks`,
     selectLevel: '📚 Выберите уровень сложности:',
     correct: '✅ Правильно!',
     wrong: (answer) => `❌ Неправильно. Правильный ответ: ${answer}`,
@@ -64,11 +64,12 @@ const translations = {
     question: (index, total) => `Вопрос ${index}/${total}`,
     unknownUser: 'Неизвестный пользователь',
     noDate: 'Дата недоступна',
+    thanksMessage: '❤️ Спасибо за использование бота! Если хотите поблагодарить автора, напишите ему: [t.me/AbdimuratovBahrom](https://t.me/AbdimuratovBahrom)',
   },
   uz: {
     welcome: '👋 Tilni tanlang:',
     help: `ℹ️ <b>Qanday foydalaniladi:</b>\n\n1. "📚 Darajani tanlash" tugmasini bosing.\n2. 20 ta savolga javob bering.\n3. Natijangizni ko'ring.\n4. Top 10 ni ko'ring.\n\nOmad! 🎓`,
-    info: `🤖 <b>English Quiz Bot</b>\n📌 Muallif: @AbdimuratovBahrom\n💡 Darajalar: Boshlang'ich, O'rta, Ilg'or\n📊 Buyruqlar: /level, /top10, /myresults`,
+    info: `🤖 <b>English Quiz Bot</b>\n📌 Muallif: @AbdimuratovBahrom\n💡 Darajalar: Boshlang'ich, O'rta, Ilg'or\n📊 Buyruqlar: /level, /top10, /myresults, /thanks`,
     selectLevel: '📚 Qiyinlik darajasini tanlang:',
     correct: '✅ To‘g‘ri!',
     wrong: (answer) => `❌ Noto‘g‘ri. To‘g‘ri javob: ${answer}`,
@@ -87,11 +88,12 @@ const translations = {
     question: (index, total) => `Savol ${index}/${total}`,
     unknownUser: "Noma'lum foydalanuvchi",
     noDate: 'Sana mavjud emas',
+    thanksMessage: '❤️ Botdan foydalanganingiz uchun rahmat! Muallifga minnatdorchilik bildirmoqchi bo‘lsangiz, unga yozing: [t.me/AbdimuratovBahrom](https://t.me/AbdimuratovBahrom)',
   },
   kk: {
     welcome: '👋 Til saylañ:',
     help: `ℹ️ <b>Qalay paydalanıw kerek:</b>\n\n1. "📚 Daraja saylañ" tugmasın basıñ.\n2. 20 sorawğa jawap beriñ.\n3. Nátiyjeni kóriñ.\n4. Top 10 dı kóriñ.\n\nSáttilik! 🎓`,
-    info: `🤖 <b>English Quiz Bot</b>\n📌 Avtor: @AbdimuratovBahrom\n💡 Darajalar: Baslang‘ish, Orta, Ilgeri\n📊 Komandalar: /level, /top10, /myresults`,
+    info: `🤖 <b>English Quiz Bot</b>\n📌 Avtor: @AbdimuratovBahrom\n💡 Darajalar: Baslang‘ish, Orta, Ilgeri\n📊 Komandalar: /level, /top10, /myresults, /thanks`,
     selectLevel: '📚 Qıyınlıq darajasın saylañ:',
     correct: '✅ Dúris!',
     wrong: (answer) => `❌ Qáte. Dúris jawap: ${answer}`,
@@ -110,6 +112,7 @@ const translations = {
     question: (index, total) => `Soraw ${index}/${total}`,
     unknownUser: 'Belgisiz paydalanıwshı',
     noDate: 'Sana joq',
+    thanksMessage: '❤️ Botty paydalanıw üshin rámet! Eger avtordı maqtanw qalasañ, oña jazıñ: [t.me/AbdimuratovBahrom](https://t.me/AbdimuratovBahrom)',
   },
 };
 
@@ -185,6 +188,12 @@ bot.on('callback_query', async (query) => {
   }
 });
 
+// Новая команда /thanks
+bot.onText(/\/thanks/, (msg) => {
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, t(chatId, 'thanksMessage'), { parse_mode: 'Markdown' });
+});
+
 // /help
 bot.onText(/\/help/, (msg) => {
   bot.sendMessage(msg.chat.id, t(msg.chat.id, 'help'), { parse_mode: 'HTML' });
@@ -212,7 +221,7 @@ bot.onText(/\/top10/, async (msg) => {
       try {
         const chat = await bot.getChat(r.user_id);
         username = chat.username || chat.first_name || t(chatId, 'unknownUser');
-        userCache.set(r.user_id, username); // Кэшируем результат
+        userCache.set(r.user_id, username);
       } catch (err) {
         console.warn(`⚠️ Не удалось получить имя пользователя для user_id ${r.user_id}:`, err.message);
         username = t(chatId, 'unknownUser');
@@ -230,19 +239,18 @@ bot.onText(/\/myresults/, async (msg) => {
   const chatId = msg.chat.id;
   const state = userStates.get(chatId) || { lang: 'ru' };
   const locale = state.lang === 'uz' ? 'uz-UZ' : state.lang === 'kk' ? 'kk-KZ' : 'ru-RU';
-  const options = { day: '2-digit', month: '2-digit', year: 'numeric' }; // Уточненный формат даты
+  const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
   const results = await getUserResults(chatId);
   if (results.length === 0) return bot.sendMessage(chatId, t(chatId, 'userResultsEmpty'));
 
   const formattedResults = results.map((r) => {
-    let date = t(chatId, 'noDate'); // Значение по умолчанию
+    let date = t(chatId, 'noDate');
     if (r.timestamp) {
       const d = new Date(r.timestamp);
-      console.log(`Debug: Raw timestamp "${r.timestamp}" parsed to ${d}`); // Подробный лог
+      console.log(`Debug: Raw timestamp "${r.timestamp}" parsed to ${d}`);
       date = !isNaN(d) ? d.toLocaleDateString(locale, options) : t(chatId, 'noDate');
     } else {
       console.warn(`⚠️ No timestamp for result: ${JSON.stringify(r)}`);
-      // Запасной вариант: текущая дата
       date = new Date().toLocaleDateString(locale, options);
     }
     return `${r.score}/20 (${r.level}) — ${date}`;
@@ -275,12 +283,12 @@ function createQuestionMessage(state) {
 function sendNextQuestion(chatId) {
   const state = userStates.get(chatId);
   if (!state || state.index >= state.questions.length) {
-    const now = new Date().toISOString(); // Текущая дата в ISO формате
+    const now = new Date().toISOString();
     bot.sendMessage(chatId, t(chatId, 'done', state.correct, state.questions.length), {
       reply_markup: { remove_keyboard: true },
     });
-    console.log(`Debug: Saving result with timestamp ${now}`); // Отладочный лог
-    saveResult(chatId, state.level, state.correct, now); // Передаем текущую дату
+    console.log(`Debug: Saving result with timestamp ${now}`);
+    saveResult(chatId, state.level, state.correct, now);
     userStates.delete(chatId);
     return;
   }
@@ -304,22 +312,21 @@ function startQuiz(chatId, level) {
     default: return;
   }
 
-  // Выбираем случайные вопросы
   const selected = getRandomQuestions(questions);
-
-  // Перемешиваем варианты ответа для каждого вопроса
-  const shuffledQuestions = selected.map(q => {
-    const options = [...q.options]; // Копируем массив опций
-    shuffleArray(options); // Перемешиваем опции
-    const newCorrectIndex = options.indexOf(q.correctAnswer); // Находим новую позицию правильного ответа
-    return { ...q, options, correctAnswer: newCorrectIndex }; // Обновляем вопрос с новыми опциями и индексом
+  // Перемешивание вариантов ответов
+  selected.forEach(q => {
+    const options = [...q.options];
+    shuffleArray(options);
+    const correctIndex = options.indexOf(q.options[q.correctAnswer]);
+    q.options = options;
+    q.correctAnswer = correctIndex;
   });
 
   const prev = userStates.get(chatId) || { lang: 'ru' };
   userStates.set(chatId, {
     ...prev,
     level,
-    questions: shuffledQuestions,
+    questions: selected,
     index: 0,
     correct: 0,
     chatId,

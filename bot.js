@@ -63,6 +63,7 @@ const translations = {
     startQuiz: '📚 Начать викторину',
     question: (index, total) => `Вопрос ${index}/${total}`,
     unknownUser: 'Неизвестный пользователь',
+    noDate: 'Дата недоступна',
   },
   uz: {
     welcome: '👋 Tilni tanlang:',
@@ -85,6 +86,7 @@ const translations = {
     startQuiz: '📚 Viktorinani boshlash',
     question: (index, total) => `Savol ${index}/${total}`,
     unknownUser: "Noma'lum foydalanuvchi",
+    noDate: 'Sana mavjud emas',
   },
   kk: {
     welcome: '👋 Til saylañ:',
@@ -107,6 +109,7 @@ const translations = {
     startQuiz: '📚 Viktorinanı baslaw',
     question: (index, total) => `Soraw ${index}/${total}`,
     unknownUser: 'Belgisiz paydalanıwshı',
+    noDate: 'Sana joq',
   },
 };
 
@@ -218,14 +221,18 @@ bot.onText(/\/myresults/, async (msg) => {
   const chatId = msg.chat.id;
   const state = userStates.get(chatId) || { lang: 'ru' };
   const locale = state.lang === 'uz' ? 'uz-UZ' : state.lang === 'kk' ? 'kk-KZ' : 'ru-RU';
+  const options = { day: '2-digit', month: '2-digit', year: 'numeric' }; // Уточненный формат даты
   const results = await getUserResults(chatId);
   if (results.length === 0) return bot.sendMessage(chatId, t(chatId, 'userResultsEmpty'));
 
   const formattedResults = results.map((r) => {
-    let date = 'Invalid Date';
+    let date = t(chatId, 'noDate'); // Значение по умолчанию
     if (r.timestamp) {
       const d = new Date(r.timestamp);
-      date = !isNaN(d) ? d.toLocaleDateString(locale) : 'Дата недоступна';
+      console.log(`Debug: timestamp "${r.timestamp}" parsed to ${d}`); // Отладочный лог
+      date = !isNaN(d) ? d.toLocaleDateString(locale, options) : t(chatId, 'noDate');
+    } else {
+      console.warn(`⚠️ No timestamp for result: ${JSON.stringify(r)}`);
     }
     return `${r.score}/20 (${r.level}) — ${date}`;
   });
@@ -257,10 +264,11 @@ function createQuestionMessage(state) {
 function sendNextQuestion(chatId) {
   const state = userStates.get(chatId);
   if (!state || state.index >= state.questions.length) {
+    const now = new Date().toISOString(); // Текущая дата для сохранения
     bot.sendMessage(chatId, t(chatId, 'done', state.correct, state.questions.length), {
       reply_markup: { remove_keyboard: true },
     });
-    saveResult(chatId, state.level, state.correct);
+    saveResult(chatId, state.level, state.correct, now); // Передаем текущую дату
     userStates.delete(chatId);
     return;
   }

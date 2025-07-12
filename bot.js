@@ -11,7 +11,7 @@ dotenv.config();
 
 const TOKEN = process.env.BOT_TOKEN;
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
-const PORT = process.env.PORT;
+const PORT = parseInt(process.env.PORT, 10) || 3000;
 
 
 if (!TOKEN || !WEBHOOK_URL) {
@@ -32,6 +32,7 @@ app.post(`/bot${TOKEN}`, (req, res) => {
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
   bot.setWebHook(`${WEBHOOK_URL}/bot${TOKEN}`);
+app.post(`/bot${TOKEN}`, (req, res) => { ... });
 });
 
 

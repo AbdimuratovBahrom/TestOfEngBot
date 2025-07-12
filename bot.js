@@ -87,7 +87,7 @@ const translations = {
     langSet: '✅ Til o‘rnatildi. Viktorinani boshlash uchun bosing.',
     startQuiz: '📚 Viktorinani boshlash',
     question: (index, total) => `Savol ${index}/${total}`,
-    unknownUser: 'Nomalum foydalanuvchi',
+    unknownUser: "Noma'lum foydalanuvchi",
     noDate: 'Sana mavjud emas',
     thanksMessage: '❤️ Botdan foydalanganingiz uchun rahmat! Muallifga minnatdorchilik bildirmoqchi bo‘lsangiz, unga yozing: [t.me/AbdimuratovBahrom](https://t.me/AbdimuratovBahrom)',
     errorMessage: '❌ Xato: savol ma’lumotlari noto‘g‘ri. Administratorga murojaat qiling. Batafsil: [savol: %question%, variantlar: %options%, to‘g‘ri javob: %correctAnswer%]',

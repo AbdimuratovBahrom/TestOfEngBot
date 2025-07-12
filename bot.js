@@ -1,5 +1,3 @@
-
-
 // bot.js
 import TelegramBot from 'node-telegram-bot-api';
 import express from 'express';
@@ -13,11 +11,13 @@ const TOKEN = process.env.BOT_TOKEN;
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
 const PORT = parseInt(process.env.PORT, 10) || 3000;
 
-
 if (!TOKEN || !WEBHOOK_URL) {
   console.error('❌ BOT_TOKEN и WEBHOOK_URL должны быть заданы в .env');
   process.exit(1);
 }
+
+// Инициализация бота
+const bot = new TelegramBot(TOKEN);
 
 const app = express();
 app.use(express.json());
@@ -29,14 +29,14 @@ app.post(`/bot${TOKEN}`, (req, res) => {
   res.sendStatus(200);
 });
 
-
 app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`✅ Сервер запущен на порту ${PORT}`);
   bot.setWebHook(`${WEBHOOK_URL}/bot${TOKEN}`)
-    .then(() => console.log('✅ Webhook set successfully'))
-    .catch((err) => console.error('❌ Webhook setup failed:', err.message));
+    .then(() => console.log('✅ Вебхук успешно установлен'))
+    .catch((err) => console.error('❌ Ошибка установки вебхука:', err.message));
 });
 
+// ... остальной код (обработчики событий, переводы и т.д.) остается без изменений ...
 
 // app.listen(PORT, () => {
 //   console.log(`✅ Server running on port ${PORT}`);

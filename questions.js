@@ -1555,3 +1555,22 @@ export const beginnerQuestions = [
     correctAnswer: "Beijing"
   }
 ];
+
+
+export const intermediateQuestions = [
+  // Здесь будут промежуточные вопросы, если нужно, дайте знать, чтобы я их добавил
+  {
+    question: "Which word is a capital?",
+    options: ["Beijing", "Run", "Jump", "Sing"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Beijing"
+  }
+];
+
+export const advancedQuestions = [
+  // Здесь будут продвинутые вопросы, если нужно, дайте знать, чтобы я их добавил
+  {
+    question: "What do you use to light a fire?",
+    options: ["Match", "Spoon", "Fork", "Knife"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Match"
+  }
+];

@@ -183,8 +183,7 @@ bot.on('callback_query', async (query) => {
     startQuiz(chatId, level);
   } else if (state && state.questions) {
     const q = state.questions[state.index];
-    const correctIndex = q.options.indexOf(q.correctAnswer);
-const isCorrect = data === q.options[correctIndex !== -1 ? correctIndex : q.correctAnswer];
+    const isCorrect = data === q.options[q.correctAnswer];
     await bot.sendMessage(chatId, isCorrect ? t(chatId, 'correct') : t(chatId, 'wrong', q.options[q.correctAnswer] || 'неизвестно'));
     if (isCorrect) state.correct++;
     state.index++;
@@ -328,20 +327,21 @@ function startQuiz(chatId, level) {
   }
 
   const selected = getRandomQuestions(questions);
-  // Перемешивание вариантов ответов
+  // Перемешивание вариантов ответов и обновление correctAnswer
   selected.forEach(q => {
     if (!q.options || q.options.length !== 4) {
       console.error(`❌ Ошибка в вопросе: ${q.question}, options: ${JSON.stringify(q.options)}`);
       return;
     }
-    const options = [...q.options];
-    shuffleArray(options);
-    const correctIndex = options.indexOf(q.options[q.correctAnswer]);
-    if (correctIndex === -1) {
-      console.error(`❌ Правильный ответ не найден в перемешанных опциях для вопроса: ${q.question}`);
+    const originalOptions = [...q.options]; // Сохраняем исходный массив
+    const shuffledOptions = [...q.options]; // Копия для перемешивания
+    shuffleArray(shuffledOptions);
+    const correctAnswerText = originalOptions[q.correctAnswer]; // Текст правильного ответа
+    q.correctAnswer = shuffledOptions.indexOf(correctAnswerText); // Обновляем индекс
+    if (q.correctAnswer === -1) {
+      console.error(`❌ Правильный ответ "${correctAnswerText}" не найден в перемешанных опциях для вопроса: ${q.question}`);
     }
-    q.options = options;
-    q.correctAnswer = correctIndex !== -1 ? correctIndex : q.correctAnswer; // Сохраняем исходный индекс, если что-то пошло не так
+    q.options = shuffledOptions; // Присваиваем перемешанный массив
   });
 
   const prev = userStates.get(chatId) || { lang: 'ru' };

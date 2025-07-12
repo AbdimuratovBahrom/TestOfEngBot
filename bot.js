@@ -42,20 +42,23 @@ const translations = {
   ru: {
     welcome: '👋 Выберите язык:',
     help: `ℹ️ <b>Как пользоваться:</b>\n\n1. Нажмите "📚 Выбрать уровень".\n2. Ответьте на 20 вопросов.\n3. Узнайте свой результат.\n4. Смотрите Топ 10.\n\nПриятного обучения! 🎓`,
-    info: `🤖 <b>English Quiz Bot</b>\n📌 Автор: @AbdimuratovBahrom\n💡 Уровни: Beginner, Intermediate, Advanced\n📊 Команды: /level, /top10, /myresults`,
+    info: `🤖 <b>English Quiz Bot</b>\n📌 Автор: @AbdimuratovBahrom\n💡 Уровни: Начальный, Средний, Продвинутый\n📊 Команды: /level, /top10, /myresults`,
     selectLevel: '📚 Выберите уровень сложности:',
     correct: '✅ Правильно!',
     wrong: (answer) => `❌ Неправильно. Правильный ответ: ${answer}`,
     done: (score, total) => `🎉 Викторина завершена!\nВаш результат: ${score}/${total}`,
     top10Empty: '❌ Результаты не найдены.',
     top10Header: '🏆 <b>Топ 10 результатов:</b>\n\n',
+    userResultsEmpty: '❌ Ваши результаты не найдены.',
+    userResultsHeader: '📊 <b>Ваши результаты:</b>\n\n',
     langButton: '🇷🇺 Русский',
     levelBeginner: '🔰 Начальный',
     levelIntermediate: '⚙️ Средний',
     levelAdvanced: '🚀 Продвинутый',
     optionPrefix: '🔘',
-    userResultsEmpty: '❌ Ваши результаты не найдены.',
-    userResultsHeader: '📊 <b>Ваши результаты:</b>\n\n',
+    langSet: '✅ Язык установлен. Нажмите, чтобы начать викторину.',
+    startQuiz: '📚 Начать викторину',
+    question: (index, total) => `Вопрос ${index}/${total}`,
   },
   uz: {
     welcome: '👋 Tilni tanlang:',
@@ -67,13 +70,16 @@ const translations = {
     done: (score, total) => `🎉 Viktorina tugadi!\nNatijangiz: ${score}/${total}`,
     top10Empty: '❌ Natijalar topilmadi.',
     top10Header: '🏆 <b>Eng yaxshi 10 natija:</b>\n\n',
+    userResultsEmpty: '❌ Natijalaringiz topilmadi.',
+    userResultsHeader: '📊 <b>Sizning natijalaringiz:</b>\n\n',
     langButton: '🇺🇿 Oʻzbekcha',
     levelBeginner: '🔰 Boshlang‘ich',
     levelIntermediate: '⚙️ O‘rta',
     levelAdvanced: '🚀 Ilg‘or',
     optionPrefix: '🔘',
-    userResultsEmpty: '❌ Natijalaringiz topilmadi.',
-    userResultsHeader: '📊 <b>Sizning natijalaringiz:</b>\n\n',
+    langSet: '✅ Til o‘rnatildi. Viktorinani boshlash uchun bosing.',
+    startQuiz: '📚 Viktorinani boshlash',
+    question: (index, total) => `Savol ${index}/${total}`,
   },
   kk: {
     welcome: '👋 Til saylañ:',
@@ -85,13 +91,16 @@ const translations = {
     done: (score, total) => `🎉 Viktorina ayaqtaldı!\nNátiyjeñiz: ${score}/${total}`,
     top10Empty: '❌ Nátiyjeler tabılmadı.',
     top10Header: '🏆 <b>Eñ úzdik 10 nátiyje:</b>\n\n',
+    userResultsEmpty: '❌ Nátiyjeleriñiz tabılmadı.',
+    userResultsHeader: '📊 <b>Sizdiñ nátiyjeleriñiz:</b>\n\n',
     langButton: '🇰🇿 Qaraqalpaqsha',
     levelBeginner: '🔰 Baslang‘ish',
     levelIntermediate: '⚙️ Orta',
     levelAdvanced: '🚀 Ilgeri',
     optionPrefix: '🔘',
-    userResultsEmpty: '❌ Nátiyjeleriñiz tabılmadı.',
-    userResultsHeader: '📊 <b>Sizdiñ nátiyjeleriñiz:</b>\n\n',
+    langSet: '✅ Til ornatıldı. Viktorinanı baslaw ushın basıñ.',
+    startQuiz: '📚 Viktorinanı baslaw',
+    question: (index, total) => `Soraw ${index}/${total}`,
   },
 };
 
@@ -99,6 +108,10 @@ function t(chatId, key, ...args) {
   const state = userStates.get(chatId);
   const lang = state?.lang || 'ru';
   const text = translations[lang][key];
+  if (!text) {
+    console.error(`❌ Translation key "${key}" not found for language "${lang}"`);
+    return `Translation missing for "${key}"`;
+  }
   return typeof text === 'function' ? text(...args) : text;
 }
 

@@ -229,10 +229,12 @@ bot.onText(/\/myresults/, async (msg) => {
     let date = t(chatId, 'noDate'); // Значение по умолчанию
     if (r.timestamp) {
       const d = new Date(r.timestamp);
-      console.log(`Debug: timestamp "${r.timestamp}" parsed to ${d}`); // Отладочный лог
+      console.log(`Debug: Raw timestamp "${r.timestamp}" parsed to ${d}`); // Подробный лог
       date = !isNaN(d) ? d.toLocaleDateString(locale, options) : t(chatId, 'noDate');
     } else {
       console.warn(`⚠️ No timestamp for result: ${JSON.stringify(r)}`);
+      // Запасной вариант: текущая дата
+      date = new Date().toLocaleDateString(locale, options);
     }
     return `${r.score}/20 (${r.level}) — ${date}`;
   });
@@ -264,10 +266,11 @@ function createQuestionMessage(state) {
 function sendNextQuestion(chatId) {
   const state = userStates.get(chatId);
   if (!state || state.index >= state.questions.length) {
-    const now = new Date().toISOString(); // Текущая дата для сохранения
+    const now = new Date().toISOString(); // Текущая дата в ISO формате
     bot.sendMessage(chatId, t(chatId, 'done', state.correct, state.questions.length), {
       reply_markup: { remove_keyboard: true },
     });
+    console.log(`Debug: Saving result with timestamp ${now}`); // Отладочный лог
     saveResult(chatId, state.level, state.correct, now); // Передаем текущую дату
     userStates.delete(chatId);
     return;

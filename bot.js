@@ -490,7 +490,7 @@ async function sendNextQuestion(chatId) {
 async function backupDatabase() {
   try {
     const auth = await authenticate({
-      keyfilePath: process.env.GOOGLE_CREDENTIALS || './credentials.json',
+      keyfilePath: process.env.GOOGLE_CREDENTIALS || '/opt/render/project/src/credentials.json', // Явный путь
       scopes: ['https://www.googleapis.com/auth/drive.file'],
     });
     const drive = google.drive({ version: 'v3', auth });

@@ -144,7 +144,7 @@ const translations = {
     noDate: 'Sáne qol jetimsiz',
     thanksMessage: "❤️ Bot tı paydalang'anıñız ushın rahmet! Eger avtordı qutlıqlag'ıñız kelse, oğan jazıñ: [t.me/@WolfOfAlpha](https://t.me/WolfOfAlpha)",
     errorMessage: "❌ Qáte: soraw derekleri dúris emes. Administratorğa xabarlasıñ. Toliq málimat: [soraw: %question%, saylawlar: %options%, dúris jawap: %correctAnswer%]",
-    stats: '📊 <b>Bot statistikası:</b>\nJami paydalanıwshılar: %userCount%\nÁktiw testter: %activeTests%',
+    stats: '📊 <b>Bot statistikası:</b>\nJami paydalanıwshılar: %userCount%\nÁktiw paydalanıwshılar: %activeTests%',
   },
 };
 

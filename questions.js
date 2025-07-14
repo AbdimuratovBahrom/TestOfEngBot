@@ -301,8 +301,8 @@ export const beginnerQuestions = [
   },
   {
     question: "What is the opposite of 'old'?",
-    options: ["Young", "New", "Fresh", "All"].sort(() => Math.random() - 0.5),
-    correctAnswer: "All"
+    options: [ "New", "Fresh", "Young", "All"].sort(() => Math.random() - 0.5),
+    correctAnswer: "Young"
   },
   {
     question: "Which word is a pronoun?",

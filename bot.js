@@ -9,7 +9,7 @@ import {
   advancedQuestions,
 } from './questions.js';
 
-dotenv.config();
+dotenv.config({ debug: true }); // Включение отладки dotenv
 
 const TOKEN = process.env.BOT_TOKEN;
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
@@ -151,7 +151,7 @@ const translations = {
   },
 };
 
-// Исправленная функция t с асинхронной обработкой
+// Исправленная асинхронная функция t
 async function t(chatId, key, ...args) {
   const state = userStates.get(chatId);
   const lang = state?.lang || 'ru';
@@ -162,7 +162,7 @@ async function t(chatId, key, ...args) {
   }
   const result = typeof text === 'function' ? text(...args) : text;
   const userCount = await getUserCount(); // Асинхронный вызов
-  return result.replace('%userCount%', userCount.toString()).replace('%activeTests%', userStates.size.toString());
+  return result.replace('%userCount%', userCount?.toString() || '0').replace('%activeTests%', userStates.size.toString());
 }
 
 function shuffleArray(array) {
@@ -176,14 +176,23 @@ function shuffleArray(array) {
 bot.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
   const telegramId = msg.from.id;
-  const fullName = msg.from.first_name || msg.from.username || (await t(chatId, 'unknownUser')); // Асинхронный вызов
+  const fullName = msg.from.first_name || msg.from.username || (await t(chatId, 'unknownUser'));
 
   const db = await dbPromise;
-  await db.run('INSERT OR IGNORE INTO users (telegram_id, full_name) VALUES (?, ?)', [telegramId, fullName]);
-  await db.run('UPDATE users SET test_count = test_count + 1 WHERE telegram_id = ?', [telegramId]);
-  console.log(`Регистрация пользователя ${telegramId} (${fullName})`);
+  try {
+    await db.run('INSERT OR IGNORE INTO users (telegram_id, full_name) VALUES (?, ?)', [telegramId, fullName]);
+    await db.run('UPDATE users SET test_count = test_count + 1 WHERE telegram_id = ?', [telegramId]);
+    console.log(`Регистрация пользователя ${telegramId} (${fullName})`);
+  } catch (err) {
+    console.error(`❌ Ошибка регистрации пользователя ${telegramId}:`, err.message);
+  }
 
-  bot.sendMessage(chatId, await t(chatId, 'welcome'), { // Ожидание результата
+  const welcomeMessage = await t(chatId, 'welcome');
+  if (!welcomeMessage) {
+    console.error('❌ Пустое сообщение welcome для chatId:', chatId);
+    return;
+  }
+  bot.sendMessage(chatId, welcomeMessage, {
     reply_markup: {
       inline_keyboard: [
         [{ text: translations.ru.langButton, callback_data: 'lang_ru' }],
@@ -191,7 +200,7 @@ bot.onText(/\/start/, async (msg) => {
         [{ text: translations.kk.langButton, callback_data: 'lang_kk' }],
       ],
     },
-  });
+  }).catch(err => console.error('❌ Ошибка отправки welcome:', err.message));
 });
 
 bot.on('callback_query', async (query) => {
@@ -209,11 +218,16 @@ bot.on('callback_query', async (query) => {
   if (data.startsWith('lang_')) {
     const lang = data.split('_')[1];
     userStates.set(chatId, { ...state, lang });
-    bot.sendMessage(chatId, await t(chatId, 'langSet'), { // Ожидание результата
+    const langSetMessage = await t(chatId, 'langSet');
+    if (!langSetMessage) {
+      console.error('❌ Пустое сообщение langSet для chatId:', chatId);
+      return;
+    }
+    bot.sendMessage(chatId, langSetMessage, {
       reply_markup: {
         inline_keyboard: [[{ text: await t(chatId, 'startQuiz'), callback_data: 'level_menu' }]],
       },
-    });
+    }).catch(err => console.error('❌ Ошибка отправки langSet:', err.message));
     return;
   }
 
@@ -225,32 +239,63 @@ bot.on('callback_query', async (query) => {
   } else if (data === 'stats') {
     const userCount = await getUserCount();
     const activeTests = userStates.size;
-    const message = (await t(chatId, 'stats')) // Ожидание результата
-      .replace('%userCount%', userCount.toString())
+    const statsMessage = (await t(chatId, 'stats'))
+      .replace('%userCount%', userCount?.toString() || '0')
       .replace('%activeTests%', activeTests.toString());
-    bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
+    if (!statsMessage) {
+      console.error('❌ Пустое сообщение stats для chatId:', chatId);
+      return;
+    }
+    bot.sendMessage(chatId, statsMessage, { parse_mode: 'HTML' })
+      .catch(err => console.error('❌ Ошибка отправки stats:', err.message));
   } else if (state && state.questions) {
     const q = state.questions[state.index];
     const userAnswer = data;
     const isCorrect = q.options.includes(userAnswer) && userAnswer === q.correctAnswer;
-    await bot.sendMessage(chatId, isCorrect ? await t(chatId, 'correct') : await t(chatId, 'wrong', q.correctAnswer));
+    const feedback = isCorrect ? await t(chatId, 'correct') : await t(chatId, 'wrong', q.correctAnswer);
+    if (!feedback) {
+      console.error('❌ Пустое сообщение feedback для chatId:', chatId);
+      return;
+    }
+    await bot.sendMessage(chatId, feedback)
+      .catch(err => console.error('❌ Ошибка отправки feedback:', err.message));
     if (isCorrect) state.correct++;
     state.index++;
     setTimeout(() => sendNextQuestion(chatId), 1000);
   }
 });
 
-bot.onText(/\/thanks/, (msg) => {
+bot.onText(/\/thanks/, async (msg) => {
   const chatId = msg.chat.id;
-  bot.sendMessage(chatId, t(chatId, 'thanksMessage'), { parse_mode: 'Markdown' });
+  const thanksMessage = await t(chatId, 'thanksMessage');
+  if (!thanksMessage) {
+    console.error('❌ Пустое сообщение thanks для chatId:', chatId);
+    return;
+  }
+  bot.sendMessage(chatId, thanksMessage, { parse_mode: 'Markdown' })
+    .catch(err => console.error('❌ Ошибка отправки thanks:', err.message));
 });
 
 bot.onText(/\/help/, async (msg) => {
-  bot.sendMessage(msg.chat.id, await t(msg.chat.id, 'help'), { parse_mode: 'HTML' });
+  const chatId = msg.chat.id;
+  const helpMessage = await t(chatId, 'help');
+  if (!helpMessage) {
+    console.error('❌ Пустое сообщение help для chatId:', chatId);
+    return;
+  }
+  bot.sendMessage(chatId, helpMessage, { parse_mode: 'HTML' })
+    .catch(err => console.error('❌ Ошибка отправки help:', err.message));
 });
 
 bot.onText(/\/info/, async (msg) => {
-  bot.sendMessage(msg.chat.id, await t(msg.chat.id, 'info'), { parse_mode: 'HTML' });
+  const chatId = msg.chat.id;
+  const infoMessage = await t(chatId, 'info');
+  if (!infoMessage) {
+    console.error('❌ Пустое сообщение info для chatId:', chatId);
+    return;
+  }
+  bot.sendMessage(chatId, infoMessage, { parse_mode: 'HTML' })
+    .catch(err => console.error('❌ Ошибка отправки info:', err.message));
 });
 
 bot.onText(/\/level/, (msg) => {
@@ -261,7 +306,16 @@ bot.onText(/\/top10/, async (msg) => {
   const chatId = msg.chat.id;
   const db = await dbPromise;
   const top = await db.all('SELECT telegram_id, level, score FROM test_results ORDER BY score DESC LIMIT 10');
-  if (top.length === 0) return bot.sendMessage(chatId, await t(chatId, 'top10Empty'));
+  if (top.length === 0) {
+    const emptyMessage = await t(chatId, 'top10Empty');
+    if (!emptyMessage) {
+      console.error('❌ Пустое сообщение top10Empty для chatId:', chatId);
+      return;
+    }
+    bot.sendMessage(chatId, emptyMessage)
+      .catch(err => console.error('❌ Ошибка отправки top10Empty:', err.message));
+    return;
+  }
 
   const results = await Promise.all(top.map(async (r, i) => {
     let username = userCache.get(r.telegram_id) || (await db.get('SELECT full_name FROM users WHERE telegram_id = ?', [r.telegram_id]))?.full_name;
@@ -279,8 +333,14 @@ bot.onText(/\/top10/, async (msg) => {
     return `${i + 1}. 👤 <b>${username}</b> — ${r.score}/20 (${r.level})`;
   }));
 
-  const message = await t(chatId, 'top10Header') + results.join('\n');
-  bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
+  const headerMessage = await t(chatId, 'top10Header');
+  if (!headerMessage) {
+    console.error('❌ Пустое сообщение top10Header для chatId:', chatId);
+    return;
+  }
+  const message = headerMessage + results.join('\n');
+  bot.sendMessage(chatId, message, { parse_mode: 'HTML' })
+    .catch(err => console.error('❌ Ошибка отправки top10:', err.message));
 });
 
 bot.onText(/\/myresults/, async (msg) => {
@@ -290,7 +350,16 @@ bot.onText(/\/myresults/, async (msg) => {
   const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
   const db = await dbPromise;
   const results = await db.all('SELECT level, score, timestamp FROM test_results WHERE telegram_id = ? ORDER BY timestamp DESC', [chatId]);
-  if (results.length === 0) return bot.sendMessage(chatId, await t(chatId, 'userResultsEmpty'));
+  if (results.length === 0) {
+    const emptyMessage = await t(chatId, 'userResultsEmpty');
+    if (!emptyMessage) {
+      console.error('❌ Пустое сообщение userResultsEmpty для chatId:', chatId);
+      return;
+    }
+    bot.sendMessage(chatId, emptyMessage)
+      .catch(err => console.error('❌ Ошибка отправки userResultsEmpty:', err.message));
+    return;
+  }
 
   const formattedResults = results.map((r) => {
     let date = t(chatId, 'noDate');
@@ -301,18 +370,29 @@ bot.onText(/\/myresults/, async (msg) => {
     return `${r.score}/20 (${r.level}) — ${date}`;
   });
 
-  const message = await t(chatId, 'userResultsHeader') + formattedResults.map((r, i) => `${i + 1}. ${r}`).join('\n');
-  bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
+  const headerMessage = await t(chatId, 'userResultsHeader');
+  if (!headerMessage) {
+    console.error('❌ Пустое сообщение userResultsHeader для chatId:', chatId);
+    return;
+  }
+  const message = headerMessage + formattedResults.map((r, i) => `${i + 1}. ${r}`).join('\n');
+  bot.sendMessage(chatId, message, { parse_mode: 'HTML' })
+    .catch(err => console.error('❌ Ошибка отправки myresults:', err.message));
 });
 
 bot.onText(/\/stats/, async (msg) => {
   const chatId = msg.chat.id;
   const userCount = await getUserCount();
   const activeTests = userStates.size;
-  const message = (await t(chatId, 'stats')) // Ожидание результата
-    .replace('%userCount%', userCount.toString())
+  const statsMessage = (await t(chatId, 'stats'))
+    .replace('%userCount%', userCount?.toString() || '0')
     .replace('%activeTests%', activeTests.toString());
-  bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
+  if (!statsMessage) {
+    console.error('❌ Пустое сообщение stats для chatId:', chatId);
+    return;
+  }
+  bot.sendMessage(chatId, statsMessage, { parse_mode: 'HTML' })
+    .catch(err => console.error('❌ Ошибка отправки stats:', err.message));
 });
 
 function showLevelMenu(chatId) {
@@ -324,7 +404,7 @@ function showLevelMenu(chatId) {
   ];
   bot.sendMessage(chatId, t(chatId, 'selectLevel'), {
     reply_markup: { inline_keyboard: levels },
-  });
+  }).catch(err => console.error('❌ Ошибка отправки showLevelMenu:', err.message));
 }
 
 function getRandomQuestions(questions, count = 20) {
@@ -340,9 +420,14 @@ async function sendNextQuestion(chatId) {
   const state = userStates.get(chatId);
   if (!state || state.index >= state.questions.length) {
     const now = new Date().toISOString();
-    await bot.sendMessage(chatId, await t(chatId, 'done', state.correct, state.questions.length), {
+    const doneMessage = await t(chatId, 'done', state.correct, state.questions.length);
+    if (!doneMessage) {
+      console.error('❌ Пустое сообщение done для chatId:', chatId);
+      return;
+    }
+    await bot.sendMessage(chatId, doneMessage, {
       reply_markup: { remove_keyboard: true },
-    });
+    }).catch(err => console.error('❌ Ошибка отправки done:', err.message));
     const db = await dbPromise;
     await db.run('INSERT INTO test_results (telegram_id, level, score, timestamp) VALUES (?, ?, ?, ?)', [chatId, state.level, state.correct, now]);
     userStates.delete(chatId);
@@ -355,7 +440,12 @@ async function sendNextQuestion(chatId) {
       .replace('%question%', q.question || 'не указан')
       .replace('%options%', JSON.stringify(q.options) || 'не указаны')
       .replace('%correctAnswer%', q.correctAnswer || 'не указан');
-    bot.sendMessage(chatId, errorMsg);
+    if (!errorMsg) {
+      console.error('❌ Пустое сообщение errorMessage для chatId:', chatId);
+      return;
+    }
+    bot.sendMessage(chatId, errorMsg)
+      .catch(err => console.error('❌ Ошибка отправки errorMessage:', err.message));
     userStates.delete(chatId);
     return;
   }
@@ -366,7 +456,7 @@ async function sendNextQuestion(chatId) {
   bot.sendMessage(chatId, message, {
     parse_mode: 'HTML',
     reply_markup: { inline_keyboard: buttons },
-  });
+  }).catch(err => console.error('❌ Ошибка отправки вопроса:', err.message));
 }
 
 function startQuiz(chatId, level) {
@@ -394,6 +484,11 @@ function startQuiz(chatId, level) {
 
 async function getUserCount() {
   const db = await dbPromise;
-  const count = await db.get('SELECT COUNT(*) as count FROM users');
-  return count.count || 0; // Возвращаем 0, если count отсутствует
+  try {
+    const count = await db.get('SELECT COUNT(*) as count FROM users');
+    return count?.count || 0; // Возвращаем 0, если count отсутствует
+  } catch (err) {
+    console.error('❌ Ошибка получения количества пользователей:', err.message);
+    return 0;
+  }
 }

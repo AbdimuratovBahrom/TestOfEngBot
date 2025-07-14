@@ -93,6 +93,7 @@ const translations = {
     thanksMessage: '❤️ Спасибо за использование бота! Если хотите поблагодарить автора, напишите ему: [t.me/WolfOfAlpha](https://t.me/WolfOfAlpha)',
     errorMessage: '❌ Ошибка: некорректные данные вопроса. Обратитесь к администратору. Подробности: [question: %question%, options: %options%, correctAnswer: %correctAnswer%]',
     stats: '📊 <b>Статистика бота:</b>\nВсего пользователей: %userCount%\nАктивные тесты: %activeTests%',
+    statsButton: '📊 Статистика',
   },
   uz: {
     welcome: '👋 Tilni tanlang:',
@@ -119,6 +120,7 @@ const translations = {
     thanksMessage: '❤️ Botdan foydalanganingiz uchun rahmat! Muallifga minnatdorchilik bildirmoqchi bo‘lsangiz, unga yozing: [t.me/WolfOfAlpha](https://t.me/WolfOfAlpha)',
     errorMessage: '❌ Xato: savol ma’lumotlari noto‘g‘ri. Administratorga murojaat qiling. Batafsil: [savol: %question%, variantlar: %options%, to‘g‘ri javob: %correctAnswer%]',
     stats: '📊 <b>Bot statistikasi:</b>\nJami foydalanuvchilar: %userCount%\nFaol testlar: %activeTests%',
+    statsButton: '📊 Statistika',
   },
   kk: {
     welcome: '👋 Til saylañ:',
@@ -145,6 +147,7 @@ const translations = {
     thanksMessage: "❤️ Bot tı paydalang'anıñız ushın rahmet! Eger avtordı qutlıqlag'ıñız kelse, oğan jazıñ: [t.me/@WolfOfAlpha](https://t.me/WolfOfAlpha)",
     errorMessage: "❌ Qáte: soraw derekleri dúris emes. Administratorğa xabarlasıñ. Toliq málimat: [soraw: %question%, saylawlar: %options%, dúris jawap: %correctAnswer%]",
     stats: '📊 <b>Bot statistikası:</b>\nJami paydalanıwshılar: %userCount%\nÁktiw testter: %activeTests%',
+    statsButton: '📊 Statistika',
   },
 };
 
@@ -216,6 +219,11 @@ bot.on('callback_query', async (query) => {
   } else if (data.startsWith('level_')) {
     const level = data.replace('level_', '');
     startQuiz(chatId, level);
+  } else if (data === 'stats') { // Обработка нажатия кнопки статистики
+    const userCount = await getUserCount();
+    const activeTests = userStates.size;
+    const message = t(chatId, 'stats').replace('%userCount%', userCount.toString()).replace('%activeTests%', activeTests.toString());
+    bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
   } else if (state && state.questions) {
     const q = state.questions[state.index];
     const userAnswer = data;
@@ -305,6 +313,7 @@ function showLevelMenu(chatId) {
     [{ text: t(chatId, 'levelBeginner'), callback_data: 'level_beginner' }],
     [{ text: t(chatId, 'levelIntermediate'), callback_data: 'level_intermediate' }],
     [{ text: t(chatId, 'levelAdvanced'), callback_data: 'level_advanced' }],
+    [{ text: t(chatId, 'statsButton'), callback_data: 'stats' }],
   ];
   bot.sendMessage(chatId, t(chatId, 'selectLevel'), {
     reply_markup: { inline_keyboard: levels },

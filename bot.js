@@ -418,9 +418,10 @@ function getRandomQuestions(questions, count = 20) {
   return [...questions].sort(() => 0.5 - Math.random()).slice(0, count);
 }
 
-function createQuestionMessage(state) {
+async function createQuestionMessage(state) {
   const q = state.questions[state.index];
-  return `🧠 <b>${t(state.chatId, 'question', state.index + 1, state.questions.length)}</b>\n${q.question}`;
+  const questionText = await t(state.chatId, 'question', state.index + 1, state.questions.length);
+  return `🧠 <b>${questionText}</b>\n${q.question}`;
 }
 
 async function sendNextQuestion(chatId) {
@@ -464,8 +465,8 @@ async function sendNextQuestion(chatId) {
     return;
   }
 
-  const message = createQuestionMessage({ ...state, chatId });
-  const buttons = q.options.map((opt) => [{ text: `${t(chatId, 'optionPrefix')} ${opt}`, callback_data: opt }]);
+  const message = await createQuestionMessage({ ...state, chatId });
+  const buttons = q.options.map((opt) => [{ text: `${t(state.chatId, 'optionPrefix')} ${opt}`, callback_data: opt }]);
 
   bot.sendMessage(chatId, message, {
     parse_mode: 'HTML',

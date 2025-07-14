@@ -1,6 +1,5 @@
 {
-  "name": "quiz-bot-v2",
- 
+  "name": "TestOfEngBot",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
@@ -12,7 +11,7 @@
     "dotenv": "^16.4.5",
     "sqlite3": "^5.1.7",
     "googleapis": "^140.0.0",
-    "@google-cloud/local-auth": "^3.0.1", 
-    "sqlite": "^5.1.0" 
+    "@google-cloud/local-auth": "^3.0.1",
+    "sqlite": "^5.1.0"
   }
 }

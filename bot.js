@@ -159,7 +159,7 @@ const translations = {
   },
 };
 
-async function t(chatId, key, ...args) {
+export async function t(chatId, key, ...args) {
   const state = userStates.get(chatId);
   const lang = state?.lang || 'ru';
   const text = translations[lang][key];
@@ -370,14 +370,14 @@ bot.onText(/\/myresults/, async (msg) => {
     return;
   }
 
-  const formattedResults = results.map((r) => {
-    let date = t(chatId, 'noDate');
+  const formattedResults = await Promise.all(results.map(async (r) => {
+    let date = await t(chatId, 'noDate');
     if (r.timestamp) {
       const d = new Date(r.timestamp);
-      date = !isNaN(d) ? d.toLocaleDateString(locale, options) : t(chatId, 'noDate');
+      date = !isNaN(d) ? d.toLocaleDateString(locale, options) : await t(chatId, 'noDate');
     }
     return `${r.score}/20 (${r.level}) — ${date}`;
-  });
+  }));
 
   const headerMessage = await t(chatId, 'userResultsHeader');
   if (!headerMessage) {
@@ -404,7 +404,7 @@ bot.onText(/\/stats/, async (msg) => {
     .catch(err => console.error('❌ Ошибка отправки stats:', err.message));
 });
 
-async function showLevelMenu(chatId) {
+export async function showLevelMenu(chatId) {
   const levels = [
     [{ text: await t(chatId, 'levelBeginner'), callback_data: 'level_beginner' }],
     [{ text: await t(chatId, 'levelIntermediate'), callback_data: 'level_intermediate' }],
@@ -425,13 +425,13 @@ function getRandomQuestions(questions, count = 20) {
   return [...questions].sort(() => 0.5 - Math.random()).slice(0, count);
 }
 
-async function createQuestionMessage(state) {
+export async function createQuestionMessage(state) {
   const q = state.questions[state.index];
   const questionText = await t(state.chatId, 'question', state.index + 1, state.questions.length);
   return `🧠 <b>${questionText}</b>\n${q.question}`;
 }
 
-async function sendNextQuestion(chatId) {
+export async function sendNextQuestion(chatId) {
   const state = userStates.get(chatId);
   if (!state || state.index >= state.questions.length) {
     const now = new Date().toISOString();
@@ -487,17 +487,17 @@ async function sendNextQuestion(chatId) {
 }
 
 // Функция для бэкапа базы данных
-async function backupDatabase() {
+export async function backupDatabase() {
   try {
     const auth = await authenticate({
-      keyfilePath: process.env.GOOGLE_CREDENTIALS || '/opt/render/project/src/credentials.json', // Явный путь
+      keyfilePath: JSON.parse(process.env.GOOGLE_CREDENTIALS_JSON),
       scopes: ['https://www.googleapis.com/auth/drive.file'],
     });
     const drive = google.drive({ version: 'v3', auth });
 
     const fileMetadata = {
       name: `bot_data_backup_${new Date().toISOString().replace(/[:.]/g, '-')}.db`,
-      parents: [FOLDER_ID],
+      parents: [process.env.GOOGLE_DRIVE_FOLDER_ID],
     };
     const media = {
       mimeType: 'application/x-sqlite3',
@@ -515,7 +515,7 @@ async function backupDatabase() {
   }
 }
 
-function startQuiz(chatId, level) {
+export function startQuiz(chatId, level) {
   let questions;
   switch (level) {
     case 'beginner': questions = beginnerQuestions; break;
@@ -538,7 +538,7 @@ function startQuiz(chatId, level) {
   sendNextQuestion(chatId);
 }
 
-async function getUserCount() {
+export async function getUserCount() {
   const db = await dbPromise;
   try {
     const count = await db.get('SELECT COUNT(*) as count FROM users');

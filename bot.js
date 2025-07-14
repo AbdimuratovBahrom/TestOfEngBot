@@ -13,6 +13,7 @@ try {
 }
 import fs from 'fs';
 import { authenticate } from '@google-cloud/local-auth';
+
 import {
   beginnerQuestions,
   intermediateQuestions,
@@ -489,15 +490,30 @@ export async function sendNextQuestion(chatId) {
 // Функция для бэкапа базы данных
 export async function backupDatabase() {
   try {
-    const auth = await authenticate({
-      keyfilePath: JSON.parse(process.env.GOOGLE_CREDENTIALS_JSON),
+    // Проверяем наличие GOOGLE_CREDENTIALS_JSON
+    if (!process.env.GOOGLE_CREDENTIALS_JSON) {
+      console.error('❌ Переменная окружения GOOGLE_CREDENTIALS_JSON не найдена');
+      return;
+    }
+
+    // Парсим JSON из переменной окружения
+    const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS_JSON);
+    if (!credentials || !credentials.client_email || !credentials.private_key) {
+      console.error('❌ Некорректные учетные данные в GOOGLE_CREDENTIALS_JSON');
+      return;
+    }
+
+    // Инициализируем клиента Google Drive с учетными данными
+    const auth = await google.auth.getClient({
+      credentials: credentials,
       scopes: ['https://www.googleapis.com/auth/drive.file'],
     });
+
     const drive = google.drive({ version: 'v3', auth });
 
     const fileMetadata = {
       name: `bot_data_backup_${new Date().toISOString().replace(/[:.]/g, '-')}.db`,
-      parents: [process.env.GOOGLE_DRIVE_FOLDER_ID],
+      parents: [FOLDER_ID],
     };
     const media = {
       mimeType: 'application/x-sqlite3',

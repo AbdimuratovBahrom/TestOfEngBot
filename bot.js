@@ -511,6 +511,13 @@ export async function backupDatabase() {
 
     const drive = google.drive({ version: 'v3', auth });
 
+    // Проверяем доступ к папке
+    const folderCheck = await drive.files.get({
+      fileId: FOLDER_ID,
+      fields: 'id, name',
+    });
+    console.log(`✅ Папка найдена: ${folderCheck.data.name} (ID: ${FOLDER_ID})`);
+
     const fileMetadata = {
       name: `bot_data_backup_${new Date().toISOString().replace(/[:.]/g, '-')}.db`,
       parents: [FOLDER_ID],
@@ -528,6 +535,9 @@ export async function backupDatabase() {
     console.log(`✅ Бэкап создан: ${file.data.id}`);
   } catch (err) {
     console.error('❌ Ошибка создания бэкапа:', err.message);
+    if (err.message.includes('File not found')) {
+      console.error(`⚠️ Проверьте GOOGLE_DRIVE_FOLDER_ID (${FOLDER_ID}) или права доступа.`);
+    }
   }
 }
 

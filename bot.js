@@ -3,27 +3,29 @@ import express from 'express';
 import dotenv from 'dotenv';
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
+import { google } from 'googleapis';
+import fs from 'fs';
+import { authenticate } from '@google-cloud/local-auth';
 import {
   beginnerQuestions,
   intermediateQuestions,
   advancedQuestions,
 } from './questions.js';
 
-dotenv.config({ debug: true }); // Включение отладки dotenv
+dotenv.config({ debug: true });
 
 const TOKEN = process.env.BOT_TOKEN;
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
 const PORT = parseInt(process.env.PORT, 10) || 3000;
+const FOLDER_ID = process.env.GOOGLE_DRIVE_FOLDER_ID;
 
-if (!TOKEN || !WEBHOOK_URL) {
-  console.error('❌ BOT_TOKEN и WEBHOOK_URL должны быть заданы в .env');
+if (!TOKEN || !WEBHOOK_URL || !FOLDER_ID) {
+  console.error('❌ BOT_TOKEN, WEBHOOK_URL и GOOGLE_DRIVE_FOLDER_ID должны быть заданы в .env');
   process.exit(1);
 }
 
-// Инициализация бота
 const bot = new TelegramBot(TOKEN, { polling: false });
 
-// Подключение к базе данных SQLite
 const dbPromise = open({
   filename: './bot_data.db',
   driver: sqlite3.Database,
@@ -66,7 +68,6 @@ app.listen(PORT, () => {
 const userStates = new Map();
 const userCache = new Map();
 
-// Локализация
 const translations = {
   ru: {
     welcome: '👋 Выберите язык:',
@@ -151,7 +152,6 @@ const translations = {
   },
 };
 
-// Асинхронная функция t
 async function t(chatId, key, ...args) {
   const state = userStates.get(chatId);
   const lang = state?.lang || 'ru';
@@ -442,6 +442,8 @@ async function sendNextQuestion(chatId) {
       console.log(`Сохранен результат для ${chatId}: ${state.correct}/${state.questions.length} (${state.level})`);
       const resultCount = await db.get('SELECT COUNT(*) as count FROM test_results WHERE telegram_id = ?', [chatId]);
       console.log(`Текущий счетчик результатов для ${chatId}: ${resultCount.count}`);
+      // Бэкап базы данных после каждого теста
+      await backupDatabase();
     } catch (err) {
       console.error(`❌ Ошибка сохранения результата для ${chatId}:`, err.message);
     }
@@ -475,6 +477,35 @@ async function sendNextQuestion(chatId) {
     parse_mode: 'HTML',
     reply_markup: { inline_keyboard: buttons },
   }).catch(err => console.error('❌ Ошибка отправки вопроса:', err.message));
+}
+
+// Функция для бэкапа базы данных
+async function backupDatabase() {
+  try {
+    const auth = await authenticate({
+      keyfilePath: process.env.GOOGLE_CREDENTIALS || './credentials.json',
+      scopes: ['https://www.googleapis.com/auth/drive.file'],
+    });
+    const drive = google.drive({ version: 'v3', auth });
+
+    const fileMetadata = {
+      name: `bot_data_backup_${new Date().toISOString().replace(/[:.]/g, '-')}.db`,
+      parents: [FOLDER_ID],
+    };
+    const media = {
+      mimeType: 'application/x-sqlite3',
+      body: fs.createReadStream('./bot_data.db'),
+    };
+
+    const file = await drive.files.create({
+      resource: fileMetadata,
+      media: media,
+      fields: 'id',
+    });
+    console.log(`✅ Бэкап создан: ${file.data.id}`);
+  } catch (err) {
+    console.error('❌ Ошибка создания бэкапа:', err.message);
+  }
 }
 
 function startQuiz(chatId, level) {

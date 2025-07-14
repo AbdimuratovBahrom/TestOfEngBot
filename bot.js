@@ -151,7 +151,8 @@ const translations = {
   },
 };
 
-function t(chatId, key, ...args) {
+// Исправленная функция t с асинхронной обработкой
+async function t(chatId, key, ...args) {
   const state = userStates.get(chatId);
   const lang = state?.lang || 'ru';
   const text = translations[lang][key];
@@ -160,7 +161,8 @@ function t(chatId, key, ...args) {
     return `Translation missing for "${key}"`;
   }
   const result = typeof text === 'function' ? text(...args) : text;
-  return result.replace('%userCount%', getUserCount().toString()).replace('%activeTests%', userStates.size.toString());
+  const userCount = await getUserCount(); // Асинхронный вызов
+  return result.replace('%userCount%', userCount.toString()).replace('%activeTests%', userStates.size.toString());
 }
 
 function shuffleArray(array) {
@@ -174,13 +176,14 @@ function shuffleArray(array) {
 bot.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
   const telegramId = msg.from.id;
-  const fullName = msg.from.first_name || msg.from.username || t(chatId, 'unknownUser');
+  const fullName = msg.from.first_name || msg.from.username || (await t(chatId, 'unknownUser')); // Асинхронный вызов
 
   const db = await dbPromise;
   await db.run('INSERT OR IGNORE INTO users (telegram_id, full_name) VALUES (?, ?)', [telegramId, fullName]);
   await db.run('UPDATE users SET test_count = test_count + 1 WHERE telegram_id = ?', [telegramId]);
+  console.log(`Регистрация пользователя ${telegramId} (${fullName})`);
 
-  bot.sendMessage(chatId, t(chatId, 'welcome'), {
+  bot.sendMessage(chatId, await t(chatId, 'welcome'), { // Ожидание результата
     reply_markup: {
       inline_keyboard: [
         [{ text: translations.ru.langButton, callback_data: 'lang_ru' }],
@@ -206,9 +209,9 @@ bot.on('callback_query', async (query) => {
   if (data.startsWith('lang_')) {
     const lang = data.split('_')[1];
     userStates.set(chatId, { ...state, lang });
-    bot.sendMessage(chatId, t(chatId, 'langSet'), {
+    bot.sendMessage(chatId, await t(chatId, 'langSet'), { // Ожидание результата
       reply_markup: {
-        inline_keyboard: [[{ text: t(chatId, 'startQuiz'), callback_data: 'level_menu' }]],
+        inline_keyboard: [[{ text: await t(chatId, 'startQuiz'), callback_data: 'level_menu' }]],
       },
     });
     return;
@@ -219,16 +222,18 @@ bot.on('callback_query', async (query) => {
   } else if (data.startsWith('level_')) {
     const level = data.replace('level_', '');
     startQuiz(chatId, level);
-  } else if (data === 'stats') { // Обработка нажатия кнопки статистики
+  } else if (data === 'stats') {
     const userCount = await getUserCount();
     const activeTests = userStates.size;
-    const message = t(chatId, 'stats').replace('%userCount%', userCount.toString()).replace('%activeTests%', activeTests.toString());
+    const message = (await t(chatId, 'stats')) // Ожидание результата
+      .replace('%userCount%', userCount.toString())
+      .replace('%activeTests%', activeTests.toString());
     bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
   } else if (state && state.questions) {
     const q = state.questions[state.index];
     const userAnswer = data;
     const isCorrect = q.options.includes(userAnswer) && userAnswer === q.correctAnswer;
-    await bot.sendMessage(chatId, isCorrect ? t(chatId, 'correct') : t(chatId, 'wrong', q.correctAnswer));
+    await bot.sendMessage(chatId, isCorrect ? await t(chatId, 'correct') : await t(chatId, 'wrong', q.correctAnswer));
     if (isCorrect) state.correct++;
     state.index++;
     setTimeout(() => sendNextQuestion(chatId), 1000);
@@ -240,12 +245,12 @@ bot.onText(/\/thanks/, (msg) => {
   bot.sendMessage(chatId, t(chatId, 'thanksMessage'), { parse_mode: 'Markdown' });
 });
 
-bot.onText(/\/help/, (msg) => {
-  bot.sendMessage(msg.chat.id, t(msg.chat.id, 'help'), { parse_mode: 'HTML' });
+bot.onText(/\/help/, async (msg) => {
+  bot.sendMessage(msg.chat.id, await t(msg.chat.id, 'help'), { parse_mode: 'HTML' });
 });
 
-bot.onText(/\/info/, (msg) => {
-  bot.sendMessage(msg.chat.id, t(msg.chat.id, 'info'), { parse_mode: 'HTML' });
+bot.onText(/\/info/, async (msg) => {
+  bot.sendMessage(msg.chat.id, await t(msg.chat.id, 'info'), { parse_mode: 'HTML' });
 });
 
 bot.onText(/\/level/, (msg) => {
@@ -256,25 +261,25 @@ bot.onText(/\/top10/, async (msg) => {
   const chatId = msg.chat.id;
   const db = await dbPromise;
   const top = await db.all('SELECT telegram_id, level, score FROM test_results ORDER BY score DESC LIMIT 10');
-  if (top.length === 0) return bot.sendMessage(chatId, t(chatId, 'top10Empty'));
+  if (top.length === 0) return bot.sendMessage(chatId, await t(chatId, 'top10Empty'));
 
   const results = await Promise.all(top.map(async (r, i) => {
     let username = userCache.get(r.telegram_id) || (await db.get('SELECT full_name FROM users WHERE telegram_id = ?', [r.telegram_id]))?.full_name;
     if (!username) {
       try {
         const chat = await bot.getChat(r.telegram_id);
-        username = chat.username || chat.first_name || t(chatId, 'unknownUser');
+        username = chat.username || chat.first_name || await t(chatId, 'unknownUser');
         userCache.set(r.telegram_id, username);
         await db.run('UPDATE users SET full_name = ? WHERE telegram_id = ?', [username, r.telegram_id]);
       } catch (err) {
         console.warn(`⚠️ Не удалось получить имя пользователя для user_id ${r.telegram_id}:`, err.message);
-        username = t(chatId, 'unknownUser');
+        username = await t(chatId, 'unknownUser');
       }
     }
     return `${i + 1}. 👤 <b>${username}</b> — ${r.score}/20 (${r.level})`;
   }));
 
-  const message = t(chatId, 'top10Header') + results.join('\n');
+  const message = await t(chatId, 'top10Header') + results.join('\n');
   bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
 });
 
@@ -285,7 +290,7 @@ bot.onText(/\/myresults/, async (msg) => {
   const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
   const db = await dbPromise;
   const results = await db.all('SELECT level, score, timestamp FROM test_results WHERE telegram_id = ? ORDER BY timestamp DESC', [chatId]);
-  if (results.length === 0) return bot.sendMessage(chatId, t(chatId, 'userResultsEmpty'));
+  if (results.length === 0) return bot.sendMessage(chatId, await t(chatId, 'userResultsEmpty'));
 
   const formattedResults = results.map((r) => {
     let date = t(chatId, 'noDate');
@@ -296,7 +301,7 @@ bot.onText(/\/myresults/, async (msg) => {
     return `${r.score}/20 (${r.level}) — ${date}`;
   });
 
-  const message = t(chatId, 'userResultsHeader') + formattedResults.map((r, i) => `${i + 1}. ${r}`).join('\n');
+  const message = await t(chatId, 'userResultsHeader') + formattedResults.map((r, i) => `${i + 1}. ${r}`).join('\n');
   bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
 });
 
@@ -304,7 +309,9 @@ bot.onText(/\/stats/, async (msg) => {
   const chatId = msg.chat.id;
   const userCount = await getUserCount();
   const activeTests = userStates.size;
-  const message = t(chatId, 'stats').replace('%userCount%', userCount.toString()).replace('%activeTests%', activeTests.toString());
+  const message = (await t(chatId, 'stats')) // Ожидание результата
+    .replace('%userCount%', userCount.toString())
+    .replace('%activeTests%', activeTests.toString());
   bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
 });
 
@@ -333,7 +340,7 @@ async function sendNextQuestion(chatId) {
   const state = userStates.get(chatId);
   if (!state || state.index >= state.questions.length) {
     const now = new Date().toISOString();
-    await bot.sendMessage(chatId, t(chatId, 'done', state.correct, state.questions.length), {
+    await bot.sendMessage(chatId, await t(chatId, 'done', state.correct, state.questions.length), {
       reply_markup: { remove_keyboard: true },
     });
     const db = await dbPromise;
@@ -344,7 +351,7 @@ async function sendNextQuestion(chatId) {
 
   const q = state.questions[state.index];
   if (!q.options || q.options.length !== 4 || !q.correctAnswer || !q.options.includes(q.correctAnswer)) {
-    const errorMsg = t(chatId, 'errorMessage')
+    const errorMsg = await t(chatId, 'errorMessage')
       .replace('%question%', q.question || 'не указан')
       .replace('%options%', JSON.stringify(q.options) || 'не указаны')
       .replace('%correctAnswer%', q.correctAnswer || 'не указан');
@@ -388,5 +395,5 @@ function startQuiz(chatId, level) {
 async function getUserCount() {
   const db = await dbPromise;
   const count = await db.get('SELECT COUNT(*) as count FROM users');
-  return count.count;
+  return count.count || 0; // Возвращаем 0, если count отсутствует
 }

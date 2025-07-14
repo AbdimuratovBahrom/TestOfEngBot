@@ -3,7 +3,14 @@ import express from 'express';
 import dotenv from 'dotenv';
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
-import { google } from 'googleapis';
+let google;
+try {
+  const googleModule = await import('googleapis');
+  google = googleModule.google;
+} catch (err) {
+  console.error('❌ Ошибка загрузки googleapis:', err.message);
+  process.exit(1);
+}
 import fs from 'fs';
 import { authenticate } from '@google-cloud/local-auth';
 import {

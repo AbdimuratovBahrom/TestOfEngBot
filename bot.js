@@ -183,6 +183,8 @@ bot.onText(/\/start/, async (msg) => {
     await db.run('INSERT OR IGNORE INTO users (telegram_id, full_name) VALUES (?, ?)', [telegramId, fullName]);
     await db.run('UPDATE users SET test_count = test_count + 1 WHERE telegram_id = ?', [telegramId]);
     console.log(`Регистрация пользователя ${telegramId} (${fullName})`);
+    const userCount = await db.get('SELECT COUNT(*) as count FROM users');
+    console.log(`Текущий счетчик пользователей: ${userCount.count}`);
   } catch (err) {
     console.error(`❌ Ошибка регистрации пользователя ${telegramId}:`, err.message);
   }
@@ -232,7 +234,7 @@ bot.on('callback_query', async (query) => {
   }
 
   if (data === 'level_menu') {
-    await showLevelMenu(chatId); // Асинхронный вызов
+    await showLevelMenu(chatId);
   } else if (data.startsWith('level_')) {
     const level = data.replace('level_', '');
     startQuiz(chatId, level);
@@ -299,7 +301,7 @@ bot.onText(/\/info/, async (msg) => {
 });
 
 bot.onText(/\/level/, async (msg) => {
-  await showLevelMenu(msg.chat.id); // Асинхронный вызов
+  await showLevelMenu(msg.chat.id);
 });
 
 bot.onText(/\/top10/, async (msg) => {
@@ -395,7 +397,7 @@ bot.onText(/\/stats/, async (msg) => {
     .catch(err => console.error('❌ Ошибка отправки stats:', err.message));
 });
 
-async function showLevelMenu(chatId) { // Сделали функцию асинхронной
+async function showLevelMenu(chatId) {
   const levels = [
     [{ text: await t(chatId, 'levelBeginner'), callback_data: 'level_beginner' }],
     [{ text: await t(chatId, 'levelIntermediate'), callback_data: 'level_intermediate' }],
@@ -434,7 +436,14 @@ async function sendNextQuestion(chatId) {
       reply_markup: { remove_keyboard: true },
     }).catch(err => console.error('❌ Ошибка отправки done:', err.message));
     const db = await dbPromise;
-    await db.run('INSERT INTO test_results (telegram_id, level, score, timestamp) VALUES (?, ?, ?, ?)', [chatId, state.level, state.correct, now]);
+    try {
+      await db.run('INSERT INTO test_results (telegram_id, level, score, timestamp) VALUES (?, ?, ?, ?)', [chatId, state.level, state.correct, now]);
+      console.log(`Сохранен результат для ${chatId}: ${state.correct}/${state.questions.length} (${state.level})`);
+      const resultCount = await db.get('SELECT COUNT(*) as count FROM test_results WHERE telegram_id = ?', [chatId]);
+      console.log(`Текущий счетчик результатов для ${chatId}: ${resultCount.count}`);
+    } catch (err) {
+      console.error(`❌ Ошибка сохранения результата для ${chatId}:`, err.message);
+    }
     userStates.delete(chatId);
     return;
   }

@@ -466,7 +466,10 @@ async function sendNextQuestion(chatId) {
   }
 
   const message = await createQuestionMessage({ ...state, chatId });
-  const buttons = q.options.map((opt) => [{ text: `${t(state.chatId, 'optionPrefix')} ${opt}`, callback_data: opt }]);
+  const buttons = await Promise.all(q.options.map(async (opt) => {
+    const prefix = await t(state.chatId, 'optionPrefix');
+    return [{ text: `${prefix} ${opt}`, callback_data: opt }];
+  }));
 
   bot.sendMessage(chatId, message, {
     parse_mode: 'HTML',

@@ -151,7 +151,7 @@ const translations = {
   },
 };
 
-// Исправленная асинхронная функция t
+// Асинхронная функция t
 async function t(chatId, key, ...args) {
   const state = userStates.get(chatId);
   const lang = state?.lang || 'ru';
@@ -161,7 +161,7 @@ async function t(chatId, key, ...args) {
     return `Translation missing for "${key}"`;
   }
   const result = typeof text === 'function' ? text(...args) : text;
-  const userCount = await getUserCount(); // Асинхронный вызов
+  const userCount = await getUserCount();
   return result.replace('%userCount%', userCount?.toString() || '0').replace('%activeTests%', userStates.size.toString());
 }
 
@@ -232,7 +232,7 @@ bot.on('callback_query', async (query) => {
   }
 
   if (data === 'level_menu') {
-    showLevelMenu(chatId);
+    await showLevelMenu(chatId); // Асинхронный вызов
   } else if (data.startsWith('level_')) {
     const level = data.replace('level_', '');
     startQuiz(chatId, level);
@@ -298,8 +298,8 @@ bot.onText(/\/info/, async (msg) => {
     .catch(err => console.error('❌ Ошибка отправки info:', err.message));
 });
 
-bot.onText(/\/level/, (msg) => {
-  showLevelMenu(msg.chat.id);
+bot.onText(/\/level/, async (msg) => {
+  await showLevelMenu(msg.chat.id); // Асинхронный вызов
 });
 
 bot.onText(/\/top10/, async (msg) => {
@@ -395,14 +395,19 @@ bot.onText(/\/stats/, async (msg) => {
     .catch(err => console.error('❌ Ошибка отправки stats:', err.message));
 });
 
-function showLevelMenu(chatId) {
+async function showLevelMenu(chatId) { // Сделали функцию асинхронной
   const levels = [
-    [{ text: t(chatId, 'levelBeginner'), callback_data: 'level_beginner' }],
-    [{ text: t(chatId, 'levelIntermediate'), callback_data: 'level_intermediate' }],
-    [{ text: t(chatId, 'levelAdvanced'), callback_data: 'level_advanced' }],
-    [{ text: t(chatId, 'statsButton'), callback_data: 'stats' }],
+    [{ text: await t(chatId, 'levelBeginner'), callback_data: 'level_beginner' }],
+    [{ text: await t(chatId, 'levelIntermediate'), callback_data: 'level_intermediate' }],
+    [{ text: await t(chatId, 'levelAdvanced'), callback_data: 'level_advanced' }],
+    [{ text: await t(chatId, 'statsButton'), callback_data: 'stats' }],
   ];
-  bot.sendMessage(chatId, t(chatId, 'selectLevel'), {
+  const selectLevelMessage = await t(chatId, 'selectLevel');
+  if (!selectLevelMessage) {
+    console.error('❌ Пустое сообщение selectLevel для chatId:', chatId);
+    return;
+  }
+  bot.sendMessage(chatId, selectLevelMessage, {
     reply_markup: { inline_keyboard: levels },
   }).catch(err => console.error('❌ Ошибка отправки showLevelMenu:', err.message));
 }
@@ -486,7 +491,7 @@ async function getUserCount() {
   const db = await dbPromise;
   try {
     const count = await db.get('SELECT COUNT(*) as count FROM users');
-    return count?.count || 0; // Возвращаем 0, если count отсутствует
+    return count?.count || 0;
   } catch (err) {
     console.error('❌ Ошибка получения количества пользователей:', err.message);
     return 0;

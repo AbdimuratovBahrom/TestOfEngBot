@@ -1,0 +1,4 @@
+node-telegram-bot-api
+express
+dotenv
+sqlite3

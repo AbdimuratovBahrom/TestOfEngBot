@@ -3,16 +3,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
-let google;
-try {
-  const googleModule = await import('googleapis');
-  google = googleModule.google;
-} catch (err) {
-  console.error('❌ Ошибка загрузки googleapis:', err.message);
-  process.exit(1);
-}
 import fs from 'fs';
-import { authenticate } from '@google-cloud/local-auth';
 
 import {
   beginnerQuestions,
@@ -25,10 +16,9 @@ dotenv.config({ debug: true });
 const TOKEN = process.env.BOT_TOKEN;
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
 const PORT = parseInt(process.env.PORT, 10) || 3000;
-const FOLDER_ID = process.env.GOOGLE_DRIVE_FOLDER_ID;
 
-if (!TOKEN || !WEBHOOK_URL || !FOLDER_ID) {
-  console.error('❌ BOT_TOKEN, WEBHOOK_URL и GOOGLE_DRIVE_FOLDER_ID должны быть заданы в .env');
+if (!TOKEN || !WEBHOOK_URL) {
+  console.error('❌ BOT_TOKEN и WEBHOOK_URL должны быть заданы в .env');
   process.exit(1);
 }
 
@@ -155,7 +145,7 @@ const translations = {
     noDate: 'Sáne qol jetimsiz',
     thanksMessage: "❤️ Bot tı paydalang'anıñız ushın rahmet! Eger avtordı qutlıqlag'ıñız kelse, oğan jazıñ: [t.me/@WolfOfAlpha](https://t.me/WolfOfAlpha)",
     errorMessage: "❌ Qáte: soraw derekleri dúris emes. Administratorğa xabarlasıñ. Toliq málimat: [soraw: %question%, saylawlar: %options%, dúris jawap: %correctAnswer%]",
-    stats: '📊 <b>Bot statistikası:</b>\nJami paydalanıwshılar: %userCount%\nÁktiw testter: %activeTests%',
+    stats: '📊 <b>Bot statistikasi:</b>\nJami paydalanıwshılar: %userCount%\nÁktiw testter: %activeTests%',
     statsButton: '📊 Statistika',
   },
 };
@@ -450,8 +440,6 @@ export async function sendNextQuestion(chatId) {
       console.log(`Сохранен результат для ${chatId}: ${state.correct}/${state.questions.length} (${state.level})`);
       const resultCount = await db.get('SELECT COUNT(*) as count FROM test_results WHERE telegram_id = ?', [chatId]);
       console.log(`Текущий счетчик результатов для ${chatId}: ${resultCount.count}`);
-      // Бэкап базы данных после каждого теста
-      await backupDatabase();
     } catch (err) {
       console.error(`❌ Ошибка сохранения результата для ${chatId}:`, err.message);
     }
@@ -487,66 +475,12 @@ export async function sendNextQuestion(chatId) {
   }).catch(err => console.error('❌ Ошибка отправки вопроса:', err.message));
 }
 
-// Функция для бэкапа базы данных
-export async function backupDatabase() {
-  try {
-    // Проверяем наличие GOOGLE_CREDENTIALS_JSON
-    if (!process.env.GOOGLE_CREDENTIALS_JSON) {
-      console.error('❌ Переменная окружения GOOGLE_CREDENTIALS_JSON не найдена');
-      return;
-    }
-
-    // Парсим JSON из переменной окружения
-    const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS_JSON);
-    if (!credentials || !credentials.client_email || !credentials.private_key) {
-      console.error('❌ Некорректные учетные данные в GOOGLE_CREDENTIALS_JSON');
-      return;
-    }
-
-    // Инициализируем клиента Google Drive с учетными данными
-    const auth = await google.auth.getClient({
-      credentials: credentials,
-      scopes: ['https://www.googleapis.com/auth/drive.file'],
-    });
-
-    const drive = google.drive({ version: 'v3', auth });
-
-    // Проверяем доступ к папке
-    const folderCheck = await drive.files.get({
-      fileId: FOLDER_ID,
-      fields: 'id, name',
-    });
-    console.log(`✅ Папка найдена: ${folderCheck.data.name} (ID: ${FOLDER_ID})`);
-
-    const fileMetadata = {
-      name: `bot_data_backup_${new Date().toISOString().replace(/[:.]/g, '-')}.db`,
-      parents: [FOLDER_ID],
-    };
-    const media = {
-      mimeType: 'application/x-sqlite3',
-      body: fs.createReadStream('./bot_data.db'),
-    };
-
-    const file = await drive.files.create({
-      resource: fileMetadata,
-      media: media,
-      fields: 'id',
-    });
-    console.log(`✅ Бэкап создан: ${file.data.id}`);
-  } catch (err) {
-    console.error('❌ Ошибка создания бэкапа:', err.message);
-    if (err.message.includes('File not found')) {
-      console.error(`⚠️ Проверьте GOOGLE_DRIVE_FOLDER_ID (${FOLDER_ID}) или права доступа.`);
-    }
-  }
-}
-
 export function startQuiz(chatId, level) {
   let questions;
   switch (level) {
     case 'beginner': questions = beginnerQuestions; break;
     case 'intermediate': questions = intermediateQuestions; break;
-    case 'advanced': questions = advancedQuestions; break;
+    case 'advanced': advancedQuestions; break;
     default: return;
   }
 

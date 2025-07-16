@@ -1,8 +1,8 @@
 import TelegramBot from 'node-telegram-bot-api';
 import express from 'express';
 import dotenv from 'dotenv';
-import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
+import sqlite3 from 'sqlite3'; // Исправлено с 'sqlite' на 'sqlite3'
 import fs from 'fs';
 
 import {
@@ -21,8 +21,6 @@ if (!TOKEN || !WEBHOOK_URL) {
   console.error('❌ BOT_TOKEN и WEBHOOK_URL должны быть заданы в .env');
   process.exit(1);
 }
-
-const bot = new TelegramBot(TOKEN, { polling: false });
 
 const dbPromise = open({
   filename: './bot_data.db',
@@ -62,6 +60,8 @@ app.listen(PORT, () => {
     .then(() => console.log('✅ Вебхук успешно установлен'))
     .catch((err) => console.error('❌ Ошибка установки вебхука:', err.message));
 });
+
+const bot = new TelegramBot(TOKEN, { polling: false });
 
 const userStates = new Map();
 const userCache = new Map();
@@ -480,7 +480,7 @@ export function startQuiz(chatId, level) {
   switch (level) {
     case 'beginner': questions = beginnerQuestions; break;
     case 'intermediate': questions = intermediateQuestions; break;
-    case 'advanced': advancedQuestions; break;
+    case 'advanced': questions = advancedQuestions; break;
     default: return;
   }
 

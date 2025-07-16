@@ -1,8 +1,8 @@
 import TelegramBot from 'node-telegram-bot-api';
 import express from 'express';
 import dotenv from 'dotenv';
-import { open } from 'sqlite';
-import sqlite3 from 'sqlite3'; // Исправлено с 'sqlite' на 'sqlite3'
+import { open } from 'sqlite'; // Используем sqlite для функции open
+import sqlite3 from 'sqlite3'; // Драйвер для sqlite
 import fs from 'fs';
 
 import {
@@ -437,8 +437,8 @@ export async function sendNextQuestion(chatId) {
     const db = await dbPromise;
     try {
       await db.run('INSERT INTO test_results (telegram_id, level, score, timestamp) VALUES (?, ?, ?, ?)', [chatId, state.level, state.correct, now]);
-      const result = await db.get('SELECT * FROM test_results WHERE telegram_id = ?', [chatId]); // Добавлен отладочный вывод
-      console.log(`Данные в базе:`, result); // Отладочный вывод
+      const result = await db.get('SELECT * FROM test_results WHERE telegram_id = ?', [chatId]);
+      console.log(`Данные в базе:`, result);
       console.log(`Сохранен результат для ${chatId}: ${state.correct}/${state.questions.length} (${state.level})`);
       const resultCount = await db.get('SELECT COUNT(*) as count FROM test_results WHERE telegram_id = ?', [chatId]);
       console.log(`Текущий счетчик результатов для ${chatId}: ${resultCount.count}`);

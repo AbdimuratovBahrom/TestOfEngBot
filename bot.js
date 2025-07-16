@@ -1,8 +1,8 @@
 import TelegramBot from 'node-telegram-bot-api';
 import express from 'express';
 import dotenv from 'dotenv';
-import { open } from 'sqlite'; // Используем sqlite для функции open
-import sqlite3 from 'sqlite3'; // Драйвер для sqlite
+import { open } from 'sqlite';
+import sqlite3 from 'sqlite3';
 import fs from 'fs';
 
 import {
@@ -26,6 +26,7 @@ const dbPromise = open({
   filename: './bot_data.db',
   driver: sqlite3.Database,
 }).then((db) => {
+  console.log(`База данных инициализирована: ${fs.existsSync('./bot_data.db') ? 'существует' : 'не существует'}`);
   db.exec(`
     CREATE TABLE IF NOT EXISTS users (
       telegram_id INTEGER PRIMARY KEY,
@@ -306,6 +307,7 @@ bot.onText(/\/top10/, async (msg) => {
   const chatId = msg.chat.id;
   const db = await dbPromise;
   const top = await db.all('SELECT telegram_id, level, score FROM test_results ORDER BY score DESC LIMIT 10');
+  console.log(`Топ 10 из базы:`, top); // Добавлен отладочный вывод
   if (top.length === 0) {
     const emptyMessage = await t(chatId, 'top10Empty');
     if (!emptyMessage) {
@@ -350,6 +352,7 @@ bot.onText(/\/myresults/, async (msg) => {
   const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
   const db = await dbPromise;
   const results = await db.all('SELECT level, score, timestamp FROM test_results WHERE telegram_id = ? ORDER BY timestamp DESC', [chatId]);
+  console.log(`Результаты из базы для ${chatId}:`, results); // Добавлен отладочный вывод
   if (results.length === 0) {
     const emptyMessage = await t(chatId, 'userResultsEmpty');
     if (!emptyMessage) {

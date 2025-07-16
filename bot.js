@@ -1,8 +1,7 @@
 import TelegramBot from 'node-telegram-bot-api';
 import express from 'express';
 import dotenv from 'dotenv';
-import { open } from 'sqlite';
-import sqlite3 from 'sqlite3';
+import { Pool } from 'pg';
 import fs from 'fs';
 
 import {
@@ -16,33 +15,39 @@ dotenv.config({ debug: true });
 const TOKEN = process.env.BOT_TOKEN;
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
 const PORT = parseInt(process.env.PORT, 10) || 3000;
+const DB_URL = process.env.DATABASE_URL;
 
-if (!TOKEN || !WEBHOOK_URL) {
-  console.error('❌ BOT_TOKEN и WEBHOOK_URL должны быть заданы в .env');
+if (!TOKEN || !WEBHOOK_URL || !DB_URL) {
+  console.error('❌ BOT_TOKEN, WEBHOOK_URL и DATABASE_URL должны быть заданы в .env');
   process.exit(1);
 }
 
-const dbPromise = open({
-  filename: './bot_data.db',
-  driver: sqlite3.Database,
-}).then((db) => {
-  console.log(`База данных инициализирована: ${fs.existsSync('./bot_data.db') ? 'существует' : 'не существует'}`);
-  db.exec(`
+const pool = new Pool({ connectionString: DB_URL });
+
+const dbPromise = pool.connect().then((client) => {
+  client.query(`
     CREATE TABLE IF NOT EXISTS users (
       telegram_id INTEGER PRIMARY KEY,
       full_name TEXT,
       test_count INTEGER DEFAULT 0
     );
     CREATE TABLE IF NOT EXISTS test_results (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id SERIAL PRIMARY KEY,
       telegram_id INTEGER,
       level TEXT,
       score INTEGER,
-      timestamp TEXT,
+      timestamp TIMESTAMP,
       FOREIGN KEY (telegram_id) REFERENCES users(telegram_id)
     );
-  `);
-  return db;
+  `).then(() => {
+    console.log('База данных инициализирована');
+    client.release();
+    return pool;
+  }).catch((err) => {
+    console.error('❌ Ошибка инициализации базы данных:', err.message);
+    client.release();
+    process.exit(1);
+  });
 });
 
 const app = express();
@@ -177,15 +182,17 @@ bot.onText(/\/start/, async (msg) => {
   const telegramId = msg.from.id;
   const fullName = msg.from.first_name || msg.from.username || (await t(chatId, 'unknownUser'));
 
-  const db = await dbPromise;
+  const client = await pool.connect();
   try {
-    await db.run('INSERT OR IGNORE INTO users (telegram_id, full_name) VALUES (?, ?)', [telegramId, fullName]);
-    await db.run('UPDATE users SET test_count = test_count + 1 WHERE telegram_id = ?', [telegramId]);
+    await client.query('INSERT INTO users (telegram_id, full_name) VALUES ($1, $2) ON CONFLICT DO NOTHING', [telegramId, fullName]);
+    await client.query('UPDATE users SET test_count = test_count + 1 WHERE telegram_id = $1', [telegramId]);
     console.log(`Регистрация пользователя ${telegramId} (${fullName})`);
-    const userCount = await db.get('SELECT COUNT(*) as count FROM users');
-    console.log(`Текущий счетчик пользователей: ${userCount.count}`);
+    const userCount = await client.query('SELECT COUNT(*) as count FROM users');
+    console.log(`Текущий счетчик пользователей: ${userCount.rows[0].count}`);
   } catch (err) {
     console.error(`❌ Ошибка регистрации пользователя ${telegramId}:`, err.message);
+  } finally {
+    client.release();
   }
 
   const welcomeMessage = await t(chatId, 'welcome');
@@ -305,44 +312,48 @@ bot.onText(/\/level/, async (msg) => {
 
 bot.onText(/\/top10/, async (msg) => {
   const chatId = msg.chat.id;
-  const db = await dbPromise;
-  const top = await db.all('SELECT telegram_id, level, score FROM test_results ORDER BY score DESC LIMIT 10');
-  console.log(`Топ 10 из базы:`, top); // Добавлен отладочный вывод
-  if (top.length === 0) {
-    const emptyMessage = await t(chatId, 'top10Empty');
-    if (!emptyMessage) {
-      console.error('❌ Пустое сообщение top10Empty для chatId:', chatId);
+  const client = await pool.connect();
+  try {
+    const top = await client.query('SELECT telegram_id, level, score FROM test_results ORDER BY score DESC LIMIT 10');
+    console.log(`Топ 10 из базы:`, top.rows);
+    if (top.rowCount === 0) {
+      const emptyMessage = await t(chatId, 'top10Empty');
+      if (!emptyMessage) {
+        console.error('❌ Пустое сообщение top10Empty для chatId:', chatId);
+        return;
+      }
+      bot.sendMessage(chatId, emptyMessage)
+        .catch(err => console.error('❌ Ошибка отправки top10Empty:', err.message));
       return;
     }
-    bot.sendMessage(chatId, emptyMessage)
-      .catch(err => console.error('❌ Ошибка отправки top10Empty:', err.message));
-    return;
-  }
 
-  const results = await Promise.all(top.map(async (r, i) => {
-    let username = userCache.get(r.telegram_id) || (await db.get('SELECT full_name FROM users WHERE telegram_id = ?', [r.telegram_id]))?.full_name;
-    if (!username) {
-      try {
-        const chat = await bot.getChat(r.telegram_id);
-        username = chat.username || chat.first_name || await t(chatId, 'unknownUser');
-        userCache.set(r.telegram_id, username);
-        await db.run('UPDATE users SET full_name = ? WHERE telegram_id = ?', [username, r.telegram_id]);
-      } catch (err) {
-        console.warn(`⚠️ Не удалось получить имя пользователя для user_id ${r.telegram_id}:`, err.message);
-        username = await t(chatId, 'unknownUser');
+    const results = await Promise.all(top.rows.map(async (r, i) => {
+      let username = userCache.get(r.telegram_id) || (await client.query('SELECT full_name FROM users WHERE telegram_id = $1', [r.telegram_id])).rows[0]?.full_name;
+      if (!username) {
+        try {
+          const chat = await bot.getChat(r.telegram_id);
+          username = chat.username || chat.first_name || await t(chatId, 'unknownUser');
+          userCache.set(r.telegram_id, username);
+          await client.query('UPDATE users SET full_name = $1 WHERE telegram_id = $2', [username, r.telegram_id]);
+        } catch (err) {
+          console.warn(`⚠️ Не удалось получить имя пользователя для user_id ${r.telegram_id}:`, err.message);
+          username = await t(chatId, 'unknownUser');
+        }
       }
-    }
-    return `${i + 1}. 👤 <b>${username}</b> — ${r.score}/20 (${r.level})`;
-  }));
+      return `${i + 1}. 👤 <b>${username}</b> — ${r.score}/20 (${r.level})`;
+    }));
 
-  const headerMessage = await t(chatId, 'top10Header');
-  if (!headerMessage) {
-    console.error('❌ Пустое сообщение top10Header для chatId:', chatId);
-    return;
+    const headerMessage = await t(chatId, 'top10Header');
+    if (!headerMessage) {
+      console.error('❌ Пустое сообщение top10Header для chatId:', chatId);
+      return;
+    }
+    const message = headerMessage + results.join('\n');
+    bot.sendMessage(chatId, message, { parse_mode: 'HTML' })
+      .catch(err => console.error('❌ Ошибка отправки top10:', err.message));
+  } finally {
+    client.release();
   }
-  const message = headerMessage + results.join('\n');
-  bot.sendMessage(chatId, message, { parse_mode: 'HTML' })
-    .catch(err => console.error('❌ Ошибка отправки top10:', err.message));
 });
 
 bot.onText(/\/myresults/, async (msg) => {
@@ -350,37 +361,41 @@ bot.onText(/\/myresults/, async (msg) => {
   const state = userStates.get(chatId) || { lang: 'ru' };
   const locale = state.lang === 'uz' ? 'uz-UZ' : state.lang === 'kk' ? 'kk-KZ' : 'ru-RU';
   const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-  const db = await dbPromise;
-  const results = await db.all('SELECT level, score, timestamp FROM test_results WHERE telegram_id = ? ORDER BY timestamp DESC', [chatId]);
-  console.log(`Результаты из базы для ${chatId}:`, results); // Добавлен отладочный вывод
-  if (results.length === 0) {
-    const emptyMessage = await t(chatId, 'userResultsEmpty');
-    if (!emptyMessage) {
-      console.error('❌ Пустое сообщение userResultsEmpty для chatId:', chatId);
+  const client = await pool.connect();
+  try {
+    const results = await client.query('SELECT level, score, timestamp FROM test_results WHERE telegram_id = $1 ORDER BY timestamp DESC', [chatId]);
+    console.log(`Результаты из базы для ${chatId}:`, results.rows);
+    if (results.rowCount === 0) {
+      const emptyMessage = await t(chatId, 'userResultsEmpty');
+      if (!emptyMessage) {
+        console.error('❌ Пустое сообщение userResultsEmpty для chatId:', chatId);
+        return;
+      }
+      bot.sendMessage(chatId, emptyMessage)
+        .catch(err => console.error('❌ Ошибка отправки userResultsEmpty:', err.message));
       return;
     }
-    bot.sendMessage(chatId, emptyMessage)
-      .catch(err => console.error('❌ Ошибка отправки userResultsEmpty:', err.message));
-    return;
-  }
 
-  const formattedResults = await Promise.all(results.map(async (r) => {
-    let date = await t(chatId, 'noDate');
-    if (r.timestamp) {
-      const d = new Date(r.timestamp);
-      date = !isNaN(d) ? d.toLocaleDateString(locale, options) : await t(chatId, 'noDate');
+    const formattedResults = await Promise.all(results.rows.map(async (r) => {
+      let date = await t(chatId, 'noDate');
+      if (r.timestamp) {
+        const d = new Date(r.timestamp);
+        date = !isNaN(d) ? d.toLocaleDateString(locale, options) : await t(chatId, 'noDate');
+      }
+      return `${r.score}/20 (${r.level}) — ${date}`;
+    }));
+
+    const headerMessage = await t(chatId, 'userResultsHeader');
+    if (!headerMessage) {
+      console.error('❌ Пустое сообщение userResultsHeader для chatId:', chatId);
+      return;
     }
-    return `${r.score}/20 (${r.level}) — ${date}`;
-  }));
-
-  const headerMessage = await t(chatId, 'userResultsHeader');
-  if (!headerMessage) {
-    console.error('❌ Пустое сообщение userResultsHeader для chatId:', chatId);
-    return;
+    const message = headerMessage + formattedResults.map((r, i) => `${i + 1}. ${r}`).join('\n');
+    bot.sendMessage(chatId, message, { parse_mode: 'HTML' })
+      .catch(err => console.error('❌ Ошибка отправки myresults:', err.message));
+  } finally {
+    client.release();
   }
-  const message = headerMessage + formattedResults.map((r, i) => `${i + 1}. ${r}`).join('\n');
-  bot.sendMessage(chatId, message, { parse_mode: 'HTML' })
-    .catch(err => console.error('❌ Ошибка отправки myresults:', err.message));
 });
 
 bot.onText(/\/stats/, async (msg) => {
@@ -437,16 +452,18 @@ export async function sendNextQuestion(chatId) {
     await bot.sendMessage(chatId, doneMessage, {
       reply_markup: { remove_keyboard: true },
     }).catch(err => console.error('❌ Ошибка отправки done:', err.message));
-    const db = await dbPromise;
+    const client = await pool.connect();
     try {
-      await db.run('INSERT INTO test_results (telegram_id, level, score, timestamp) VALUES (?, ?, ?, ?)', [chatId, state.level, state.correct, now]);
-      const result = await db.get('SELECT * FROM test_results WHERE telegram_id = ?', [chatId]);
-      console.log(`Данные в базе:`, result);
+      await client.query('INSERT INTO test_results (telegram_id, level, score, timestamp) VALUES ($1, $2, $3, $4)', [chatId, state.level, state.correct, now]);
+      const result = await client.query('SELECT * FROM test_results WHERE telegram_id = $1 ORDER BY id DESC LIMIT 1', [chatId]);
+      console.log(`Данные в базе:`, result.rows[0]);
       console.log(`Сохранен результат для ${chatId}: ${state.correct}/${state.questions.length} (${state.level})`);
-      const resultCount = await db.get('SELECT COUNT(*) as count FROM test_results WHERE telegram_id = ?', [chatId]);
-      console.log(`Текущий счетчик результатов для ${chatId}: ${resultCount.count}`);
+      const resultCount = await client.query('SELECT COUNT(*) as count FROM test_results WHERE telegram_id = $1', [chatId]);
+      console.log(`Текущий счетчик результатов для ${chatId}:`, resultCount.rows[0].count);
     } catch (err) {
       console.error(`❌ Ошибка сохранения результата для ${chatId}:`, err.message);
+    } finally {
+      client.release();
     }
     userStates.delete(chatId);
     return;
@@ -504,12 +521,14 @@ export function startQuiz(chatId, level) {
 }
 
 export async function getUserCount() {
-  const db = await dbPromise;
+  const client = await pool.connect();
   try {
-    const count = await db.get('SELECT COUNT(*) as count FROM users');
-    return count?.count || 0;
+    const count = await client.query('SELECT COUNT(*) as count FROM users');
+    return count.rows[0].count || 0;
   } catch (err) {
     console.error('❌ Ошибка получения количества пользователей:', err.message);
     return 0;
+  } finally {
+    client.release();
   }
 }

@@ -437,6 +437,8 @@ export async function sendNextQuestion(chatId) {
     const db = await dbPromise;
     try {
       await db.run('INSERT INTO test_results (telegram_id, level, score, timestamp) VALUES (?, ?, ?, ?)', [chatId, state.level, state.correct, now]);
+      const result = await db.get('SELECT * FROM test_results WHERE telegram_id = ?', [chatId]); // Добавлен отладочный вывод
+      console.log(`Данные в базе:`, result); // Отладочный вывод
       console.log(`Сохранен результат для ${chatId}: ${state.correct}/${state.questions.length} (${state.level})`);
       const resultCount = await db.get('SELECT COUNT(*) as count FROM test_results WHERE telegram_id = ?', [chatId]);
       console.log(`Текущий счетчик результатов для ${chatId}: ${resultCount.count}`);
